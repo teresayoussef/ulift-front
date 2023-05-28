@@ -22,6 +22,7 @@ import {
   LogoutRounded as CloseIcon,
   SosRounded as SosIcon,
   TaxiAlertRounded as ColaProcesoIcon,
+  Chat as ChatIcon,
 } from "@mui/icons-material";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -116,6 +117,10 @@ export const NavBar = (props: Props) => {
     navigate(`/perfil`);
   };
 
+  const handleClickChat = () => {
+    navigate(`/chat`);
+  };
+
   const handleClickHistory = () => {
     navigate(`/historial`);
   };
@@ -198,6 +203,14 @@ export const NavBar = (props: Props) => {
               <FavIcon />
             </ListItemIcon>
             <ListItemText>Favoritos</ListItemText>
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton onClick={handleClickChat}>
+            <ListItemIcon>
+              <ChatIcon />
+            </ListItemIcon>
+            <ListItemText>Chat</ListItemText>
           </ListItemButton>
         </ListItem>
         <Divider />

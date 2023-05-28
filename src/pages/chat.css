@@ -1,0 +1,30 @@
+.container-empty {
+    width: 100%;
+    height: 100vh;
+    background-color: #f6f6f6;
+    justify-content: center;
+    text-align: center;
+    display: flex;
+    align-items: center;
+}
+
+.container-animation {
+    width: 100%;
+}
+
+.cont-chat {
+    height: 90vh;
+    width: 100%;
+    position: relative;
+    background-color: #efeae2;
+    margin-top: -47px;
+}
+
+.cont-messages {
+    background-color: #efeae2;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    max-height: 88vh; 
+    padding-bottom: 20pt;
+}
