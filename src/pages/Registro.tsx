@@ -23,7 +23,7 @@ import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
 import { MarkerF } from "@react-google-maps/api";
 
 interface Values {
-  name: string;
+  name: string;  
   lastName: string;
   sex: string;
   email: string;
@@ -109,7 +109,7 @@ const Registro = (): JSX.Element => {
 
     const config = {
       method: "post",
-      url: "https://ulift-backend.up.railway.app/api/signup",
+      url: "https://ulift20-production.up.railway.app/api/auth/Register",
       headers: {
         "Content-Type": "multipart/form-data",
       },

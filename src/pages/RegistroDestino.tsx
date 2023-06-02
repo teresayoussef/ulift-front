@@ -41,7 +41,7 @@ const RegistroDestino = (): JSX.Element => {
   };
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    googleMapsApiKey: "AIzaSyDiBDk9jPW-I_ka-HEAH5gZO2wfXblZ88k",
+    googleMapsApiKey: "AIzaSyD7v8N1XTXpHinGn0ka8CO0l61UWh1fesA",
     libraries: ["places", "drawing"],
   });
   const onSubmit = async (user: Values, { setSubmitting }: FormikHelpers<Values>) => {
