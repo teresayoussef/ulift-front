@@ -109,9 +109,9 @@ const Registro = (): JSX.Element => {
 
     const config = {
       method: "post",
-      url: "https://ulift20-production.up.railway.app/api/auth/Register",
+      url: "https://ulift.azurewebsites.net/api/Auth/SignUp",
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": "application/json",
       },
       data: data,
     };
