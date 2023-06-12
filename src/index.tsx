@@ -17,17 +17,21 @@ import theme from "./theme";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import ScrollToTop from "./components/ScrollToTop";
+import { UserProvider } from "./contexts/UserContext";
+
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 
 root.render(
   <ThemeProvider theme={theme}>
-    <SnackbarProvider>
-      <BrowserRouter>
-        <ScrollToTop />
-        <App />
-      </BrowserRouter>
-    </SnackbarProvider>
+    <UserProvider>
+      <SnackbarProvider>
+        <BrowserRouter>
+          <ScrollToTop />
+          <App />
+        </BrowserRouter>
+      </SnackbarProvider>
+    </UserProvider>
   </ThemeProvider>
 );
 // If you want to start measuring performance in your app, pass a function

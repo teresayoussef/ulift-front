@@ -7,7 +7,7 @@ export const useUser = () => {
 };
 
 export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -17,8 +17,8 @@ export const UserProvider = ({ children }) => {
   const getUser = async () => {
     const userData = localStorage.getItem("user");
 
-    const url = "https://ulift-backend-production.up.railway.app/api/login";
-
+    const url = "https://ulift.azurewebsites.net/api/Auth/Login";
+    
     try {
       const response = await fetch(url, {
         method: "POST",

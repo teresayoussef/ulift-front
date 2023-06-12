@@ -10,6 +10,7 @@ import SubPaginasHeader from "../components/SubPaginasHeader";
 import car from "../assets/car.png";
 import { useJsApiLoader, GoogleMap, MarkerF } from "@react-google-maps/api";
 import axios from "axios";
+import { useUser } from "../contexts/UserContext";
 
 interface Values {
   name: string;
@@ -27,6 +28,11 @@ const schema = yup.object().shape({
 });
 
 const RegistroDestino = (): JSX.Element => {
+
+  const myUser = useUser();
+
+  console.log(myUser);
+
   var latitude = "";
   var longitude = "";
   const navigate = useNavigate();
@@ -46,6 +52,7 @@ const RegistroDestino = (): JSX.Element => {
   });
   const onSubmit = async (user: Values, { setSubmitting }: FormikHelpers<Values>) => {
     data.append("name", user.name);
+    // data.append("email", myUser.email);
     data.append("lat", latitude.toString()!);
     data.append("lng", longitude.toString()!);
 
@@ -56,7 +63,7 @@ const RegistroDestino = (): JSX.Element => {
     const token = localStorage.getItem("token");
     const config = {
       method: "post",
-      url: "https://ulift-backend.up.railway.app/api/user/destination",
+      url: "https://ulift.azurewebsites.net/api/Destination",
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -72,6 +79,7 @@ const RegistroDestino = (): JSX.Element => {
         console.log(error);
         enqueueSnackbar("¡Algo salió mal!", { variant: "error" });
         data.delete("name");
+        // data.delete("email");
         data.delete("lat");
         data.delete("lng");
       });

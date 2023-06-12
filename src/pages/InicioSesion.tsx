@@ -38,10 +38,10 @@ const InicioSesion = (): JSX.Element => {
 
     //const url = "https://ulift-backend-production.up.railway.app/api/";
 
-    const url = "https://ulift-backend.up.railway.app/api/";
+    const url = "https://ulift.azurewebsites.net/api/Auth/";
     // const url = "http://localhost:3000/api/";
     return api_instance
-      .post(url + "login", user)
+      .post(url + "Login", user)
       .then((response) => {
         console.log(response);
         if (response.status === 200) {
