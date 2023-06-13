@@ -73,7 +73,7 @@ const Registro = (): JSX.Element => {
 
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    googleMapsApiKey: "",
+    googleMapsApiKey: "AIzaSyD7v8N1XTXpHinGn0ka8CO0l61UWh1fesA",
     libraries: ["places", "drawing"],
   });
 
@@ -109,7 +109,7 @@ const Registro = (): JSX.Element => {
 
     const config = {
       method: "post",
-      url: "https://ulift20-production.up.railway.app/api/auth/Register",
+      url: "https://ulift.azurewebsites.net/api/Auth/SignUp",
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -247,6 +247,8 @@ const Registro = (): JSX.Element => {
                     const input = inputs[i];
                     if (input != null && input.type === "file") {
                       if (input.files != null && input.files.length > 0) {
+                        console.log(input.files[0]);
+                        console.log(input.files[0].name);
                         data.append("photo", input.files[0]);
                       }
                     }

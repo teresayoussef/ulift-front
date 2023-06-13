@@ -43,3 +43,5 @@ export const UserProvider = ({ children }) => {
 
   return <UserContext.Provider value={user}>{!loading && children}</UserContext.Provider>;
 };
+
+export { UserContext } from "../contexts/UserContext";

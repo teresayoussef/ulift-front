@@ -10,14 +10,19 @@ import SubPaginasHeader from "../components/SubPaginasHeader";
 import car from "../assets/car.png";
 import { useJsApiLoader, GoogleMap, MarkerF } from "@react-google-maps/api";
 import axios from "axios";
+import { useEffect } from "react";
+import userEvent from "@testing-library/user-event";
+import { Email } from "@mui/icons-material";
 
 interface Values {
+  email: string;
   name: string;
   lat: number;
   lng: number;
 }
 
 const initialValues: Values = {
+  email: "",
   name: "",
   lat: 0,
   lng: 0,
@@ -45,7 +50,9 @@ const RegistroDestino = (): JSX.Element => {
     libraries: ["places", "drawing"],
   });
   const onSubmit = async (user: Values, { setSubmitting }: FormikHelpers<Values>) => {
+    const email = localStorage.getItem("email");
     data.append("name", user.name);
+    data.append("email", email!);
     data.append("lat", latitude.toString()!);
     data.append("lng", longitude.toString()!);
 
@@ -56,7 +63,7 @@ const RegistroDestino = (): JSX.Element => {
     const token = localStorage.getItem("token");
     const config = {
       method: "post",
-      url: "https://ulift-backend.up.railway.app/api/user/destination",
+      url: "https://ulift.azurewebsites.net/api/Destination",
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",

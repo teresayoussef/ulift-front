@@ -54,35 +54,38 @@ const PerfilUsuario = (): JSX.Element => {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
 
-  const url = "https://ulift-backend.up.railway.app/api/user/profile";
+  const url = "https://ulift.azurewebsites.net/api/User";
   //const url = "http://localhost:3000/api/user/profile";
   const fetchUser = async () => {
     const token = localStorage.getItem("token");
 
+    console.log(token);
+    console.log(url);
     const response = await api_instance.get(url, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    usuario.name = response.data.user.nameU;
-    usuario.lastname = response.data.user.lastname;
-    usuario.id = response.data.user.id;
-    usuario.email = response.data.user.email;
-    usuario.emergencyContact = response.data.user.emergencyContact;
-    usuario.emergencyName = response.data.user.emergencyName;
-    usuario.trips = response.data.user.trips;
-    usuario.rating = response.data.user.rate;
-    usuario.gender = response.data.user.gender;
-    usuario.photo = response.data.user.photo;
-    usuario.vehicles = response.data.user.vehicles;
-    usuario.destinations = response.data.user.destination;
-    usuario.routes = response.data.user.routes;
+    console.log(response.data[1].name);
+    usuario.name = response.data[1].name;
+    usuario.lastname = response.data[1].lastName;
+    // usuario.id = response.data.user.id;
+    usuario.email = response.data[1].email;
+    // usuario.emergencyContact = response.data.user.emergencyContact;
+    // usuario.emergencyName = response.data.user.emergencyName;
+    // usuario.trips = response.data.user.trips;
+    // usuario.rating = response.data.user.rate;
+    // usuario.gender = response.data.user.gender;
+    // usuario.photo = response.data.user.photo;
+    // usuario.vehicles = response.data.user.vehicles;
+    // usuario.destinations = response.data.user.destination;
+    // usuario.routes = response.data.user.routes;
 
-    if (response.data.user.role === "E") {
-      usuario.role = "Estudiante";
-    } else if (response.data.user.role === "D") {
-      usuario.role = "Docente";
-    } else {
-      usuario.role = "Trabajador";
-    }
+    // if (response.data.user.role === "E") {
+    //   usuario.role = "Estudiante";
+    // } else if (response.data.user.role === "D") {
+    //   usuario.role = "Docente";
+    // } else {
+    //   usuario.role = "Trabajador";
+    // }
   };
 
   fetchUser();
