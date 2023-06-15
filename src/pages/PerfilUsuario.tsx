@@ -53,56 +53,46 @@ const usuario: User = {
 const PerfilUsuario = (): JSX.Element => {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
-
-  const url = "https://ulift.azurewebsites.net/api/User";
+  const email = localStorage.getItem("email");
+  console.log(email);
+  const url = `https://ulift.azurewebsites.net/api/User/${email}`;
+  console.log(url);
   //const url = "http://localhost:3000/api/user/profile";
   const fetchUser = async () => {
     const token = localStorage.getItem("token");
-    const email = localStorage.getItem("email");
-    
+
     const response = await api_instance.get(url, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
-    //const userFilter = response.data.filter((v: any) => v.email === email);
 
-    const urlVehicles = 'https://ulift.azurewebsites.net/api/Vehicle';
-
-    const getVehicle = await api_instance.get(urlVehicles,{
-      headers: { Authorization: `Bearer ${token}` }
-      });
-
-    const filters = getVehicle.data.filter((v: any) => v.email === email);
-
-    const urlRoutes = 'https://ulift.azurewebsites.net/api/URoute';
-    const getRoutes = await api_instance.get(urlRoutes,{
+    const getDestinations = await api_instance.get('https://ulift.azurewebsites.net/api/Destination',{
       headers: { Authorization: `Bearer ${token}` }
     });
 
-    const routes = getRoutes.data.filter((v: any) => v.email === email);
-
-    console.log(routes);
-    usuario.name = response.data[1].name;
-    usuario.lastname = response.data[1].lastName;
-    // usuario.id = response.data.user.id;
-    usuario.email = response.data[1].email;
-    // usuario.emergencyContact = response.data.user.emergencyContact;
-    // usuario.emergencyName = response.data.user.emergencyName;
-    // usuario.trips = response.data.user.trips;
-    // usuario.rating = response.data.user.rate;
-    // usuario.gender = response.data.user.gender;
+    const destinations = getDestinations.data.filter((v: any) => v.email === email);
+    console.log(destinations);
+    console.log(response.data.uRoutes);
+    usuario.name = response.data.user.name;
+    usuario.lastname = response.data.user.lastname;
+    usuario.email = response.data.user.email;
+    usuario.emergencyContact = response.data.user.emergencyContact;
+    usuario.emergencyName = "Anthony Testing"; //Hayque agregarlo a la base de datos y al response
+    usuario.trips = response.data.user.liftCount;
+    usuario.rating = response.data.user.driverRating;
+    usuario.gender = response.data.user.gender;
     // usuario.photo = response.data.user.photo;
-    usuario.vehicles = filters;
-    // usuario.destinations = response.data.user.destination;
-    usuario.routes = routes;
+    usuario.vehicles = response.data.vehicles;
+    usuario.destinations = response.data.destinations;
+    usuario.routes = response.data.uRoutes;
 
-    // if (response.data.user.role === "E") {
-    //   usuario.role = "Estudiante";
-    // } else if (response.data.user.role === "D") {
-    //   usuario.role = "Docente";
-    // } else {
-    //   usuario.role = "Trabajador";
-    // }
+    if (response.data.user.role === "E") {
+      usuario.role = "Estudiante";
+    } else if (response.data.user.role === "D") {
+      usuario.role = "Docente";
+    } else {
+      usuario.role = "Trabajador";
+    }
   };
 
   fetchUser();

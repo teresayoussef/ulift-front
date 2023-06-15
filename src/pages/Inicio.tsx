@@ -51,13 +51,13 @@ const fetchInfo = async () => {
   const token = localStorage.getItem("token");
   var queryVehiculos = {
     method: "get",
-    url: "https://ulift-backend.up.railway.app/api/user/vehicle",
+    url: "https://ulift.azurewebsites.net/api/Vehicle",
     headers: { Authorization: `Bearer ${token}` },
   };
 
   var queryRutas = {
     method: "get",
-    url: "https://ulift-backend.up.railway.app/api/user/route",
+    url: "https://ulift.azurewebsites.net/api/Route",
     headers: { Authorization: `Bearer ${token}` },
   };
 
