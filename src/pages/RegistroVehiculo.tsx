@@ -11,6 +11,7 @@ import car from "../assets/car.png";
 import axios from "axios";
 
 interface Values {
+  email: string;
   placa: string;
   color: string;
   modelo: string;
@@ -18,6 +19,7 @@ interface Values {
 }
 
 const initialValues: Values = {
+  email: "",
   placa: "",
   color: "",
   modelo: "",
@@ -31,7 +33,7 @@ const schema = yup.object().shape({
     .number()
     .required("Campo requerido")
     .moreThan(0, "El número de asientos debe ser mayor a 0")
-    .lessThan(8, "El número de asientos debe ser menor a 8"),
+    .lessThan(8, "El número de asientos debe ser menor a 6"),
 });
 
 const RegistroVehiculo = (): JSX.Element => {
@@ -40,14 +42,15 @@ const RegistroVehiculo = (): JSX.Element => {
 
   const onSubmit = async (user: Values, { setSubmitting }: FormikHelpers<Values>) => {
     if (user.asientos < 1 || user.asientos > 8) {
-      enqueueSnackbar("¡El número de asientos debe estar entre 1 y 8!", { variant: "error" });
+      enqueueSnackbar("¡El número de asientos debe estar entre 1 y 5!", { variant: "error" });
       return;
     } else {
       setSubmitting(true);
-      const url = "https://ulift-backend.up.railway.app/api/user/vehicle";
-      //const url = "http://localhost:3000/api/user/vehicle";
+      const url = "https://ulift.azurewebsites.net/api/Vehicle";
       const token = localStorage.getItem("token");
+      const email = localStorage.getItem("email");
       var data = JSON.stringify({
+        email: email,
         model: user.modelo,
         plate: user.placa,
         color: user.color,

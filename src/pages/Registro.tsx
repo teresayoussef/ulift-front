@@ -111,7 +111,7 @@ const Registro = (): JSX.Element => {
       method: "post",
       url: "https://ulift.azurewebsites.net/api/Auth/SignUp",
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": "application/json",
       },
       data: data,
     };

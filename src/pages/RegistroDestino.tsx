@@ -13,6 +13,7 @@ import axios from "axios";
 import { useEffect } from "react";
 import userEvent from "@testing-library/user-event";
 import { Email } from "@mui/icons-material";
+//import { useUser } from "../contexts/UserContext";
 
 interface Values {
   email: string;
@@ -32,6 +33,11 @@ const schema = yup.object().shape({
 });
 
 const RegistroDestino = (): JSX.Element => {
+
+ // const myUser = useUser();
+
+  //console.log(myUser);
+
   var latitude = "";
   var longitude = "";
   const navigate = useNavigate();
@@ -53,6 +59,7 @@ const RegistroDestino = (): JSX.Element => {
     const email = localStorage.getItem("email");
     data.append("name", user.name);
     data.append("email", email!);
+    //data.append("email", myUser.email);
     data.append("lat", latitude.toString()!);
     data.append("lng", longitude.toString()!);
 
@@ -79,6 +86,7 @@ const RegistroDestino = (): JSX.Element => {
         console.log(error);
         enqueueSnackbar("¡Algo salió mal!", { variant: "error" });
         data.delete("name");
+        // data.delete("email");
         data.delete("lat");
         data.delete("lng");
       });

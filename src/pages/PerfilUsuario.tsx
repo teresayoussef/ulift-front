@@ -58,13 +58,30 @@ const PerfilUsuario = (): JSX.Element => {
   //const url = "http://localhost:3000/api/user/profile";
   const fetchUser = async () => {
     const token = localStorage.getItem("token");
-
-    console.log(token);
-    console.log(url);
+    const email = localStorage.getItem("email");
+    
     const response = await api_instance.get(url, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    console.log(response.data[1].name);
+
+    //const userFilter = response.data.filter((v: any) => v.email === email);
+
+    const urlVehicles = 'https://ulift.azurewebsites.net/api/Vehicle';
+
+    const getVehicle = await api_instance.get(urlVehicles,{
+      headers: { Authorization: `Bearer ${token}` }
+      });
+
+    const filters = getVehicle.data.filter((v: any) => v.email === email);
+
+    const urlRoutes = 'https://ulift.azurewebsites.net/api/URoute';
+    const getRoutes = await api_instance.get(urlRoutes,{
+      headers: { Authorization: `Bearer ${token}` }
+    });
+
+    const routes = getRoutes.data.filter((v: any) => v.email === email);
+
+    console.log(routes);
     usuario.name = response.data[1].name;
     usuario.lastname = response.data[1].lastName;
     // usuario.id = response.data.user.id;
@@ -75,9 +92,9 @@ const PerfilUsuario = (): JSX.Element => {
     // usuario.rating = response.data.user.rate;
     // usuario.gender = response.data.user.gender;
     // usuario.photo = response.data.user.photo;
-    // usuario.vehicles = response.data.user.vehicles;
+    usuario.vehicles = filters;
     // usuario.destinations = response.data.user.destination;
-    // usuario.routes = response.data.user.routes;
+    usuario.routes = routes;
 
     // if (response.data.user.role === "E") {
     //   usuario.role = "Estudiante";

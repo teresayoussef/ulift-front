@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const url = "https://ulift20-production.up.railway.app/api/";
+const url = "https://ulift.azurewebsites.net/api/";
 
 //const url = "http://localhost:3000/api/";
 const instance = axios.create({
