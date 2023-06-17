@@ -49,15 +49,16 @@ var flagColas: boolean = false;
 
 const fetchInfo = async () => {
   const token = localStorage.getItem("token");
+  const email = localStorage.getItem("email");
   var queryVehiculos = {
     method: "get",
-    url: "https://ulift.azurewebsites.net/api/Vehicle",
+    url: `https://ulift.azurewebsites.net/api/Vehicle/${email}`,
     headers: { Authorization: `Bearer ${token}` },
   };
 
   var queryRutas = {
     method: "get",
-    url: "https://ulift.azurewebsites.net/api/Route",
+    url: `https://ulift.azurewebsites.net/api/URoute/${email}`,
     headers: { Authorization: `Bearer ${token}` },
   };
 
@@ -70,7 +71,8 @@ const fetchInfo = async () => {
   };
   axios(queryVehiculos)
     .then(function (response) {
-      vehiculos = response.data.vehicles;
+      vehiculos = response.data;
+      console.log(vehiculos);
       flagVehiculos = true;
     })
     .catch(function (error) {
@@ -79,7 +81,7 @@ const fetchInfo = async () => {
 
   axios(queryRutas)
     .then(function (response) {
-      rutas = response.data.routes;
+      rutas = response.data;
       flagRutas = true;
     })
     .catch(function (error) {
@@ -88,7 +90,7 @@ const fetchInfo = async () => {
 
   axios(queryColas)
     .then(function (response) {
-      colas = response.data.lifts;
+      colas = response.data;
       flagColas = true;
     })
     .catch(function (error) {

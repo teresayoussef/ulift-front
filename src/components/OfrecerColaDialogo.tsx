@@ -31,8 +31,9 @@ interface DialogProps {
 var rutas: string[] = [];
 var vehiculos: string[] = [];
 
+const email = localStorage.getItem("email");
 const OfrecerColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
-  const url = "https://ulift-backend.up.railway.app/api/user/profile";
+  const url = `https://ulift.azurewebsites.net/api/User/${email}`;
   // const url = "http://localhost:3000/api/user/profile";
   const fetchUser = async () => {
     const token = localStorage.getItem("token");
@@ -41,21 +42,23 @@ const OfrecerColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
       headers: { Authorization: `Bearer ${token}` },
     });
 
-    for (let i = 0; i < vehiculos.length; i++) {
+    console.log(response.data);
+
+    for (let i = 0; i <= vehiculos.length; i++) {
       vehiculos.pop();
     }
 
-    for (let i = 0; i < rutas.length; i++) {
+    for (let i = 0; i <= rutas.length; i++) {
       rutas.pop();
     }
 
-    for (let i = 0; i < response.data.user.vehicles.length; i++) {
+    for (let i = 0; i < response.data.vehicles.length; i++) {
       vehiculos.push(
-        response.data.user.vehicles[i].plate + " - " + response.data.user.vehicles[i].model
+        response.data.vehicles[i].plate + " - " + response.data.vehicles[i].model
       );
     }
-    for (let i = 0; i < response.data.user.routes.length; i++) {
-      rutas.push(response.data.user.routes[i].rNumber + " - " + response.data.user.routes[i].name);
+    for (let i = 0; i < response.data.uRoutes.length; i++) {
+      rutas.push(response.data.uRoutes[i].name);
     }
   };
   useEffect(() => {
@@ -89,8 +92,9 @@ const OfrecerColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
       const token = localStorage.getItem("token");
       // const url = "http://localhost:3000/api/lift";
       var data = JSON.stringify({
+        driverEmail: email,
         plate: vehiculo.split(" - ")[0],
-        rNumber: direccion.split(" - ")[0],
+        route: direccion.split(" - ")[0],
         seats: puestos,
         waitingTime: tiempo,
       });
@@ -99,7 +103,8 @@ const OfrecerColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
 
       const config = {
         method: "post",
-        url: "https://ulift-backend.up.railway.app/api/lift",
+        url: "https://ulift.azurewebsites.net/api/Lift/Create",
+        //url: "https://localhost:7007/api/Lift/Create",
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",

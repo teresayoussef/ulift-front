@@ -71,17 +71,15 @@ const PerfilUsuario = (): JSX.Element => {
     });
 
     const destinations = getDestinations.data.filter((v: any) => v.email === email);
-    console.log(destinations);
-    console.log(response.data.uRoutes);
     usuario.name = response.data.user.name;
-    usuario.lastname = response.data.user.lastname;
+    usuario.lastname = response.data.user.lastName;
     usuario.email = response.data.user.email;
     usuario.emergencyContact = response.data.user.emergencyContact;
     usuario.emergencyName = "Anthony Testing"; //Hayque agregarlo a la base de datos y al response
     usuario.trips = response.data.user.liftCount;
     usuario.rating = response.data.user.driverRating;
     usuario.gender = response.data.user.gender;
-    // usuario.photo = response.data.user.photo;
+    //usuario.photo = response.data.user.photo;
     usuario.vehicles = response.data.vehicles;
     usuario.destinations = response.data.destinations;
     usuario.routes = response.data.uRoutes;
