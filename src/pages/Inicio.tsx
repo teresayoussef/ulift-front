@@ -25,7 +25,7 @@ interface Colas {
   driverID: number;
   email: string;
   gender: string;
-  lastname: string;
+  lastName: string;
   liftID: number;
   model: string;
   name: string;
@@ -64,7 +64,8 @@ const fetchInfo = async () => {
 
   var queryColas = {
     method: "get",
-    url: "https://ulift-backend.up.railway.app/api/lift/match/0/0/0/0",
+    //url: "https://ulift-backend.up.railway.app/api/lift/match/0/0/0/0",
+    url: "https://ulift.azurewebsites.net/api/Lift/Available",
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -91,6 +92,7 @@ const fetchInfo = async () => {
   axios(queryColas)
     .then(function (response) {
       colas = response.data;
+      console.log(colas[0].waitingTime);
       flagColas = true;
     })
     .catch(function (error) {
@@ -170,7 +172,7 @@ const Inicio = (): JSX.Element => {
                       driverID={cola.driverID}
                       email={cola.email}
                       gender={cola.gender}
-                      lastname={cola.lastname}
+                      lastname={cola.lastName}
                       liftID={cola.liftID}
                       model={cola.model}
                       name={cola.name}

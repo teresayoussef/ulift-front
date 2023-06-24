@@ -20,6 +20,7 @@ import api_instance from "../api/api_instance";
 import Typography from "@mui/material/Typography";
 import { useEffect } from "react";
 import axios from "axios";
+import { dir } from "console";
 
 interface DialogProps {
   isOpen: boolean;
@@ -54,7 +55,8 @@ var conductores: ColasDisponibles[] = [];
 const BuscarColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
   //var destinos: Destination[] = [];
 
-  const url = "https://ulift-backend.up.railway.app/api/user/profile";
+  const email = localStorage.getItem("email");
+  const url = `https://ulift.azurewebsites.net/api/User/${email}`;
   //const url = "http://localhost:3000/api/user/profile";
   const fetchUser = async () => {
     const token = localStorage.getItem("token");
@@ -63,13 +65,13 @@ const BuscarColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
       headers: { Authorization: `Bearer ${token}` },
     });
 
-    for (let i = 0; i < destinos.length; i++) {
+    for (let i = 0; i <= destinos.length; i++) {
       destinos.pop();
     }
 
-    for (let i = 0; i < response.data.user.destination.length; i++) {
+    for (let i = 0; i < response.data.destinations.length; i++) {
       destinos.push(
-        response.data.user.destination[i].dNumber + " - " + response.data.user.destination[i].name
+        i + " - " + response.data.destinations[i].name
       );
     }
   };
@@ -127,7 +129,7 @@ const BuscarColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
 
       var destino = {
         method: "get",
-        url: "https://ulift-backend.up.railway.app/api/user/destination",
+        url: `https://ulift.azurewebsites.net/api/User/${email}`,
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -135,12 +137,10 @@ const BuscarColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
 
       axios(destino)
         .then(function (response) {
-          for (let i = 0; i < response.data.destination.length; i++) {
-            if (response.data.destination[i].dNumber === parseInt(direccion.split(" - ")[0])) {
-              lat = response.data.destination[i].lat;
-              lng = response.data.destination[i].lng;
-              console.log(lat);
-              console.log(lng);
+          for (let i = 0; i < response.data.destinations.length; i++) {
+            if (i === parseInt(direccion.split(" - ")[0])) {
+              lat = response.data.destinations[i].lat;
+              lng = response.data.destinations[i].lng;
             }
             const url =
               "https://ulift-backend.up.railway.app/api/lift/match/" +

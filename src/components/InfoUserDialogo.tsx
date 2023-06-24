@@ -54,10 +54,10 @@ const InfoUserDialogo = (props: DialogProps) => {
         }}
       >
         {/* Aquí se tiene que cambiar para colocar la imagen */}
-        <Avatar
+        {/* <Avatar
           sx={{ width: 50, height: 50 }}
           src={"https://ulift-backend.up.railway.app/" + props.photo}
-        />
+        /> */}
 
         <Typography
           sx={{
