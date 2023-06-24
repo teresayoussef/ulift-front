@@ -52,6 +52,7 @@ const OfrecerColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
       rutas.pop();
     }
 
+    console.log(response.data.vehicles);
     for (let i = 0; i < response.data.vehicles.length; i++) {
       vehiculos.push(
         response.data.vehicles[i].plate + " - " + response.data.vehicles[i].model

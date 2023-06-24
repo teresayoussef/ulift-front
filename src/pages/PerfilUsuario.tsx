@@ -10,6 +10,7 @@ import {
   Card,
   CardContent,
   Grid,
+  Avatar,
 } from "@mui/material";
 import {
   AccessTimeRounded as TimeIcon,
@@ -32,6 +33,7 @@ import api_instance from "../api/api_instance";
 import { User } from "../types/index";
 import InfoCard from "../components/InfoCard";
 import { useSnackbar } from "notistack";
+import { BlobServiceClient } from "@azure/storage-blob";
 
 const usuario: User = {
   name: "",
@@ -54,9 +56,8 @@ const PerfilUsuario = (): JSX.Element => {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const email = localStorage.getItem("email");
-  console.log(email);
   const url = `https://ulift.azurewebsites.net/api/User/${email}`;
-  console.log(url);
+  
   //const url = "http://localhost:3000/api/user/profile";
   const fetchUser = async () => {
     const token = localStorage.getItem("token");
@@ -65,12 +66,6 @@ const PerfilUsuario = (): JSX.Element => {
       headers: { Authorization: `Bearer ${token}` },
     });
 
-
-    const getDestinations = await api_instance.get('https://ulift.azurewebsites.net/api/Destination',{
-      headers: { Authorization: `Bearer ${token}` }
-    });
-
-    const destinations = getDestinations.data.filter((v: any) => v.email === email);
     usuario.name = response.data.user.name;
     usuario.lastname = response.data.user.lastName;
     usuario.email = response.data.user.email;
@@ -79,7 +74,8 @@ const PerfilUsuario = (): JSX.Element => {
     usuario.trips = response.data.user.liftCount;
     usuario.rating = response.data.user.driverRating;
     usuario.gender = response.data.user.gender;
-    //usuario.photo = response.data.user.photo;
+    usuario.photo = response.data.user.photoURL;
+    console.log(usuario.photo);
     usuario.vehicles = response.data.vehicles;
     usuario.destinations = response.data.destinations;
     usuario.routes = response.data.uRoutes;
@@ -108,7 +104,7 @@ const PerfilUsuario = (): JSX.Element => {
             role={usuario.role}
             gender={usuario.gender}
             photo={usuario.photo}
-            trips={usuario.trips}
+            trips= {usuario.trips}
             rating={usuario.rating}
             emergencyContact={usuario.emergencyContact}
             emergencyName={usuario.emergencyName}
@@ -116,6 +112,7 @@ const PerfilUsuario = (): JSX.Element => {
             destinations={usuario.destinations}
             routes={usuario.routes}
           />
+          
           <Box
             sx={{
               display: "flex",
@@ -130,6 +127,7 @@ const PerfilUsuario = (): JSX.Element => {
                 flexDirection: "row",
                 mb: 2,
               }}
+
             >
               <EmailIcon color="primary" />
               <Typography ml={2}>
