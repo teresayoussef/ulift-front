@@ -15,94 +15,158 @@ import OfrecerColaDialogo from "../components/OfrecerColaDialogo";
 import ConductorDisponible from "../components/ConductorDisponible";
 import InfoUserDialogo from "../components/InfoUserDialogo";
 import axios from "axios";
-import { Lift, Route, Vehicle } from "../types";
+// import { Lift, Route, Vehicle } from "../types";
 import AlertaDialogo from "../components/AlertaDialogo";
+import { set } from "date-fns";
 
-interface Colas {
-  color: string;
-  date: Date;
-  distanceLastNode: number;
-  driverID: number;
-  email: string;
-  gender: string;
-  lastName: string;
-  liftID: number;
-  model: string;
-  name: string;
-  path: string;
-  photo: string;
-  plate: string;
-  rName: string;
-  rate: number;
-  role: string;
-  seats: number;
-  time: Date;
-  waitingTime: number;
+// interface Colas {
+//   color: string;
+//   date: Date;
+//   distanceLastNode: number;
+//   driverID: number;
+//   email: string;
+//   gender: string;
+//   lastName: string;
+//   liftID: number;
+//   model: string;
+//   name: string;
+//   path: string;
+//   photo: string;
+//   plate: string;
+//   rName: string;
+//   rate: number;
+//   role: string;
+//   seats: number;
+//   time: Date;
+//   waitingTime: number;
+// }
+
+export interface Root {
+  colas: Cola[]
 }
+
+export interface Cola {
+  lift: Lift
+  driver: Driver
+  route: Route
+  vehicle: Vehicle
+}
+
+export interface Lift {
+  email1: string
+  rating1: number
+  email2: string
+  rating2: number
+  email3: string
+  rating3: number
+  email4: string
+  rating4: number
+  email5: string
+  rating5: number
+  driverEmail: string
+  driverRating: number
+  status: string
+  plate: string
+  route: string
+  seats: number
+  waitingTime: number
+}
+
+export interface Driver {
+  email: string
+  password: string
+  name: string
+  lastName: string
+  photoURL: string
+  gender: string
+  role: string
+  emergencyContact: string
+  passengerRating: number
+  driverRating: number
+  confirmedUser: boolean
+  liftCount: number
+}
+
+export interface Route {
+  email: string
+  path: string
+  name: string
+}
+
+export interface Vehicle {
+  plate: string
+  email: string
+  color: string
+  model: string
+  seats: number
+}
+
 var vehiculos: Vehicle[] = [];
 var rutas: Route[] = [];
-var colas: Colas[] = [];
+var colas: Cola[] = [];
 
-var flagVehiculos: boolean = false;
-var flagRutas: boolean = false;
-var flagColas: boolean = false;
-
-const fetchInfo = async () => {
-  const token = localStorage.getItem("token");
-  const email = localStorage.getItem("email");
-  var queryVehiculos = {
-    method: "get",
-    url: `https://ulift.azurewebsites.net/api/Vehicle/${email}`,
-    headers: { Authorization: `Bearer ${token}` },
-  };
-
-  var queryRutas = {
-    method: "get",
-    url: `https://ulift.azurewebsites.net/api/URoute/${email}`,
-    headers: { Authorization: `Bearer ${token}` },
-  };
-
-  var queryColas = {
-    method: "get",
-    //url: "https://ulift-backend.up.railway.app/api/lift/match/0/0/0/0",
-    url: "https://ulift.azurewebsites.net/api/Lift/Available",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-  axios(queryVehiculos)
-    .then(function (response) {
-      vehiculos = response.data;
-      console.log(vehiculos);
-      flagVehiculos = true;
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-
-  axios(queryRutas)
-    .then(function (response) {
-      rutas = response.data;
-      flagRutas = true;
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-
-  axios(queryColas)
-    .then(function (response) {
-      colas = response.data;
-      console.log(colas[0].waitingTime);
-      flagColas = true;
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-};
 
 const Inicio = (): JSX.Element => {
   const [isDialogOfrecerOpen, setDialogOfrecerOpen] = useState(false);
   const [isDialogPedirOpen, setDialogPedirOpen] = useState(false);
+  const [flagVehiculos, setFlagVehiculos] = useState(false);
+  const [flagRutas, setFlagRutas] = useState(false);
+  const [flagColas, setFlagColas] = useState(false);
+  
+  const fetchInfo = async () => {
+    const token = localStorage.getItem("token");
+    const email = localStorage.getItem("email");
+    var queryVehiculos = {
+      method: "get",
+      url: `https://ulift.azurewebsites.net/api/Vehicle/${email}`,
+      headers: { Authorization: `Bearer ${token}` },
+    };
+  
+    var queryRutas = {
+      method: "get",
+      url: `https://ulift.azurewebsites.net/api/URoute/${email}`,
+      headers: { Authorization: `Bearer ${token}` },
+    };
+  
+    var queryColas = {
+      method: "get",
+      //url: "https://ulift-backend.up.railway.app/api/lift/match/0/0/0/0",
+      url: "https://ulift.azurewebsites.net/api/Lift/Available",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    axios(queryVehiculos)
+      .then(function (response) {
+        vehiculos = response.data;
+        console.log(vehiculos);
+        setFlagVehiculos(true);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  
+    axios(queryRutas)
+      .then(function (response) {
+        rutas = response.data;
+        setFlagRutas(true);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  
+    axios(queryColas)
+      .then(function (response) {
+        colas = response.data;
+        // console.log(colas[0].waitingTime);
+        console.log({colas});
+        setFlagColas(true);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+  
 
   const openOfrecerDialog = () => {
     if (vehiculos.length === 0) {
@@ -134,7 +198,7 @@ const Inicio = (): JSX.Element => {
     fetchInfo();
   }, []);
 
-  return (
+  return ((flagColas && flagRutas && flagVehiculos)?(    
     <Box>
       <NavBar />
       <Fade in timeout={800}>
@@ -166,25 +230,25 @@ const Inicio = (): JSX.Element => {
                   {colas.map((cola, index) => (
                     <ConductorDisponible
                       key={index}
-                      color={cola.color}
-                      date={cola.date}
-                      distanceLastNode={cola.distanceLastNode}
-                      driverID={cola.driverID}
-                      email={cola.email}
-                      gender={cola.gender}
-                      lastname={cola.lastName}
-                      liftID={cola.liftID}
-                      model={cola.model}
-                      name={cola.name}
-                      path={cola.path}
-                      photo={cola.photo}
-                      plate={cola.plate}
-                      rName={cola.rName}
-                      rate={cola.rate}
-                      role={cola.role}
-                      seats={cola.seats}
-                      time={cola.time}
-                      waitingTime={cola.waitingTime}
+                      color={cola.vehicle.color}
+                      date={new Date()}
+                      distanceLastNode={15}
+                      driverID={15}
+                      email={cola.driver.email}
+                      gender={cola.driver.gender}
+                      lastname={cola.driver.lastName}
+                      liftID={15}
+                      model={cola.vehicle.model}
+                      name={cola.driver.name}
+                      path={cola.route.path}
+                      photo={cola.driver.photoURL}
+                      plate={cola.vehicle.plate}
+                      rName={cola.route.name}
+                      rate={cola.driver.driverRating}
+                      role={cola.driver.role}
+                      seats={cola.vehicle.seats}
+                      time={new Date()}
+                      waitingTime={15}
                     />
                   ))}
                 </Grid>
@@ -229,6 +293,8 @@ const Inicio = (): JSX.Element => {
         </Box>
       </Fade>
     </Box>
-  );
+  ):(
+   <div>Cargando</div> 
+  ));
 };
 export default Inicio;
