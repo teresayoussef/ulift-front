@@ -54,6 +54,9 @@ const usuario: User = {
 
 const PerfilUsuario = (): JSX.Element => {
   const navigate = useNavigate();
+
+  const [isLoaded, setLoaded] = useState(false);
+
   const { enqueueSnackbar } = useSnackbar();
   const email = localStorage.getItem("email");
   const url = `https://ulift.azurewebsites.net/api/User/${email}`;
@@ -87,265 +90,272 @@ const PerfilUsuario = (): JSX.Element => {
     } else {
       usuario.role = "Trabajador";
     }
+    setLoaded(true);
   };
 
-  fetchUser();
+  useEffect(() => {
+    fetchUser();
+  } , []);
 
   return (
+    
     <Box>
-      <NavBar />
-      <Box justifyContent="space-between" flexDirection="column" flexGrow={1}>
-        <Container maxWidth="md" sx={{ p: 2 }}>
-          <Profile
-            id={usuario.id}
-            name={usuario.name}
-            lastname={usuario.lastname}
-            email={usuario.email}
-            role={usuario.role}
-            gender={usuario.gender}
-            photo={usuario.photo}
-            trips= {usuario.trips}
-            rating={usuario.rating}
-            emergencyContact={usuario.emergencyContact}
-            emergencyName={usuario.emergencyName}
-            vehicles={usuario.vehicles}
-            destinations={usuario.destinations}
-            routes={usuario.routes}
-          />
-          
+      {isLoaded && (<>
+        <NavBar />
+        <Box justifyContent="space-between" flexDirection="column" flexGrow={1}>
+          <Container maxWidth="md" sx={{ p: 2 }}>
+            <Profile
+              id={usuario.id}
+              name={usuario.name}
+              lastname={usuario.lastname}
+              email={usuario.email}
+              role={usuario.role}
+              gender={usuario.gender}
+              photo={usuario.photo}
+              trips= {usuario.trips}
+              rating={usuario.rating}
+              emergencyContact={usuario.emergencyContact}
+              emergencyName={usuario.emergencyName}
+              vehicles={usuario.vehicles}
+              destinations={usuario.destinations}
+              routes={usuario.routes}
+            />
+            
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                p: 2,
+                m: 1,
+              }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  mb: 2,
+                }}
+  
+              >
+                <EmailIcon color="primary" />
+                <Typography ml={2}>
+                  <b>Correo electrónico:</b> {usuario.email}
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  mb: 2,
+                }}
+              >
+                <BadgeIcon color="primary" />
+                <Typography ml={2}>
+                  <b>Rol:</b> {usuario.role}
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  mb: 2,
+                }}
+              >
+                <PersonIcon color="primary" />
+                <Typography ml={2}>
+                  <b>Contacto de emergencia:</b> {usuario.emergencyName}
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  mb: 2,
+                }}
+              >
+                <PhoneIcon color="primary" />
+                <Typography ml={2}>
+                  <b>Teléfono de emergencia:</b> {usuario.emergencyContact}
+                </Typography>
+              </Box>
+            </Box>
+  
+            <Box>
+              <Box>
+                <Typography variant="h6" sx={{ mt: 2 }}>
+                  Vehículos registrados
+                </Typography>
+                {/* Mapear los nombres de los vehículos registrados */}
+                {usuario.vehicles.length === 0 && (
+                  <Typography fontSize={{ xs: 14, md: 17 }} m={2}>
+                    No hay vehículos registrados
+                  </Typography>
+                )}
+                <Grid container spacing={{ xs: 2, md: 3 }}>
+                  {usuario.vehicles?.map((v) => (
+                    <InfoCard
+                      key={v.plate}
+                      title={"Placa: " + v.plate}
+                      subtitile={"Modelo: " + v.model}
+                    />
+                  ))}
+                </Grid>
+              </Box>
+  
+              <Box>
+                <Typography variant="h6" sx={{ mt: 2 }}>
+                  Rutas registradas
+                </Typography>
+                {/* Mapear los nombres de las rutas registradas */}
+                {usuario.routes.length === 0 && (
+                  <Typography fontSize={{ xs: 14, md: 17 }} m={2}>
+                    No hay rutas registradas
+                  </Typography>
+                )}
+  
+                <Grid container spacing={{ xs: 2, md: 3 }}>
+                  {usuario.routes?.map((v) => (
+                    <InfoCard
+                      key={v.rNumber}
+                      title={"Nombre de la ruta: " + v.name}
+                      subtitile={"Activa: " + v.active}
+                    />
+                  ))}
+                </Grid>
+              </Box>
+  
+              <Box>
+                <Typography variant="h6" sx={{ mt: 2 }}>
+                  Destinos registrados
+                </Typography>
+                {/* Mapear los nombres de las rutas registradas */}
+                {usuario.destinations.length === 0 && (
+                  <Typography fontSize={{ xs: 14, md: 17 }} m={2}>
+                    Error al cargar destinos
+                  </Typography>
+                )}
+  
+                <Grid container spacing={{ xs: 2, md: 3 }}>
+                  {usuario.destinations?.map((v, index) => (
+                    <InfoCard
+                      key={index}
+                      title={"Nombre del destino: " + v.name}
+                      subtitile={"Latitud y Longitud: " + v.lat + " " + v.lng}
+                    />
+                  ))}
+                </Grid>
+              </Box>
+            </Box>
+          </Container>
+  
           <Box
             sx={{
-              display: "flex",
-              flexDirection: "column",
-              p: 2,
-              m: 1,
+              mt: 5,
+              bottom: 0,
+              left: 0,
+              right: 0,
             }}
           >
-            <Box
+            <Divider />
+            <Card
               sx={{
                 display: "flex",
-                flexDirection: "row",
-                mb: 2,
-              }}
-
-            >
-              <EmailIcon color="primary" />
-              <Typography ml={2}>
-                <b>Correo electrónico:</b> {usuario.email}
-              </Typography>
-            </Box>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                mb: 2,
-              }}
-            >
-              <BadgeIcon color="primary" />
-              <Typography ml={2}>
-                <b>Rol:</b> {usuario.role}
-              </Typography>
-            </Box>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                mb: 2,
-              }}
-            >
-              <PersonIcon color="primary" />
-              <Typography ml={2}>
-                <b>Contacto de emergencia:</b> {usuario.emergencyName}
-              </Typography>
-            </Box>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                mb: 2,
-              }}
-            >
-              <PhoneIcon color="primary" />
-              <Typography ml={2}>
-                <b>Teléfono de emergencia:</b> {usuario.emergencyContact}
-              </Typography>
-            </Box>
-          </Box>
-
-          <Box>
-            <Box>
-              <Typography variant="h6" sx={{ mt: 2 }}>
-                Vehículos registrados
-              </Typography>
-              {/* Mapear los nombres de los vehículos registrados */}
-              {usuario.vehicles.length === 0 && (
-                <Typography fontSize={{ xs: 14, md: 17 }} m={2}>
-                  No hay vehículos registrados
-                </Typography>
-              )}
-              <Grid container spacing={{ xs: 2, md: 3 }}>
-                {usuario.vehicles?.map((v) => (
-                  <InfoCard
-                    key={v.plate}
-                    title={"Placa: " + v.plate}
-                    subtitile={"Modelo: " + v.model}
-                  />
-                ))}
-              </Grid>
-            </Box>
-
-            <Box>
-              <Typography variant="h6" sx={{ mt: 2 }}>
-                Rutas registradas
-              </Typography>
-              {/* Mapear los nombres de las rutas registradas */}
-              {usuario.routes.length === 0 && (
-                <Typography fontSize={{ xs: 14, md: 17 }} m={2}>
-                  No hay rutas registradas
-                </Typography>
-              )}
-
-              <Grid container spacing={{ xs: 2, md: 3 }}>
-                {usuario.routes?.map((v) => (
-                  <InfoCard
-                    key={v.rNumber}
-                    title={"Nombre de la ruta: " + v.name}
-                    subtitile={"Activa: " + v.active}
-                  />
-                ))}
-              </Grid>
-            </Box>
-
-            <Box>
-              <Typography variant="h6" sx={{ mt: 2 }}>
-                Destinos registrados
-              </Typography>
-              {/* Mapear los nombres de las rutas registradas */}
-              {usuario.destinations.length === 0 && (
-                <Typography fontSize={{ xs: 14, md: 17 }} m={2}>
-                  Error al cargar destinos
-                </Typography>
-              )}
-
-              <Grid container spacing={{ xs: 2, md: 3 }}>
-                {usuario.destinations?.map((v, index) => (
-                  <InfoCard
-                    key={index}
-                    title={"Nombre del destino: " + v.name}
-                    subtitile={"Latitud y Longitud: " + v.lat + " " + v.lng}
-                  />
-                ))}
-              </Grid>
-            </Box>
-          </Box>
-        </Container>
-
-        <Box
-          sx={{
-            mt: 5,
-            bottom: 0,
-            left: 0,
-            right: 0,
-          }}
-        >
-          <Divider />
-          <Card
-            sx={{
-              display: "flex",
-              width: "100%",
-              height: "80px",
-              boxShadow: "none",
-              p: 0,
-            }}
-            onClick={() => {
-              navigate("/registroDestino");
-            }}
-          >
-            <CardContent
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                boxShadow: "none",
                 width: "100%",
                 height: "80px",
-                textOverflow: "ellipsis",
-                overflow: "hidden",
+                boxShadow: "none",
+                p: 0,
+              }}
+              onClick={() => {
+                navigate("/registroDestino");
               }}
             >
-              <LocationIcon />
-              <Typography sx={{ fontWeight: 600, fontSize: 16, ml: 2 }}>Agregar Destino</Typography>
-            </CardContent>
-          </Card>
-          <Divider />
-          <Card
-            sx={{
-              width: "100%",
-              height: "70px",
-              boxShadow: "none",
-              p: 0,
-            }}
-            onClick={() => {
-              navigate("/registroVehiculo");
-            }}
-          >
-            <CardContent
+              <CardContent
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  boxShadow: "none",
+                  width: "100%",
+                  height: "80px",
+                  textOverflow: "ellipsis",
+                  overflow: "hidden",
+                }}
+              >
+                <LocationIcon />
+                <Typography sx={{ fontWeight: 600, fontSize: 16, ml: 2 }}>Agregar Destino</Typography>
+              </CardContent>
+            </Card>
+            <Divider />
+            <Card
               sx={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                boxShadow: "none",
                 width: "100%",
                 height: "70px",
-                textOverflow: "ellipsis",
-                overflow: "hidden",
+                boxShadow: "none",
+                p: 0,
+              }}
+              onClick={() => {
+                navigate("/registroVehiculo");
               }}
             >
-              <CarIcon />
-              <Typography sx={{ fontWeight: 600, fontSize: 16, ml: 2 }}>
-                Agregar Vehículo{" "}
-              </Typography>
-            </CardContent>
-          </Card>
-          <Divider />
-          <Card
-            sx={{
-              width: "100%",
-              height: "80px",
-              boxShadow: "none",
-              p: 0,
-            }}
-            onClick={() => {
-              if (usuario.vehicles.length === 0) {
-                enqueueSnackbar("Debe registrar un vehículo antes de registrar una ruta", {
-                  variant: "warning",
-                });
-              }
-              if (usuario.vehicles.length >= 1) {
-                navigate("/registroRuta");
-              }
-            }}
-          >
-            <CardContent
+              <CardContent
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  boxShadow: "none",
+                  width: "100%",
+                  height: "70px",
+                  textOverflow: "ellipsis",
+                  overflow: "hidden",
+                }}
+              >
+                <CarIcon />
+                <Typography sx={{ fontWeight: 600, fontSize: 16, ml: 2 }}>
+                  Agregar Vehículo{" "}
+                </Typography>
+              </CardContent>
+            </Card>
+            <Divider />
+            <Card
               sx={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                boxShadow: "none",
                 width: "100%",
                 height: "80px",
-                textOverflow: "ellipsis",
-                overflow: "hidden",
+                boxShadow: "none",
+                p: 0,
+              }}
+              onClick={() => {
+                if (usuario.vehicles.length === 0) {
+                  enqueueSnackbar("Debe registrar un vehículo antes de registrar una ruta", {
+                    variant: "warning",
+                  });
+                }
+                if (usuario.vehicles.length >= 1) {
+                  navigate("/registroRuta");
+                }
               }}
             >
-              <RutaIcon />
-              <Typography sx={{ fontWeight: 600, fontSize: 16, ml: 2 }}>Agregar Ruta </Typography>
-            </CardContent>
-          </Card>
+              <CardContent
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  boxShadow: "none",
+                  width: "100%",
+                  height: "80px",
+                  textOverflow: "ellipsis",
+                  overflow: "hidden",
+                }}
+              >
+                <RutaIcon />
+                <Typography sx={{ fontWeight: 600, fontSize: 16, ml: 2 }}>Agregar Ruta </Typography>
+              </CardContent>
+            </Card>
+          </Box>
         </Box>
-      </Box>
+        </>)}   
     </Box>
-  );
+  )
 };
+
 
 export default PerfilUsuario;
