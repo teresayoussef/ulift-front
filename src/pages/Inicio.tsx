@@ -4,11 +4,11 @@ import { NavBar } from "../components/NavBar";
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
+import CircularProgress from '@mui/material/CircularProgress';
 import {
   DriveEtaRounded as OfrecerColaIcon,
   HailRounded as PedirColaIcon,
 } from "@mui/icons-material";
-
 import { useState } from "react";
 import BuscarColaDialogo from "../components/BuscarColaDialogo";
 import OfrecerColaDialogo from "../components/OfrecerColaDialogo";
@@ -297,7 +297,9 @@ const Inicio = (): JSX.Element => {
       </Fade>
     </Box>
   ):(
-   <div>Cargando</div> 
+  <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+    <CircularProgress sx={{margin: 'auto'}}/>
+  </Box> 
   ));
 };
 export default Inicio;

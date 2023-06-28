@@ -84,6 +84,7 @@ const ListaEsperaParaPasajeros = (): JSX.Element => {
 
 export default ListaEsperaParaPasajeros;
 
+// foto del usuario
 export const Conductor = (usuario: ColasDisponibles): JSX.Element => {
   const foto = "https://ulift-backend.up.railway.app/" + usuario.photo;
 
