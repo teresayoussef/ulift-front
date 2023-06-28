@@ -8,11 +8,11 @@ interface UserProps {
   color: string;
   date: Date;
   distanceLastNode: number;
-  driverID: number;
+  driverID: string;
   email: string;
   gender: string;
   lastname: string;
-  liftID: number;
+  liftID: string;
   model: string;
   name: string;
   path: string;

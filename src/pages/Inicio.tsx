@@ -70,6 +70,8 @@ export interface Lift {
   route: string
   seats: number
   waitingTime: number
+  _id: string
+  createdAt: Date
 }
 
 export interface Driver {
@@ -85,6 +87,7 @@ export interface Driver {
   driverRating: number
   confirmedUser: boolean
   liftCount: number
+  _id: string
 }
 
 export interface Route {
@@ -231,13 +234,13 @@ const Inicio = (): JSX.Element => {
                     <ConductorDisponible
                       key={index}
                       color={cola.vehicle.color}
-                      date={new Date()}
+                      date={cola.lift.createdAt}
                       distanceLastNode={15}
-                      driverID={15}
+                      driverID={cola.driver._id}
                       email={cola.driver.email}
                       gender={cola.driver.gender}
                       lastname={cola.driver.lastName}
-                      liftID={15}
+                      liftID={cola.lift._id}
                       model={cola.vehicle.model}
                       name={cola.driver.name}
                       path={cola.route.path}
@@ -248,7 +251,7 @@ const Inicio = (): JSX.Element => {
                       role={cola.driver.role}
                       seats={cola.vehicle.seats}
                       time={new Date()}
-                      waitingTime={15}
+                      waitingTime={cola.lift.waitingTime}
                     />
                   ))}
                 </Grid>

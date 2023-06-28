@@ -66,6 +66,7 @@ const OfrecerColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
     fetchUser();
   }, [isOpen]);
 
+  //CAMBIAR ESTRUCTURA DEL COMPONENTE SIMILAR A LA BD
   interface ColasDisponibles {
     id: string;
     email: string;
@@ -115,6 +116,7 @@ const OfrecerColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
 
       var requestAConductores = {
         method: "get",
+        //REESCRIBIR URL NUEVO - Todos los usuarios que te han pedido una cola
         url: "https://ulift-backend.up.railway.app/api/lift/requests",
         headers: { Authorization: `Bearer ${token}` },
       };

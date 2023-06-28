@@ -17,10 +17,12 @@ import theme from "./theme";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import ScrollToTop from "./components/ScrollToTop";
+import { LiftProvider } from "./contexts/LiftsContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 
 root.render(
+  <LiftProvider>
   <ThemeProvider theme={theme}>
     <SnackbarProvider>
       <BrowserRouter>
@@ -29,6 +31,7 @@ root.render(
       </BrowserRouter>
     </SnackbarProvider>
   </ThemeProvider>
+  </LiftProvider>
 );
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

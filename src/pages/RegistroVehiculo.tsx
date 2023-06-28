@@ -125,10 +125,10 @@ const RegistroVehiculo = (): JSX.Element => {
         </Box>
       </Fade>
       <Box
-        component="img"
-        src={car}
-        alt="car"
-        sx={{ width: "80%", position: "absolute", bottom: 0, right: 0 }}
+        //component="img"
+        //src={car}
+        //alt="car"
+        //sx={{ width: "80%", position: "absolute", bottom: 0, right: 0 }}
       />
     </Box>
   );

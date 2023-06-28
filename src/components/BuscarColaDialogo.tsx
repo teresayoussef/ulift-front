@@ -21,12 +21,14 @@ import Typography from "@mui/material/Typography";
 import { useEffect } from "react";
 import axios from "axios";
 import { dir } from "console";
+import { Driver, Lift, Route, Vehicle } from "../pages/Inicio";
+import { LiftContext } from "../contexts/LiftsContext";
 
 interface DialogProps {
   isOpen: boolean;
   closeDialog: () => void;
 }
-
+//CAMBIAR ESTRUCTURA DEL COMPONENTE SIMILAR A LA BD
 interface ColasDisponibles {
   color: string;
   date: Date;
@@ -49,11 +51,20 @@ interface ColasDisponibles {
   waitingTime: number;
 }
 
+export interface lifts {
+  lift: Lift
+  driver: Driver
+  route: Route
+  vehicle: Vehicle
+}
+
+
 var destinos: string[] = [];
-var conductores: ColasDisponibles[] = [];
+var conductores: lifts[] = [];
 
 const BuscarColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
   //var destinos: Destination[] = [];
+  const {setLiftList, liftsList} = React.useContext(LiftContext)
 
   const email = localStorage.getItem("email");
   const url = `https://ulift.azurewebsites.net/api/User/${email}`;
@@ -103,7 +114,7 @@ const BuscarColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
         //guardo en localStorage los conductores disponibles
 
         conductores = response.data.lifts;
-        localStorage.setItem("conductores", JSON.stringify(conductores));
+        setLiftList(conductores);
 
         setTimeout(() => {
           navigate("/listaEspera/pasajero");
@@ -119,10 +130,10 @@ const BuscarColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
   const irListaEspera = () => {
     if (direccion !== "" && metros.toString() !== "") {
       const token = localStorage.getItem("token");
-
-      var mujeres = 0;
+      //AQUI MANDA 0 SI NO SELECCIONA LA OPCION Y 1 SI ESTA ACTIVADA
+      var mujeres = false;
       if (mujeresOnly) {
-        mujeres = 1;
+        mujeres = true;
       }
       var lat: number = 0;
       var lng: number = 0;
@@ -142,13 +153,14 @@ const BuscarColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
               lat = response.data.destinations[i].lat;
               lng = response.data.destinations[i].lng;
             }
+
             const url =
-              "https://ulift-backend.up.railway.app/api/lift/match/" +
-              mujeres +
-              "/" +
+              "https://ulift.azurewebsites.net/api/Lift/" +           
               lat +
               "/" +
               lng +
+              "/" +
+              mujeres +
               "/" +
               metros;
             pedirCola(url, token!);

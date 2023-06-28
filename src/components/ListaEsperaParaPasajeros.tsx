@@ -1,3 +1,4 @@
+import * as React from "react"; 
 import { Avatar, Box, IconButton, Typography } from "@mui/material";
 import { ChatRounded, HailRounded as PedirColaIcon } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
@@ -5,16 +6,18 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import { grey } from "@mui/material/colors";
 import axios from "axios";
+import { LiftContext } from "../contexts/LiftsContext";
+import { Driver, Lift, Route, Vehicle } from "../pages/Inicio";
 
 interface ColasDisponibles {
   color: string;
   date: Date;
   distanceLastNode: number;
-  driverID: number;
+  driverID: string;
   email: string;
   gender: string;
-  lastname: string;
-  liftID: number;
+  lastName: string;
+  liftID: string;
   model: string;
   name: string;
   path: string;
@@ -28,7 +31,15 @@ interface ColasDisponibles {
   waitingTime: number;
 }
 
+export interface lifts {
+  lift: Lift
+  driver: Driver
+  route: Route
+  vehicle: Vehicle
+}
+
 const ListaEsperaParaPasajeros = (): JSX.Element => {
+  const {liftsList} = React.useContext(LiftContext);
   var pasajeros: ColasDisponibles[] = [];
 
   const fetchUser = async () => {
@@ -37,31 +48,34 @@ const ListaEsperaParaPasajeros = (): JSX.Element => {
   };
 
   fetchUser();
+  React.useEffect(()=>{
+    console.log({liftsList})
+  }, [liftsList])
 
   return (
     <Box display={"flex"} flexDirection="column">
-      {pasajeros.map((cola, index) => (
+      {liftsList.map((cola, index) => (
         <Conductor
           key={index}
-          color={cola.color}
-          date={cola.date}
-          distanceLastNode={cola.distanceLastNode}
-          driverID={cola.driverID}
-          email={cola.email}
-          gender={cola.gender}
-          lastname={cola.lastname}
-          liftID={cola.liftID}
-          model={cola.model}
-          name={cola.name}
-          path={cola.path}
-          photo={cola.photo}
-          plate={cola.plate}
-          rName={cola.rName}
-          rate={cola.rate}
-          role={cola.role}
-          seats={cola.seats}
-          time={cola.time}
-          waitingTime={cola.waitingTime}
+          color={cola.vehicle.color}
+          date={cola.lift.createdAt}
+          distanceLastNode={15}
+          driverID={cola.driver._id}
+          email={cola.driver.email}
+          gender={cola.driver.gender}
+          lastName={cola.driver.lastName}
+          liftID={cola.lift._id}
+          model={cola.vehicle.model}
+          name={cola.driver.name}
+          path={cola.route.path}
+          photo={cola.driver.photoURL}
+          plate={cola.vehicle.plate}
+          rName={cola.route.name}
+          rate={cola.driver.driverRating}
+          role={cola.driver.role}
+          seats={cola.lift.seats}
+          time={cola.lift.createdAt}
+          waitingTime={cola.lift.waitingTime}
         />
       ))}
     </Box>
@@ -152,7 +166,7 @@ export const Conductor = (usuario: ColasDisponibles): JSX.Element => {
               fontWeight: 600,
             }}
           >
-            {usuario.name} {usuario.lastname}
+            {usuario.name} {usuario.lastName}
           </Typography>
         </Box>
         <Box

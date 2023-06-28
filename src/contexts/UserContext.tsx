@@ -1,12 +1,13 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, PropsWithChildren } from "react";
+import { Driver, Lift, Route, Vehicle } from "../pages/Inicio";
 
-const UserContext = React.createContext();
+const UserContext = React.createContext({});
 
 // export const useUser = () => {
 //   return useContext(UserContext);
 // };
 
-export const UserProvider = ({ children }) => {
+export const UserProvider = ({ children }: PropsWithChildren) => {
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState(true);
 
@@ -44,4 +45,3 @@ export const UserProvider = ({ children }) => {
   return <UserContext.Provider value={user}>{!loading && children}</UserContext.Provider>;
 };
 
-export { UserContext } from "../contexts/UserContext";
