@@ -9,6 +9,8 @@ import PasswordField from "../components/PasswordField";
 import { useNavigate } from "react-router-dom";
 import api_instance from "../api/api_instance";
 
+// import { useEffect, useState } from "react";s
+
 interface Values {
   email: string;
   password: string;
@@ -111,5 +113,35 @@ const InicioSesion = (): JSX.Element => {
     </Box>
   );
 };
+
+// function InicioSesion():JSX.Element{
+
+//   const [counter, setCounter] = useState<number>(0)
+
+//   useEffect(()=>{
+//     console.log('Hola')
+//   }, [])
+
+//   useEffect(()=>{
+//     console.log('hook 2')
+//   }, [counter])
+
+//   let variable = 1
+//   const constante = 3.14
+
+//   const prueba = (event: any) => {
+//     setCounter(counter+1)
+//   }
+
+//   return (
+//     <div>
+//       <h1>cuenta: {counter}</h1>
+//       <button onClick={prueba}>+</button>
+//       <div>
+
+//       </div>
+//     </div>
+//   )
+// }
 
 export default InicioSesion;

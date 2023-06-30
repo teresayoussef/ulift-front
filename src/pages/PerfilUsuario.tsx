@@ -34,6 +34,7 @@ import { User } from "../types/index";
 import InfoCard from "../components/InfoCard";
 import { useSnackbar } from "notistack";
 import { BlobServiceClient } from "@azure/storage-blob";
+import Spinner from "../components/Spinner";
 
 const usuario: User = {
   name: "",
@@ -97,10 +98,12 @@ const PerfilUsuario = (): JSX.Element => {
     fetchUser();
   } , []);
 
+  // (condicion)? (si se cumple): (si no se cumple)
+
   return (
     
     <Box>
-      {isLoaded && (<>
+      {(isLoaded)?(<>
         <NavBar />
         <Box justifyContent="space-between" flexDirection="column" flexGrow={1}>
           <Container maxWidth="md" sx={{ p: 2 }}>
@@ -247,7 +250,6 @@ const PerfilUsuario = (): JSX.Element => {
               </Box>
             </Box>
           </Container>
-  
           <Box
             sx={{
               mt: 5,
@@ -352,7 +354,7 @@ const PerfilUsuario = (): JSX.Element => {
             </Card>
           </Box>
         </Box>
-        </>)}   
+        </>):(<Spinner />)}   
     </Box>
   )
 };

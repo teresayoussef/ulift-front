@@ -149,7 +149,7 @@ const ListaEsperaParaConductores = (): JSX.Element => {
 export default ListaEsperaParaConductores;
 
 export const PasajeroListaEspera = ({ usuario, solicitudes }: SolicitudUsuarios): JSX.Element => {
-  const foto = "https://ulift-backend.up.railway.app/" + usuario.photo;
+  const foto = usuario.photo;
   const [isActive, setIsActive] = useState(false);
   const navigate = useNavigate();
   solicitudes = requests;

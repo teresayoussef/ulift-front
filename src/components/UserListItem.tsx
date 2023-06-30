@@ -16,7 +16,7 @@ import { Colas } from "../types";
 
 const UserListItem = (props: Colas): JSX.Element => {
   const [isInfoUserOpen, setDialogInfoUser] = useState(false);
-  const foto = "https://ulift-backend.up.railway.app/" + props.photo;
+  const foto = props.photo;
 
   const openInfoUserDialog = () => {
     setDialogInfoUser(true);

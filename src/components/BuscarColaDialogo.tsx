@@ -20,7 +20,6 @@ import api_instance from "../api/api_instance";
 import Typography from "@mui/material/Typography";
 import { useEffect } from "react";
 import axios from "axios";
-import { dir } from "console";
 import { Driver, Lift, Route, Vehicle } from "../pages/Inicio";
 import { LiftContext } from "../contexts/LiftsContext";
 
@@ -62,9 +61,15 @@ export interface lifts {
 var destinos: string[] = [];
 var conductores: lifts[] = [];
 
+interface latLng {
+  lat:number;
+  lng:number;
+}
+
 const BuscarColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
   //var destinos: Destination[] = [];
   const {setLiftList, liftsList} = React.useContext(LiftContext)
+  const [destinationsLatLng, setDestinationsLatLng] = React.useState<latLng[]>([])
 
   const email = localStorage.getItem("email");
   const url = `https://ulift.azurewebsites.net/api/User/${email}`;
@@ -81,6 +86,13 @@ const BuscarColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
     }
 
     for (let i = 0; i < response.data.destinations.length; i++) {
+
+      const dest: latLng = {
+        lat: response.data.destinations[i].lat,
+        lng: response.data.destinations[i].lng
+      }
+      setDestinationsLatLng([...destinationsLatLng, dest])
+
       destinos.push(
         i + " - " + response.data.destinations[i].name
       );
@@ -138,37 +150,27 @@ const BuscarColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
       var lat: number = 0;
       var lng: number = 0;
 
-      var destino = {
-        method: "get",
-        url: `https://ulift.azurewebsites.net/api/User/${email}`,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
+      console.log(direccion)
 
-      axios(destino)
-        .then(function (response) {
-          for (let i = 0; i < response.data.destinations.length; i++) {
-            if (i === parseInt(direccion.split(" - ")[0])) {
-              lat = response.data.destinations[i].lat;
-              lng = response.data.destinations[i].lng;
-            }
+      const index = direccion[0]
 
-            const url =
-              "https://ulift.azurewebsites.net/api/Lift/" +           
-              lat +
-              "/" +
-              lng +
-              "/" +
-              mujeres +
-              "/" +
-              metros;
-            pedirCola(url, token!);
-          }
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+      if(typeof(index) === 'number'){
+        const dest = destinationsLatLng[index as number]
+        lat = dest.lat
+        lng = dest.lng
+      }
+
+      const url =
+      "https://ulift.azurewebsites.net/api/Lift/" +           
+      lat +
+      "/" +
+      lng +
+      "/" +
+      mujeres +
+      "/" +
+      metros;
+      pedirCola(url, token!);
+     
 
       destinos = [];
     } else {

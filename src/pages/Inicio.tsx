@@ -18,6 +18,7 @@ import axios from "axios";
 // import { Lift, Route, Vehicle } from "../types";
 import AlertaDialogo from "../components/AlertaDialogo";
 import { set } from "date-fns";
+import Spinner from "../components/Spinner";
 
 // interface Colas {
 //   color: string;
@@ -297,9 +298,7 @@ const Inicio = (): JSX.Element => {
       </Fade>
     </Box>
   ):(
-  <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-    <CircularProgress sx={{margin: 'auto'}}/>
-  </Box> 
+  <Spinner />
   ));
 };
 export default Inicio;
