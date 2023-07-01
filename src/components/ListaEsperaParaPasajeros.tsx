@@ -100,7 +100,7 @@ export const Conductor = (usuario: ColasDisponibles): JSX.Element => {
     console.log(usuario.liftID);
     const data = JSON.stringify({
       liftId: usuario.liftID,
-      passengerEmail: Email  
+      passengerEmail: Email,  
     });
 
     const token = localStorage.getItem("token");

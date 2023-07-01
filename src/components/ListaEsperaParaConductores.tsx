@@ -39,6 +39,75 @@ interface ColasDisponibles {
   newRate: number | null;
 }
 
+const colasDisponibles: ColasDisponibles[] = [
+  {
+    color: "rojo",
+    date: new Date(),
+    distanceLastNode: 10,
+    id: 1,
+    email: "usuario1@example.com",
+    gender: "femenino",
+    lastname: "Pérez",
+    liftID: 1234,
+    model: "Modelo 1",
+    nameU: "Usuario 1",
+    path: "/ruta/1",
+    photo: "https://ejemplo.com/usuario1.jpg",
+    plate: "ABC-123",
+    rName: "Restaurante 1",
+    rate: 4,
+    role: "cliente",
+    seats: 4,
+    time: new Date(),
+    waitingTime: 5,
+    newRate: null,
+  },
+  {
+    color: "azul",
+    date: new Date(),
+    distanceLastNode: 7,
+    id: 2,
+    email: "usuario2@example.com",
+    gender: "masculino",
+    lastname: "Gómez",
+    liftID: 5678,
+    model: "Modelo 2",
+    nameU: "Usuario 2",
+    path: "/ruta/2",
+    photo: "https://ejemplo.com/usuario2.jpg",
+    plate: "DEF-456",
+    rName: "Restaurante 2",
+    rate: 3,
+    role: "cliente",
+    seats: 2,
+    time: new Date(),
+    waitingTime: 3,
+    newRate: 5,
+  },
+  {
+    color: "verde",
+    date: new Date(),
+    distanceLastNode: 5,
+    id: 3,
+    email: "usuario3@example.com",
+    gender: "no binario",
+    lastname: "López",
+    liftID: 9012,
+    model: "Modelo 3",
+    nameU: "Usuario 3",
+    path: "/ruta/3",
+    photo: "https://ejemplo.com/usuario3.jpg",
+    plate: "GHI-789",
+    rName: "Restaurante 3",
+    rate: 5,
+    role: "conductor",
+    seats: 1,
+    time: new Date(),
+    waitingTime: 7,
+    newRate: 4,
+  },
+];
+
 interface SolicitudUsuarios {
   usuario: ColasDisponibles;
   solicitudes: ColasDisponibles[];
@@ -51,11 +120,42 @@ var requests: ColasDisponibles[] = [];
 const ListaEsperaParaConductores = (): JSX.Element => {
   const { enqueueSnackbar } = useSnackbar();
   const fetchUser = async () => {
-    var requestsString = JSON.parse(localStorage.getItem("requests")!);
-    requests = requestsString;
+    requests = colasDisponibles;
   };
   fetchUser();
   const navigate = useNavigate();
+
+  const getRequests = async () => {
+
+    //api/Lift/Requests/{liftId}
+    const liftId = localStorage.getItem("liftID");
+
+    const config = {
+      method: "get",
+      url: `https://ulift.azurewebsites.net/api/WaitingList/Requests/${liftId}`,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      }
+    }
+
+    axios(config)
+      .then(function (response) {
+        console.log('-------------------')
+        console.log(JSON.stringify(response.data));
+        // requests = response.data;
+      }
+      )
+      .catch(function (error) {
+        console.log(error);
+      }
+      );
+
+  }
+
+  useEffect(() => {
+    getRequests();
+  },[]);
 
   function empezarViaje() {
     //aqui se debe pasar la lista de elegidos a la cola en proceso
@@ -66,6 +166,8 @@ const ListaEsperaParaConductores = (): JSX.Element => {
         dNumber: 1,
       });
       console.log(data);
+      //WaitingList/Requests/{liftId}
+      //AcceptRequest
       var config = {
         method: "post",
         url: "https://ulift-backend.up.railway.app/api/lift/accept",
@@ -76,6 +178,7 @@ const ListaEsperaParaConductores = (): JSX.Element => {
         data: data,
       };
 
+      //StartLift
       var startLift = {
         method: "post",
         url: "https://ulift-backend.up.railway.app/api/lift/start",

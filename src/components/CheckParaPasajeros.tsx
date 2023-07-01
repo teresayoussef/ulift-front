@@ -45,17 +45,16 @@ const CheckParaPasajeros = (): JSX.Element => {
 
     const Email = localStorage.getItem("email");
 
-    var data = JSON.stringify({
-      email: Email,
-    });
+    // var data = JSON.stringify({
+    //   email: Email,
+    // });
 
     var config = {
       method: "post",
-      url: "https://ulift-backend.up.railway.app/api/lift/complete",
+      url: `https://ulift.azurewebsites.net/api/Lift/PasajeroCheck/${Email}`,
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
-      },
-      data: data,
+      }
     };
 
     axios(config)
