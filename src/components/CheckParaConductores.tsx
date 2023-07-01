@@ -23,6 +23,7 @@ import RatingDialogo from "./RatingDialogo";
 import RatingPasajeros from "./RatingPasajeros";
 import axios from "axios";
 import { useSnackbar } from "notistack";
+import { useNavigate } from "react-router-dom";
 
 interface ColasDisponibles {
   color: string;
@@ -85,6 +86,7 @@ export interface solicitud {
 
 const CheckParaConductores = (): JSX.Element => {
   const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();
 
   const [passengersData, setPassengersData] = React.useState<Root>([]);
 
@@ -101,7 +103,7 @@ const CheckParaConductores = (): JSX.Element => {
 
   const finViaje = () => {
     var config = {
-      method: "post",
+      method: "put",
       url: `https://ulift.azurewebsites.net/api/Lift/complete/${localStorage.getItem("liftID")}`,
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -110,11 +112,11 @@ const CheckParaConductores = (): JSX.Element => {
     axios(config)
       .then(function (response) {
         console.log(JSON.stringify(response.data));
-        enqueueSnackbar("Cola finalizada recuerda calificar a tus pasajeros.", {
+        enqueueSnackbar("Cola finalizada.", {
           variant: "success",
         });
         setTimeout(() => {
-          abrirDialogo();
+          navigate("/")
         }, 5000);
       })
       .catch(function (error) {
