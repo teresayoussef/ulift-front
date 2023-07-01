@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Avatar,
   Box,
@@ -45,6 +45,41 @@ interface SolicitudUsuarios {
   solicitudes: ColasDisponibles[];
 }
 
+export type Root = Root2[]
+
+export interface Root2 {
+  waitingList: WaitingList
+  user: UserData
+}
+
+export interface WaitingList {
+  liftId: string
+  passengerEmail: string
+}
+
+export interface UserData {
+  email: string
+  password: string
+  name: string
+  lastName: string
+  photoURL: string
+  gender: string
+  role: string
+  emergencyContact: string
+  passengerRating: number
+  driverRating: number
+  confirmedUser: boolean
+  liftCount: number
+  status: string
+}
+
+export interface solicitud {
+  usuario: Root2;
+  solicitudes: Root2[];
+  elegidos: Root;
+  setElegidos: React.Dispatch<React.SetStateAction<Root>>;
+}
+
 var elegidos: ColasDisponibles[] = [];
 var flag: boolean = false;
 var requests: ColasDisponibles[] = [];
@@ -56,6 +91,9 @@ const ListaEsperaParaConductores = (): JSX.Element => {
   };
   fetchUser();
   const navigate = useNavigate();
+
+  const [requestsData,setRequestsData] = useState<Root>([] as Root);
+  const [selecteds, setSelecteds] = useState<Root>([] as Root);
 
   const getRequests = async () => {
 
@@ -75,6 +113,11 @@ const ListaEsperaParaConductores = (): JSX.Element => {
       .then(function (response) {
         console.log('-------------------')
         console.log(JSON.stringify(response.data));
+
+        const data: Root = response.data; 
+
+        setRequestsData([...data] as Root);
+
         // requests = response.data;
       }
       )
@@ -158,6 +201,70 @@ const ListaEsperaParaConductores = (): JSX.Element => {
     });
   }
 
+  const startTrip = async () =>{
+
+    const token = localStorage.getItem("token")
+    const liftId = localStorage.getItem("liftID");
+
+    if(selecteds.length > 0){
+      
+      selecteds.forEach((user) => {
+
+        const config = {
+          method: "post",
+          url: `https://ulift.azurewebsites.net/api/Lift/AcceptRequest/${user.waitingList.liftId}/${user.waitingList.passengerEmail}`,
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          }
+        }
+        axios(config)
+          .then(function (response) {
+            console.log(response.data);
+            enqueueSnackbar("Se ha aceptado la solicitud", { variant: "success" });
+          }
+          )
+          .catch(function (error) {
+            console.log(error);
+            enqueueSnackbar("Ha ocurrido un error", { variant: "error" });
+          }
+          );
+      })
+
+      setTimeout(() => {
+        const config = {
+          method: "post",
+          url: `https://ulift.azurewebsites.net/api/Lift/StartLift/${liftId}`,
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          }
+        }
+        axios(config)
+          .then(function (response) {
+            console.log(response.data);
+            enqueueSnackbar("El viaje ya va a comenzar ", { variant: "info" });
+            setTimeout(() => {
+              localStorage.setItem("elegidos", JSON.stringify(selecteds));
+              flag = true;
+              navigate("/colaEnProceso/conductor");
+            }, 6000);
+          }
+          )
+          .catch(function (error) {
+            console.log(error);
+            enqueueSnackbar("Ha ocurrido un error", { variant: "error" });
+          }
+          );
+
+      }, 3000);
+
+    }else{
+      enqueueSnackbar("No ha seleccionado ningún pasajero", { variant: "error" });
+    }
+
+  }
+
   return (
     <Box display={"flex"} flexDirection="column" alignItems="center" justifyContent="center">
       {/* Cuando haya seleccionado al menos uno o el límite indicado y si es conductor , debe habilitarse esta opción */}
@@ -168,14 +275,19 @@ const ListaEsperaParaConductores = (): JSX.Element => {
       )}
       {!flag && (
         <List dense sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
-          {requests.map((user, index) => (
-            <PasajeroListaEspera usuario={user} solicitudes={requests} key={index} />
+          {/* {requests.map((user, index) => (
+            // <PasajeroListaEspera usuario={user} solicitudes={requests} key={index} />
+          ))} */}
+          {requestsData.map((request, index) => (
+            <PasajeroListaEspera usuario={request} solicitudes={requestsData} elegidos={selecteds} setElegidos={setSelecteds} key={index} />
           ))}
         </List>
       )}
 
-      {!flag && requests.length > 0 && (
-        <Button variant="contained" onClick={empezarViaje}>
+      {!flag && requestsData.length > 0 && (
+        <Button variant="contained" onClick={startTrip} style={{
+          marginTop: "20px",
+        }}>
           Empezar viaje
         </Button>
       )}
@@ -185,26 +297,27 @@ const ListaEsperaParaConductores = (): JSX.Element => {
 
 export default ListaEsperaParaConductores;
 
-export const PasajeroListaEspera = ({ usuario, solicitudes }: SolicitudUsuarios): JSX.Element => {
-  const foto = usuario.photo;
+export const PasajeroListaEspera = ({ usuario, solicitudes, elegidos, setElegidos  }: solicitud): JSX.Element => {
+  const foto = usuario.user.photoURL;
   const [isActive, setIsActive] = useState(false);
   const navigate = useNavigate();
-  solicitudes = requests;
-  console.log(
-    "arreglo de requests " + requests.flatMap((usuario) => usuario.nameU + " " + usuario.id)
-  );
-  const handleClick = (id: number) => () => {
+  // console.log(
+  //   "arreglo de requests " + requests.flatMap((usuario) => usuario.nameU + " " + usuario.id)
+  // );
+  const handleClick = (email: string) => () => {
     if (isActive === false) {
       setIsActive((current) => !current);
-      elegidos.push(solicitudes.find((usuario) => usuario.id === id) as ColasDisponibles);
-      console.log(elegidos.flatMap((usuario) => usuario.nameU + " " + usuario.id));
+      setElegidos((current) => [...current, usuario]);
+      // console.log(elegidos.flatMap((usuario) => usuario.nameU + " " + usuario.id));
     } else {
-      if (solicitudes.find((usuario) => usuario.id === id)) {
+      if (solicitudes.find((usuario) => usuario.user.email === email)) {
         setIsActive((current) => !current);
-        elegidos.splice(
-          elegidos.indexOf(solicitudes.find((usuario) => usuario.id === id) as ColasDisponibles),
-          1
-        );
+        // elegidos.splice(
+        //   elegidos.indexOf(solicitudes.find((usuario) => usuario.id === id) as ColasDisponibles),
+        //   1
+        // );
+        // use setElegidos to update the state deleting the user with email === email
+        setElegidos((current) => current.filter((user) => user.user.email !== email));
       }
     }
 
@@ -258,7 +371,7 @@ export const PasajeroListaEspera = ({ usuario, solicitudes }: SolicitudUsuarios)
               fontStyle: "bold",
             }}
           >
-            {usuario.nameU} {usuario.lastname}
+            {usuario.user.name} {usuario.user.lastName}
           </Typography>
         </Box>
         <Box
@@ -270,7 +383,7 @@ export const PasajeroListaEspera = ({ usuario, solicitudes }: SolicitudUsuarios)
           {/* <IconButton sx={{ marginRight: 1 }} onClick={goChat(usuario.id)}>
             <ChatRounded color="primary" />
           </IconButton> */}
-          <IconButton sx={{ marginRight: 1 }} onClick={handleClick(usuario.id)}>
+          <IconButton sx={{ marginRight: 1 }} onClick={handleClick(usuario.user.email)}>
             <LocIcon />
           </IconButton>
         </Box>
