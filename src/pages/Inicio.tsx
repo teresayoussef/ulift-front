@@ -71,7 +71,7 @@ export interface Lift {
   route: string
   seats: number
   waitingTime: number
-  _id: string
+  liftId: string
   createdAt: Date
 }
 
@@ -88,7 +88,7 @@ export interface Driver {
   driverRating: number
   confirmedUser: boolean
   liftCount: number
-  _id: string
+  id: string
 }
 
 export interface Route {
@@ -237,11 +237,11 @@ const Inicio = (): JSX.Element => {
                       color={cola.vehicle.color}
                       date={cola.lift.createdAt}
                       distanceLastNode={15}
-                      driverID={cola.driver._id}
+                      driverID={cola.driver.id}
                       email={cola.driver.email}
                       gender={cola.driver.gender}
                       lastname={cola.driver.lastName}
-                      liftID={cola.lift._id}
+                      liftID={cola.lift.liftId}
                       model={cola.vehicle.model}
                       name={cola.driver.name}
                       path={cola.route.path}

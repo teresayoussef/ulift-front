@@ -22,6 +22,8 @@ import { useEffect } from "react";
 import axios from "axios";
 import { Driver, Lift, Route, Vehicle } from "../pages/Inicio";
 import { LiftContext } from "../contexts/LiftsContext";
+import { set } from "date-fns";
+
 
 interface DialogProps {
   isOpen: boolean;
@@ -97,6 +99,7 @@ const BuscarColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
         i + " - " + response.data.destinations[i].name
       );
     }
+
   };
 
   useEffect(() => {
@@ -126,8 +129,19 @@ const BuscarColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
         //guardo en localStorage los conductores disponibles
 
         conductores = response.data.lifts;
-        setLiftList(conductores);
 
+        console.log('----------')
+        console.log(response.data);
+
+        console.log(response.data.length)
+
+        const LiftsTest : lifts[] = response.data
+
+        
+        setLiftList([...LiftsTest] as lifts[])
+
+        console.log({liftsList})
+        
         setTimeout(() => {
           navigate("/listaEspera/pasajero");
         }, 5000);
@@ -171,6 +185,8 @@ const BuscarColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
       metros;
       pedirCola(url, token!);
      
+    console.log({liftsList})
+
 
       destinos = [];
     } else {

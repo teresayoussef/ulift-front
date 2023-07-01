@@ -43,12 +43,19 @@ const CheckParaPasajeros = (): JSX.Element => {
     const d = new Date();
     let hour = d.getHours() + ":" + d.getMinutes();
 
+    const Email = localStorage.getItem("email");
+
+    var data = JSON.stringify({
+      email: Email,
+    });
+
     var config = {
       method: "post",
       url: "https://ulift-backend.up.railway.app/api/lift/complete",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
       },
+      data: data,
     };
 
     axios(config)

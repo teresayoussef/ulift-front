@@ -50,21 +50,22 @@ const ListaEsperaParaPasajeros = (): JSX.Element => {
   fetchUser();
   React.useEffect(()=>{
     console.log({liftsList})
-  }, [liftsList])
+  }, [])
 
   return (
     <Box display={"flex"} flexDirection="column">
+      {/* {JSON.stringify(liftsList)} */}
       {liftsList.map((cola, index) => (
         <Conductor
           key={index}
           color={cola.vehicle.color}
           date={cola.lift.createdAt}
           distanceLastNode={15}
-          driverID={cola.driver._id}
+          driverID={cola.driver.id}
           email={cola.driver.email}
           gender={cola.driver.gender}
           lastName={cola.driver.lastName}
-          liftID={cola.lift._id}
+          liftID={cola.lift.liftId}
           model={cola.vehicle.model}
           name={cola.driver.name}
           path={cola.route.path}
@@ -88,20 +89,25 @@ export default ListaEsperaParaPasajeros;
 export const Conductor = (usuario: ColasDisponibles): JSX.Element => {
   const foto = usuario.photo;
 
+  console.log({usuario})
+
   const navigate = useNavigate();
 
   const handleClick = (id: string) => () => {
-    console.log(id);
+    console.log({id});
 
+    const Email = localStorage.getItem("email");
+    console.log(usuario.liftID);
     const data = JSON.stringify({
-      liftID: id,
+      liftId: usuario.liftID,
+      passengerEmail: Email  
     });
 
     const token = localStorage.getItem("token");
 
     const config = {
       method: "post",
-      url: "https://ulift-backend.up.railway.app/api/lift/request",
+      url: "https://ulift.azurewebsites.net/api/WaitingList/Request",
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -179,7 +185,7 @@ export const Conductor = (usuario: ColasDisponibles): JSX.Element => {
           {/* <IconButton sx={{ marginRight: 1 }} onClick={goChat(usuario.driverID.toString())}>
             <ChatRounded color="primary" />
           </IconButton> */}
-          <IconButton sx={{ marginRight: 1 }} onClick={handleClick(usuario.liftID.toString())}>
+          <IconButton sx={{ marginRight: 1 }} onClick={handleClick(usuario.liftID)}>
             <PedirColaIcon />
           </IconButton>
         </Box>
