@@ -112,6 +112,7 @@ const OfrecerColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
           "Content-Type": "application/json",
         },
         data: data,
+
       };
 
       // var requestAConductores = {
@@ -127,14 +128,15 @@ const OfrecerColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
           enqueueSnackbar("Cola creada, espera que alguien te envie una solicitud", {
             variant: "success",
           });          
-          localStorage.setItem("liftID", response.data.liftID);
+          localStorage.setItem("liftID", response.data.liftId);
           //wait 3 seconds
           console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!')
           console.log(response.data)
+          console.log(response.data.liftId)
           console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!')
 
           setTimeout(() => {            
-            // navigate("/listaEspera/conductor");
+             navigate("/listaEspera/conductor");
           }, 3000);
           // axios(requestAConductores).then((res) => {
           //   requests = res.data.requests;
