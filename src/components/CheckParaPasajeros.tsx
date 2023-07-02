@@ -4,11 +4,13 @@ import RatingDialogo from "./RatingDialogo";
 import { useSnackbar } from "notistack";
 import { User } from "../types";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 var conductor: User;
 
 const CheckParaPasajeros = (): JSX.Element => {
   const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();
 
   //Solicitar a la API el destino en el que fue dejado el pasajero
 
@@ -43,12 +45,18 @@ const CheckParaPasajeros = (): JSX.Element => {
     const d = new Date();
     let hour = d.getHours() + ":" + d.getMinutes();
 
+    const Email = localStorage.getItem("email");
+
+    // var data = JSON.stringify({
+    //   email: Email,
+    // });
+
     var config = {
       method: "post",
-      url: "https://ulift-backend.up.railway.app/api/lift/complete",
+      url: `https://ulift.azurewebsites.net/api/Lift/PasajeroCheck/${Email}`,
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
-      },
+      }
     };
 
     axios(config)
@@ -58,7 +66,8 @@ const CheckParaPasajeros = (): JSX.Element => {
           variant: "success",
         });
         setTimeout(() => {
-          abrirDialogo();
+          //abrirDialogo();
+          navigate("/");
         }, 5000);
       })
       .catch(function (error) {

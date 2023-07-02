@@ -112,29 +112,37 @@ const OfrecerColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
           "Content-Type": "application/json",
         },
         data: data,
+
       };
 
-      var requestAConductores = {
-        method: "get",
-        //REESCRIBIR URL NUEVO - Todos los usuarios que te han pedido una cola
-        url: "https://ulift-backend.up.railway.app/api/lift/requests",
-        headers: { Authorization: `Bearer ${token}` },
-      };
+      // var requestAConductores = {
+      //   method: "get",
+      //   //REESCRIBIR URL NUEVO - Todos los usuarios que te han pedido una cola
+      //   url: "https://ulift-backend.up.railway.app/api/lift/requests",
+      //   headers: { Authorization: `Bearer ${token}` },
+      // };
 
       axios(config)
         .then((response) => {
           console.log(JSON.stringify(response.data));
           enqueueSnackbar("Cola creada, espera que alguien te envie una solicitud", {
             variant: "success",
-          });
+          });          
+          localStorage.setItem("liftID", response.data.liftId);
+          //wait 3 seconds
+          console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!')
+          console.log(response.data)
+          console.log(response.data.liftId)
+          console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!')
 
-          localStorage.setItem("liftID", response.data.liftID);
-          axios(requestAConductores).then((res) => {
-            requests = res.data.requests;
-            localStorage.setItem("requests", JSON.stringify(requests));
+          setTimeout(() => {            
+             navigate("/listaEspera/conductor");
+          }, 3000);
+          // axios(requestAConductores).then((res) => {
+          //   requests = res.data.requests;
+          //   localStorage.setItem("requests", JSON.stringify(requests));
 
-            navigate("/listaEspera/conductor");
-          });
+          // });
         })
         .catch((error) => {
           console.log(error);

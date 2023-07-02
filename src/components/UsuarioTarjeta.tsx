@@ -22,7 +22,7 @@ const UsuarioTarjeta = (user: User): JSX.Element => {
     setDialogInfoUser(false);
   };
 
-  const foto = "https://ulift-backend.up.railway.app/" + user.photo;
+  const foto = user.photo;
 
   return (
     <Grid item xs={12} sm={6} md={4}>

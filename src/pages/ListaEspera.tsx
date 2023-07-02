@@ -29,19 +29,19 @@ const ListaEspera = (): JSX.Element => {
   tipoUsuario = params.tipo!;
   var requests: User[] = [];
   const token = localStorage.getItem("token");
-  var requestAConductores = {
-    method: "get",
-    url: "https://ulift-backend.up.railway.app/api/lift/requests",
-    headers: { Authorization: `Bearer ${token}` },
-  };
+  // var requestAConductores = {
+  //   method: "get",
+  //   url: "https://ulift-backend.up.railway.app/api/lift/requests",
+  //   headers: { Authorization: `Bearer ${token}` },
+  // };
 
-  axios(requestAConductores)
-    .then(function (response) {
-      requests = response.data.requests;
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+  // axios(requestAConductores)
+  //   .then(function (response) {
+  //     requests = response.data.requests;
+  //   })
+  //   .catch(function (error) {
+  //     console.log(error);
+  //   });
 
   return (
     <Box>
