@@ -19,6 +19,7 @@ import axios from "axios";
 import AlertaDialogo from "../components/AlertaDialogo";
 import { set } from "date-fns";
 import Spinner from "../components/Spinner";
+import { useJsApiLoader, GoogleMap, MarkerF } from "@react-google-maps/api";
 
 // interface Colas {
 //   color: string;
@@ -116,10 +117,55 @@ const Inicio = (): JSX.Element => {
   const [flagVehiculos, setFlagVehiculos] = useState(false);
   const [flagRutas, setFlagRutas] = useState(false);
   const [flagColas, setFlagColas] = useState(false);
+
+  
   
   const fetchInfo = async () => {
     const token = localStorage.getItem("token");
     const email = localStorage.getItem("email");
+    navigator.geolocation.getCurrentPosition((position) => {
+      const latitude = position.coords.latitude.toString();
+      const longitude = position.coords.longitude.toString();
+      localStorage.setItem("coordenadas", latitude + "," + longitude);
+    });
+
+    function getDistance(lat1: number, lon1: number, lat2: number, lon2: number) {
+      var R = 6371 * 1000; // Radius of the earth in m
+      var dLat = deg2rad(lat2 - lat1); // deg2rad below
+      var dLon = deg2rad(lon2 - lon1);
+      var a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(deg2rad(lat1)) *
+          Math.cos(deg2rad(lat2)) *
+          Math.sin(dLon / 2) *  
+          Math.sin(dLon / 2);
+      var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      var d = R * c; // Distance in m
+      console.log(d);
+      return d;
+    }
+
+    function deg2rad(deg: number) {
+      return deg * (Math.PI / 180);
+    }
+
+    var lat1 = localStorage.getItem("coordenadas")!.split(",")[0];
+    var lon1 = localStorage.getItem("coordenadas")!.split(",")[1];
+    // var lat1 =  8.292362164394163;
+    // var lon1 = -62.742359070043264;
+
+    //Coordenadas del Centro de la UCAB
+    var lat2 =8.296814168450002;
+    var lon2 = -62.71148732766616;
+    var distance = getDistance(Number(lat1), Number(lon1), lat2, lon2);
+
+    var radius = 290;
+    if (distance <= radius) {
+      localStorage.setItem("inUCAB", "true");
+    } else {
+      localStorage.setItem("inUCAB", "false");
+    }
+
     var queryVehiculos = {
       method: "get",
       url: `https://ulift.azurewebsites.net/api/Vehicle/${email}`,
