@@ -116,7 +116,7 @@ const CheckParaConductores = (): JSX.Element => {
           variant: "success",
         });
         setTimeout(() => {
-          navigate("/")
+          navigate("/rating/conductor");
         }, 5000);
       })
       .catch(function (error) {

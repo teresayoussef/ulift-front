@@ -67,7 +67,7 @@ const CheckParaPasajeros = (): JSX.Element => {
         });
         setTimeout(() => {
           //abrirDialogo();
-          navigate("/");
+          navigate("/rating/pasajero");
         }, 5000);
       })
       .catch(function (error) {
