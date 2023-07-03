@@ -102,26 +102,33 @@ const CheckParaConductores = (): JSX.Element => {
   };
 
   const finViaje = () => {
-    var config = {
-      method: "put",
-      url: `https://ulift.azurewebsites.net/api/Lift/complete/${localStorage.getItem("liftID")}`,
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("token"),
-      },
-    };
-    axios(config)
-      .then(function (response) {
-        console.log(JSON.stringify(response.data));
-        enqueueSnackbar("Cola finalizada.", {
-          variant: "success",
-        });
-        setTimeout(() => {
-          navigate("/rating/conductor");
-        }, 5000);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    enqueueSnackbar("Cola finalizada, recuerda calificar a tus pasajeros.", {
+      variant: "success",
+    });
+    setTimeout(() => {
+      navigate("/rating/conductor");
+    }, 5000);
+
+    // var config = {
+    //   method: "put",
+    //   url: `https://ulift.azurewebsites.net/api/Lift/complete/${localStorage.getItem("liftID")}`,
+    //   headers: {
+    //     Authorization: "Bearer " + localStorage.getItem("token"),
+    //   },
+    // };
+    // axios(config)
+    //   .then(function (response) {
+    //     console.log(JSON.stringify(response.data));
+    //     enqueueSnackbar("Cola finalizada, recuerda calificar a tus pasajeros.", {
+    //       variant: "success",
+    //     });
+    //     setTimeout(() => {
+    //       navigate("/rating/conductor");
+    //     }, 5000);
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   });
   };
 
   const fetchUser = async () => {

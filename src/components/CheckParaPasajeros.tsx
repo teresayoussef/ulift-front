@@ -59,20 +59,25 @@ const CheckParaPasajeros = (): JSX.Element => {
       }
     };
 
-    axios(config)
-      .then(function (response) {
-        console.log(JSON.stringify(response.data));
-        enqueueSnackbar("Cola finalizada a las " + hour + ", recuerda calificar a tu conductor.", {
-          variant: "success",
-        });
-        setTimeout(() => {
-          //abrirDialogo();
-          navigate("/rating/pasajero");
-        }, 5000);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    // axios(config)
+    //   .then(function (response) {
+    //     console.log(JSON.stringify(response.data));
+    //     enqueueSnackbar("Cola finalizada a las " + hour + ", recuerda calificar a tu conductor.", {
+    //       variant: "success",
+    //     });
+    //     setTimeout(() => {
+    //       //abrirDialogo();
+    //       navigate("/rating/pasajero");
+    //     }, 5000);
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   });
+
+    enqueueSnackbar("Cola finalizada, recuerda calificar a tu conductor.", {
+            variant: "success",
+          });
+    navigate("/rating/pasajero");
   };
 
   return (

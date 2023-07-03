@@ -122,6 +122,7 @@ export const Conductor = (usuario: ColasDisponibles): JSX.Element => {
         console.log(JSON.stringify(response.data.message));
 
         localStorage.setItem("driverData", JSON.stringify(usuario.driver.driver));
+        localStorage.setItem("liftID", usuario.liftID);
 
         setTimeout(() => {
           navigate("/colaEnProceso/pasajero");
