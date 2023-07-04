@@ -119,7 +119,7 @@ export const Conductor = (usuario: ColasDisponibles): JSX.Element => {
       .then(function (response) {
         console.log(JSON.stringify(response.data.message));
         setTimeout(() => {
-          navigate("/colaEnProceso/pasajero");
+          navigate("/colaEnProceso/SalaDeEspera");
         }, 5000);
       })
       .catch(function (error) {

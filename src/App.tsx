@@ -19,6 +19,7 @@ import RegistroDestino from "./pages/RegistroDestino";
 import WrapperPerfilExterno from "./pages/WrapperPerfilExterno";
 import io from "socket.io-client";
 import axios from "axios";
+import SalaDeEspera from "./pages/SalaDeEspera";
 
 //const socket = io("http://localhost:3001");
 
@@ -101,6 +102,7 @@ const App = (): JSX.Element => {
         <Route path="perfilExterno/:userId" element={<WrapperPerfilExterno />} />
         <Route path="registroRuta" element={<RegistroRuta />} />
         <Route path="registroDestino" element={<RegistroDestino />} />
+        <Route path="colaEnProceso/SalaDeEspera" element={<SalaDeEspera />} />
       </Routes>
     </>
   );
