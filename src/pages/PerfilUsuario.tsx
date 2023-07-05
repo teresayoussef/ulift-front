@@ -332,7 +332,12 @@ const PerfilUsuario = (): JSX.Element => {
                   });
                 }
                 if (usuario.vehicles.length >= 1) {
-                  navigate("/registroRuta");
+                  const inUcab = localStorage.getItem("inUCAB");
+                  if(inUcab === "false"){
+                    navigate("/registroRutaExterna");
+                  }else if(inUcab === "true"){
+                    navigate("/registroRutaUcab");
+                  }
                 }
               }}
             >
