@@ -101,13 +101,37 @@ const CheckParaConductores = (): JSX.Element => {
     setOpen(false);
   };
 
-  const finViaje = () => {
-    enqueueSnackbar("Cola finalizada, recuerda calificar a tus pasajeros.", {
-      variant: "success",
-    });
-    setTimeout(() => {
-      navigate("/rating/conductor");
-    }, 5000);
+    const finViaje = () => {
+      const config = {
+        method: "put",
+        url: `https://ulift.azurewebsites.net/api/Lift/checkPassengerArriving`,
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        }
+      };
+      axios(config)
+        .then(function (response) {
+          const result = response.data;
+  
+          if (!result) {
+            enqueueSnackbar("No todos tus pasajeros llegaron a su destino. Asegurate si deseas finalizar la cola", {
+              variant: "success",
+            });
+          }
+          else{
+            enqueueSnackbar("Cola finalizada, recuerda calificar a tus pasajeros.", {
+              variant: "success",
+            });
+            setTimeout(() => {
+              navigate("/rating/conductor");
+            }, 5000);
+          }
+          
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+
 
     // var config = {
     //   method: "put",
