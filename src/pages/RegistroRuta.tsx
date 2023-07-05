@@ -6,6 +6,7 @@ import { LoadingButton } from "@mui/lab";
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import * as yup from "yup";
 import axios from "axios";
+import { parse } from "path";
 
 interface Values {
   email: string;
@@ -60,10 +61,12 @@ export default class RutaUsuario extends Component<
 
   componentDidMount() {
     let self = this;
+    var lat = parseFloat(localStorage.getItem("coordenadas")!.split(",")[0]);
+    const lng = parseFloat(localStorage.getItem("coordenadas")!.split(",")[1]);
     const defaultMapOptions = {
       center: {
-        lat: 8.296423157514385,
-        lng: -62.71283272286731,
+        lat: lat,
+        lng: lng,
       },
       zoom: 15,
     };
@@ -113,6 +116,7 @@ export default class RutaUsuario extends Component<
     }
 
     const destiny: google.maps.LatLngLiteral = latLng;
+    const inUcab = localStorage.getItem("inUcab");
 
     directionsService
       .route({

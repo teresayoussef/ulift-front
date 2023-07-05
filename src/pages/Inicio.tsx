@@ -159,6 +159,8 @@ const Inicio = (): JSX.Element => {
     var lon2 = -62.71148732766616;
     var distance = getDistance(Number(lat1), Number(lon1), lat2, lon2);
 
+    var inUcab = localStorage.getItem("inUCAB");
+
     var radius = 290;
     if (distance <= radius) {
       localStorage.setItem("inUCAB", "true");
@@ -174,14 +176,14 @@ const Inicio = (): JSX.Element => {
   
     var queryRutas = {
       method: "get",
-      url: `https://ulift.azurewebsites.net/api/URoute/${email}`,
+      url: `https://ulift.azurewebsites.net/api/URoute/${email}/${inUcab}`,
       headers: { Authorization: `Bearer ${token}` },
     };
   
     var queryColas = {
       method: "get",
       //url: "https://ulift-backend.up.railway.app/api/lift/match/0/0/0/0",
-      url: "https://ulift.azurewebsites.net/api/Lift/Available",
+      url: `https://ulift.azurewebsites.net/api/Lift/Available/?inUcab=${inUcab}`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
