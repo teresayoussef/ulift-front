@@ -29,6 +29,7 @@ interface ColasDisponibles {
   seats: number;
   time: Date;
   waitingTime: number;
+  driver: lifts;
 }
 
 export interface lifts {
@@ -77,6 +78,7 @@ const ListaEsperaParaPasajeros = (): JSX.Element => {
           seats={cola.lift.seats}
           time={cola.lift.createdAt}
           waitingTime={cola.lift.waitingTime}
+          driver={cola}
         />
       ))}
     </Box>
@@ -118,6 +120,10 @@ export const Conductor = (usuario: ColasDisponibles): JSX.Element => {
     axios(config)
       .then(function (response) {
         console.log(JSON.stringify(response.data.message));
+
+        localStorage.setItem("driverData", JSON.stringify(usuario.driver.driver));
+        localStorage.setItem("liftID", usuario.liftID);
+
         setTimeout(() => {
           navigate("/colaEnProceso/pasajero");
         }, 5000);
