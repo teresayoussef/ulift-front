@@ -172,11 +172,14 @@ const Rating = (): JSX.Element => {
 
         const data = JSON.stringify(ratingData); 
 
+        console.log(data);
+
         var config = {
           method: "put",
-          url: `https://ulift.azurewebsites.net/api/Lift/complete/${localStorage.getItem("liftID")}`,
+          url: `https://ulift.azurewebsites.net/api/Lift/complete`,
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
+            "Content-Type": "application/json",
           },
           data: data,
         };

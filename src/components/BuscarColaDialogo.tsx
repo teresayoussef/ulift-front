@@ -64,7 +64,7 @@ var destinos: string[] = [];
 var conductores: lifts[] = [];
 
 
-interface latLng {
+export interface latLng {
   lat:number;
   lng:number;
 }
@@ -90,19 +90,26 @@ const BuscarColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
     for (let i = 0; i <= destinos.length; i++) {
       destinos.pop();
     }
-
+    const desti: latLng[] = [];
     for (let i = 0; i < response.data.destinations.length; i++) {
-
       const dest: latLng = {
         lat: response.data.destinations[i].lat,
         lng: response.data.destinations[i].lng
       }
-      setDestinationsLatLng([...destinationsLatLng, dest])
-
+      console.log("aqui")
+      console.log(dest);
+      desti.push(dest)
+      console.log(destinationsLatLng);
+      
       destinos.push(
         i + " - " + response.data.destinations[i].name
       );
     }
+
+
+    setDestinationsLatLng(desti);
+    console.log("aaaaaaaaaaaaa")
+    console.log(destinationsLatLng)
 
   };
 
@@ -163,15 +170,16 @@ const BuscarColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
       var lat: number = 0;
       var lng: number = 0;
 
-      const index = direccion[0]
+      const index = parseInt(direccion[0])
 
+      console.log(index);
       console.log(typeof(index));
       if(inUcab){
         if(typeof(index) === 'number'){
-          console.log("in ucab")
-          const dest = destinationsLatLng[index as number]
-          lat = dest.lat
-          lng = dest.lng
+          // const dest = destinationsLatLng[index]
+          console.log(destinationsLatLng[index]);
+          lat = destinationsLatLng[index].lat!;
+          lng = destinationsLatLng[index].lng!;
         }
       }else {
         console.log("no in ucab")

@@ -101,10 +101,11 @@ const CheckParaConductores = (): JSX.Element => {
     setOpen(false);
   };
 
+  const liftID = localStorage.getItem("liftID");
     const finViaje = () => {
       const config = {
-        method: "put",
-        url: `https://ulift.azurewebsites.net/api/Lift/checkPassengerArriving`,
+        method: "get",
+        url: `https://ulift.azurewebsites.net/api/Lift/checkPassengerArriving?liftId=${liftID}`,
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
         }

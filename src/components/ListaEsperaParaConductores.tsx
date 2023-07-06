@@ -96,6 +96,7 @@ const ListaEsperaParaConductores = (): JSX.Element => {
   const [selecteds, setSelecteds] = useState<Root>([] as Root);
 
   const getRequests = async () => {
+    console.log("hola")
 
     //api/Lift/Requests/{liftId}
     const liftId = localStorage.getItem("liftID");
