@@ -35,6 +35,7 @@ import InfoCard from "../components/InfoCard";
 import { useSnackbar } from "notistack";
 import { BlobServiceClient } from "@azure/storage-blob";
 import Spinner from "../components/Spinner";
+import {Route} from "../types/index.js";
 
 const usuario: User = {
   name: "",
@@ -55,7 +56,7 @@ const usuario: User = {
 
 const PerfilUsuario = (): JSX.Element => {
   const navigate = useNavigate();
-
+  var rutas: Route[] = [];
   const [isLoaded, setLoaded] = useState(false);
 
   const { enqueueSnackbar } = useSnackbar();
@@ -70,6 +71,30 @@ const PerfilUsuario = (): JSX.Element => {
       headers: { Authorization: `Bearer ${token}` },
     });
 
+    const inUcab = localStorage.getItem("inUCAB");
+    console.log(inUcab);
+
+    if(inUcab === "true"){
+      for (let i = 0; i < response.data.uRoutes.length; i++) {
+        console.log("A")
+        if (response.data.uRoutes[i].inUcab === true){
+          rutas.push(
+            response.data.uRoutes[i]
+          );
+        }
+      }
+    }else if(inUcab === "false"){
+      for (let i = 0; i < response.data.uRoutes.length; i++) {
+        if (response.data.uRoutes[i].inUcab === false){
+          rutas.push(
+            response.data.uRoutes[i]
+          );
+
+      }
+    }
+  }
+
+  console.log({rutas});
     usuario.name = response.data.user.name;
     usuario.lastname = response.data.user.lastName;
     usuario.email = response.data.user.email;
@@ -82,7 +107,7 @@ const PerfilUsuario = (): JSX.Element => {
     console.log(usuario.photo);
     usuario.vehicles = response.data.vehicles;
     usuario.destinations = response.data.destinations;
-    usuario.routes = response.data.uRoutes;
+    usuario.routes = rutas;
 
     if (response.data.user.role === "E") {
       usuario.role = "Estudiante";
@@ -221,7 +246,7 @@ const PerfilUsuario = (): JSX.Element => {
                     <InfoCard
                       key={v.rNumber}
                       title={"Nombre de la ruta: " + v.name}
-                      subtitile={"Activa: " + v.active}
+                      subtitile={"Activa" }
                     />
                   ))}
                 </Grid>

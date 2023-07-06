@@ -28,7 +28,7 @@ export interface Route {
   rNumber: string;
   path: [];
   name: string;
-  active: boolean;
+  inUcab: boolean;
 }
 
 export interface Destination {

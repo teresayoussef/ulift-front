@@ -63,6 +63,7 @@ export interface lifts {
 var destinos: string[] = [];
 var conductores: lifts[] = [];
 
+
 interface latLng {
   lat:number;
   lng:number;
@@ -72,6 +73,9 @@ const BuscarColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
   //var destinos: Destination[] = [];
   const {setLiftList, liftsList} = React.useContext(LiftContext)
   const [destinationsLatLng, setDestinationsLatLng] = React.useState<latLng[]>([])
+  const [inUcab, setInUcab] = React.useState(true)
+  const [pageIsLoaded, setPageIsLoaded] = React.useState(false)
+  const [conductores, setConductores] = React.useState<lifts[]>([]);
 
   const email = localStorage.getItem("email");
   const url = `https://ulift.azurewebsites.net/api/User/${email}`;
@@ -103,7 +107,12 @@ const BuscarColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
   };
 
   useEffect(() => {
+    if (localStorage.getItem("inUCAB") === "false") {
+      setInUcab(false)
+      setDireccion("UCAB")
+    }
     fetchUser();
+    setPageIsLoaded(true)
   }, []);
 
   const [direccion, setDireccion] = React.useState("");
@@ -121,36 +130,26 @@ const BuscarColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
       },
     };
 
-    axios(config)
-      .then(function (response) {
-        enqueueSnackbar("¡Solicitud de cola creada con exito! Espera que un conductor te acepte.", {
-          variant: "success",
-        });
-        //guardo en localStorage los conductores disponibles
-
-        conductores = response.data.lifts;
-
-        console.log('----------')
-        console.log(response.data);
-
-        console.log(response.data.length)
-
-        const LiftsTest : lifts[] = response.data
-
-        
-        setLiftList([...LiftsTest] as lifts[])
-
-        console.log({liftsList})
-        
-        setTimeout(() => {
-          navigate("/listaEspera/pasajero");
-        }, 5000);
-      })
-      .catch(function (error) {
-        enqueueSnackbar("¡No se pudo crear la solicitud de cola!", {
-          variant: "error",
-        });
+    try{
+      const response = await axios(config);
+      enqueueSnackbar("¡Solicitud de cola creada con exito! Espera que un conductor te acepte.", {
+        variant: "success",
       });
+
+      setConductores(response.data.lifts);
+      console.log({conductores})
+      const LiftsTest: lifts[] = response.data.lifts
+      setLiftList([...LiftsTest] as lifts[])
+      console.log({liftsList})
+      setTimeout(() => {
+        navigate("/listaEspera/pasajero");
+      }
+      , 5000);
+    }catch(error){
+      enqueueSnackbar("¡No se pudo crear la solicitud de cola!", {
+        variant: "error",
+      });
+    }
   };
 
   const irListaEspera = () => {
@@ -164,14 +163,20 @@ const BuscarColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
       var lat: number = 0;
       var lng: number = 0;
 
-      console.log(direccion)
-
       const index = direccion[0]
 
-      if(typeof(index) === 'number'){
-        const dest = destinationsLatLng[index as number]
-        lat = dest.lat
-        lng = dest.lng
+      console.log(typeof(index));
+      if(inUcab){
+        if(typeof(index) === 'number'){
+          console.log("in ucab")
+          const dest = destinationsLatLng[index as number]
+          lat = dest.lat
+          lng = dest.lng
+        }
+      }else {
+        console.log("no in ucab")
+        lat = parseFloat(localStorage.getItem("coordenadas")!.split(",")[0]);
+        lng = parseFloat(localStorage.getItem("coordenadas")!.split(",")[1]);
       }
 
       const url =
@@ -182,7 +187,9 @@ const BuscarColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
       "/" +
       mujeres +
       "/" +
-      metros;
+      metros +
+      "/" +
+      inUcab;
       pedirCola(url, token!);
      
     console.log({liftsList})
@@ -195,6 +202,8 @@ const BuscarColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
       });
     }
   };
+
+
   return (
     <Dialog open={isOpen} onClose={closeDialog}>
       <DialogTitle textAlign={"center"} color={"primary"}>
@@ -222,6 +231,9 @@ const BuscarColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
           >
             <LocIcon color="warning" fontSize="large" />
             <FormControl fullWidth>
+              {pageIsLoaded && !inUcab ? (
+                <TextField label="Destino" value="UCAB" disabled/>
+              ) : (
               <Autocomplete
                 onChange={(event, value) => setDireccion(value as string)}
                 options={destinos}
@@ -229,6 +241,7 @@ const BuscarColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
                 fullWidth
                 renderInput={(params) => <TextField {...params} label="Destino" />}
               />
+              )}
             </FormControl>
           </Box>
           <Box
@@ -278,5 +291,6 @@ const BuscarColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
       </DialogContent>
     </Dialog>
   );
-};
+}
+
 export default BuscarColaDialogo;
