@@ -21,6 +21,7 @@ import io from "socket.io-client";
 import axios from "axios";
 import Rating  from "./pages/Rating";
 import RegistroRuta2 from "./pages/RegistroRuta2";
+import SalaDeEspera from "./pages/SalaEspera";
 
 //const socket = io("http://localhost:3001");
 
@@ -105,7 +106,8 @@ const App = (): JSX.Element => {
         <Route path="registroRutaExterna" element={<RegistroRuta2 />} />
         <Route path="registroDestino" element={<RegistroDestino />} />
         <Route path="rating/:tipo" element={<Rating/>} />
-        
+        <Route path="salaDeEspera" element={<SalaDeEspera/>} />
+
       </Routes>
     </>
   );
