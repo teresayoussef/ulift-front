@@ -8,31 +8,42 @@ import ListaPasajeros from "../components/ListaPasajeros";
 import axios from "axios";
 import { User } from "../types";
 
-var favoritos: User[] = [];
+export type Root = Root2[]
+
+export interface Root2 {
+  id: Id
+  userEmail: string
+  favoriteEmail: string
+}
+
+export interface Id {
+  timestamp: number
+  machine: number
+  pid: number
+  increment: number
+  creationTime: string
+}
 
 const Favoritos = (): JSX.Element => {
+
+  const [favoritos, setFavoritos] = useState<Root>([]);
+
   const fetchFav = () => {
     const token = localStorage.getItem("token");
 
+    const email = localStorage.getItem("email");
+
     var config = {
       method: "get",
-      url: "http://ulift.azurewebsites.net/api/Favorites",
-      headers: { Authorization: `Bearer ${token}` },
+      url: `https://ulift.azurewebsites.net/api/Favorite/${email}`,
+      headers: { Authorization: `Bearer ${token}` }
     };
 
     axios(config)
       .then(function (response) {
-        console.log(JSON.stringify(response.data.favorites));
-        favoritos = response.data.favorites.map((fav: any) => {
-          var usuarios = {} as User; //arreglo auxiliar
-
-          usuarios.name = fav.nameU;
-          usuarios.trips = fav.n_trips;
-          usuarios.rating = fav.rate;
-          usuarios.photo = fav.photo;
-
-          return usuarios;
-        });
+        console.log(JSON.stringify(response.data));
+        const data: Root = response.data;
+        setFavoritos(data);
       })
       .catch(function (error) {
         console.log(error);
@@ -55,7 +66,7 @@ const Favoritos = (): JSX.Element => {
 
   useEffect(() => {
     fetchFav();
-  });
+  }, []);
 
   return (
     <Box>
@@ -79,7 +90,15 @@ const Favoritos = (): JSX.Element => {
                 Aun no tienes usuarios favoritos
               </Typography>
             )}
-            {favoritos.length! > 0 && <ListaPasajeros pasajeros={favoritos} />}
+            {/* {favoritos.length! > 0 && <ListaPasajeros pasajeros={favoritos} />} */}
+            {favoritos.length > 0 && 
+              <ul>{
+                favoritos.map((favorito) => (
+                  <li>{favorito.favoriteEmail}</li>
+                ))}
+              </ul>
+            }
+
 
             <Fab
               aria-label="agregar"
