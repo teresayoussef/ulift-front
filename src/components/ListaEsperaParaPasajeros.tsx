@@ -125,7 +125,7 @@ export const Conductor = (usuario: ColasDisponibles): JSX.Element => {
         localStorage.setItem("liftID", usuario.liftID);
 
         setTimeout(() => {
-          navigate("/colaEnProceso/pasajero");
+          navigate("/salaDeEspera");
         }, 5000);
       })
       .catch(function (error) {

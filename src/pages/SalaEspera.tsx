@@ -6,10 +6,36 @@ import { useNavigate } from "react-router-dom";
 import { NavBar } from "../components/NavBar";
 import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';
 import 'animate.css';
+import { useSnackbar } from "notistack";
+
 
 const SalaDeEspera = (): JSX.Element => {
   const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
 
+  React.useEffect(() => {
+    
+  }, []);
+
+  var config = {
+    method: "get",
+    url: `https://ulift.azurewebsites.net/api/Lift/checkAcceptCola?email=${localStorage.getItem("email")}&liftId=${localStorage.getItem("liftID")}`,
+  }
+
+  axios(config)
+    .then(function (response) {
+      console.log(JSON.stringify(response.data));
+      const data: boolean = response.data;
+      if (data) {
+        navigate("/colaEnProceso/pasajero");
+      }
+      else {
+        enqueueSnackbar("El conductor no ha aceptado tu solicitud", {
+          variant: "error",
+        });
+      }
+    }
+    )
   return (
     <Box>
     <NavBar />
@@ -56,3 +82,4 @@ const SalaDeEspera = (): JSX.Element => {
 };
 
 export default SalaDeEspera;
+
