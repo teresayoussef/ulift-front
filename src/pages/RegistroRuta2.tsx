@@ -7,6 +7,8 @@ import { Field, Form, Formik, FormikHelpers } from "formik";
 import * as yup from "yup";
 import axios from "axios";
 import { parse } from "path";
+import { useSnackbar } from "notistack";
+
 
 interface Values {
   email: string;
@@ -31,6 +33,7 @@ const rendererOptions: object = {
 };
 
 const ucab: object = { lat: 8.296677954778339, lng: -62.71350327511522 };
+
 
 export default class RutaUsuario2 extends Component<
   {},
@@ -59,6 +62,8 @@ export default class RutaUsuario2 extends Component<
     this.calculateAndDisplayRoute = this.calculateAndDisplayRoute.bind(this);
   }
 
+  
+
   componentDidMount() {
     let self = this;
     var lat = parseFloat(localStorage.getItem("coordenadas")!.split(",")[0]);
@@ -68,10 +73,27 @@ export default class RutaUsuario2 extends Component<
         lat: lat,
         lng: lng,
       },
-      zoom: 15,
+      zoom: 17,
     };
     loader.load().then((google) => {
       const map = new google.maps.Map(self.googleMapDiv, defaultMapOptions);
+      const currentMark = new google.maps.Marker({
+        position: {
+          lat: lat,
+          lng: lng,
+        },
+        map: map,
+      });
+
+      const ucab = { lat: 8.296814168450002, lng: -62.71148732766616 };
+
+      const destinationMarker = new google.maps.Marker({
+        position: ucab,
+        map: map,
+        icon : {
+          url: "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png"
+        }
+      });
 
       const directionsService = new google.maps.DirectionsService();
       const directionsRenderer = new google.maps.DirectionsRenderer(rendererOptions);
@@ -117,10 +139,14 @@ export default class RutaUsuario2 extends Component<
 
     const destiny: google.maps.LatLngLiteral = latLng;
     const inUcab = localStorage.getItem("inUcab");
+    const currentLocation = {
+      lat: parseFloat(localStorage.getItem("coordenadas")!.split(",")[0]),
+      lng: parseFloat(localStorage.getItem("coordenadas")!.split(",")[1]),
+    }    
 
     directionsService
       .route({
-        origin: ucab,
+        origin: currentLocation,
         destination: destiny,
         travelMode: google.maps.TravelMode.DRIVING,
         waypoints: waypts,
@@ -144,6 +170,7 @@ export default class RutaUsuario2 extends Component<
         });
 
         directionsRenderer.setDirections(response);
+
       })
       .catch((e: any) => console.log(e));
   }
@@ -202,6 +229,19 @@ export default class RutaUsuario2 extends Component<
               type="submit"
               variant="contained"
               onClick={() => {
+                const ucab = { lat: 8.296814168450002, lng: -62.71148732766616 };
+                const { markers } = this.state;	
+                const lastMarker = markers[markers.length - 1];
+                const distanceFromUcab = google.maps.geometry.spherical.computeDistanceBetween(
+                  new google.maps.LatLng(lastMarker.lat, lastMarker.lng),
+                  new google.maps.LatLng(ucab.lat, ucab.lng)
+                );
+                const maxDistance = 150;
+                if (distanceFromUcab > maxDistance) {
+                  alert ("La última parada debe estar a menos de 150 metros de la entrada de la UCAB");
+                  return;
+                }
+
                 var email = localStorage.getItem("email");
                 var data = JSON.stringify({
                   email: email,

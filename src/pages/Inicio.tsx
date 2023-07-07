@@ -188,6 +188,7 @@ const Inicio = (): JSX.Element => {
         Authorization: `Bearer ${token}`,
       },
     };
+
     axios(queryVehiculos)
       .then(function (response) {
         vehiculos = response.data;
@@ -200,7 +201,10 @@ const Inicio = (): JSX.Element => {
   
     axios(queryRutas)
       .then(function (response) {
+        console.log('pruebaaaaa');
         rutas = response.data;
+        console.log(rutas);
+        console.log(rutas.length)
         setFlagRutas(true);
       })
       .catch(function (error) {

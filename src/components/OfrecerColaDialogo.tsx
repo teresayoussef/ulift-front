@@ -35,6 +35,7 @@ const email = localStorage.getItem("email");
 const OfrecerColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
   const url = `https://ulift.azurewebsites.net/api/User/${email}`;
   // const url = "http://localhost:3000/api/user/profile";
+  const inUcab = localStorage.getItem("inUCAB");
   const fetchUser = async () => {
     const token = localStorage.getItem("token");
 
@@ -52,14 +53,37 @@ const OfrecerColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
       rutas.pop();
     }
 
-    console.log(response.data.vehicles);
+    
     for (let i = 0; i < response.data.vehicles.length; i++) {
       vehiculos.push(
         response.data.vehicles[i].plate + " - " + response.data.vehicles[i].model
       );
     }
-    for (let i = 0; i < response.data.uRoutes.length; i++) {
-      rutas.push(response.data.uRoutes[i].name);
+
+    console.log("ji")
+    console.log(response.data.uRoutes)
+    
+    if (inUcab === "true"){
+      console.log("entro")
+      for (let i = 0; i < response.data.uRoutes.length; i++) {
+        
+        if (response.data.uRoutes[i].inUcab === true){
+          rutas.push(
+            response.data.uRoutes[i].name
+          );
+        }
+      }
+    }
+    else{
+      for (let i = 0; i < response.data.uRoutes.length; i++) {
+        if (response.data.uRoutes[i].inUcab === false){
+          console.log(response.data.uRoutes[i].name)
+          console.log(response.data.uRoutes[i].inUcab)
+          rutas.push(
+            response.data.uRoutes[i].name
+          );
+        }
+      }
     }
   };
   useEffect(() => {
