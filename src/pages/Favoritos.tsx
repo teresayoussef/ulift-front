@@ -7,14 +7,26 @@ import { Add as AgregarUsuarioIcon } from "@mui/icons-material";
 import ListaPasajeros from "../components/ListaPasajeros";
 import axios from "axios";
 import { User } from "../types";
+import UsuarioTarjeta from "../components/UsuarioTarjeta";
 
 export type Root = Root2[]
 
 export interface Root2 {
-  id: Id
-  userEmail: string
-  favoriteEmail: string
+  email: string
+  password: string
+  name: string
+  lastName: string
+  photoURL: string
+  gender: string
+  role: string
+  emergencyContact: string
+  passengerRating: number
+  driverRating: number
+  confirmedUser: boolean
+  liftCount: number
+  status: string
 }
+
 
 export interface Id {
   timestamp: number
@@ -90,13 +102,29 @@ const Favoritos = (): JSX.Element => {
                 Aun no tienes usuarios favoritos
               </Typography>
             )}
-            {/* {favoritos.length! > 0 && <ListaPasajeros pasajeros={favoritos} />} */}
+          
             {favoritos.length > 0 && 
-              <ul>{
-                favoritos.map((favorito) => (
-                  <li>{favorito.favoriteEmail}</li>
+              <Box display={"flex"} flexDirection="column">{
+                favoritos.map((favorito, index) => (
+                  <UsuarioTarjeta
+                  key={index}
+                  id={favorito.email}
+                  name={favorito.name}
+                  lastname={favorito.lastName}
+                  email={favorito.email}
+                  role={favorito.role}
+                  gender={favorito.gender}
+                  photo={favorito.photoURL}
+                  trips={favorito.liftCount}
+                  rating={favorito.passengerRating}
+                  emergencyContact={favorito.emergencyContact}
+                  emergencyName={favorito.emergencyContact}
+                  vehicles={[]}
+                  destinations={[]}
+                  routes={[]}
+                  />
                 ))}
-              </ul>
+              </Box>
             }
 
 

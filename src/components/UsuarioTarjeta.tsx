@@ -7,12 +7,13 @@ import {
   CardContent,
   Grid,
   Typography,
+  Box,
 } from "@mui/material";
 import { User } from "../types";
 import { grey } from "@mui/material/colors";
 import InfoFavoritoDialogo from "./InfoFavoritoDialogo";
 
-const UsuarioTarjeta = (user: User): JSX.Element => {
+const UsuarioTarjeta = (user?: User): JSX.Element => {
   const [isInfoUserOpen, setDialogInfoUser] = useState(false);
   const openInfoUserDialog = () => {
     setDialogInfoUser(true);
@@ -22,7 +23,7 @@ const UsuarioTarjeta = (user: User): JSX.Element => {
     setDialogInfoUser(false);
   };
 
-  const foto = user.photo;
+  const foto = user?.photo;
 
   return (
     <Grid item xs={12} sm={6} md={4}>
@@ -57,23 +58,25 @@ const UsuarioTarjeta = (user: User): JSX.Element => {
         >
           <ListItem sx={{ mt: 2, height: 60 }}>
             <ListItemAvatar>
-              <Avatar sx={{ width: 50, height: 50 }} src={foto} />
+              <Avatar sx={{ width: 50, height: 50, mr:5 }} src={foto} />
             </ListItemAvatar>
-            <Typography>
-              {user.name} {user.lastname}
-            </Typography>
+            <Box >
+              <Typography textAlign={"center"}>
+                {user?.name} {user?.lastname}
+              </Typography>
+            </Box>
           </ListItem>
         </CardContent>
       </Card>
       <InfoFavoritoDialogo
         isOpen={isInfoUserOpen}
         closeDialog={closeInfoUserDialog}
-        name={user.name}
-        lastname={user.lastname}
-        trips={user.trips}
-        role={user.role}
-        photo={user.photo}
-        rating={user.rating}
+        name={user?.name || ""}
+        lastname={user?.lastname || ""}
+        trips={user?.trips || 0}
+        role={user?.role || ""}
+        photo={user?.photo || ""}
+        rating={user?.rating || 0}
       />
     </Grid>
   );
