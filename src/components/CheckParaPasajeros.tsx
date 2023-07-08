@@ -83,7 +83,7 @@ const CheckParaPasajeros = (): JSX.Element => {
   return (
     <Box display={"flex"} flexDirection="column">
       <Typography fontSize={{ xs: 14, md: 17 }} textAlign="left">
-        Si fuiste dejado en el lugar correcto, entonces haz click aqui :
+        Si fuiste dejado en el lugar correcto, entonces haz click en viaje finalizado :
       </Typography>
       {/* <Typography fontSize={{ xs: 17, md: 20 }} fontWeight="500" textAlign="center" margin={4}>
         En las cercanías de XXXX
