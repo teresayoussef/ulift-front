@@ -44,6 +44,9 @@ export default class RutaUsuario extends Component<
   }
 > {
   googleMapDiv!: HTMLElement | any;
+  directionsService!: any;
+  directionsRenderer!: any;
+
 
   constructor(props: any) {
     super(props);
@@ -72,9 +75,17 @@ export default class RutaUsuario extends Component<
     };
     loader.load().then((google) => {
       const map = new google.maps.Map(self.googleMapDiv, defaultMapOptions);
+      const ucab = { lat: 8.296665855599754, lng: -62.71348350108948 };
+      const currentMarker = new google.maps.Marker({
+        position: {
+          lat: ucab.lat,
+          lng: ucab.lng,
+        },
+        map: map,
+      });
 
-      const directionsService = new google.maps.DirectionsService();
-      const directionsRenderer = new google.maps.DirectionsRenderer(rendererOptions);
+      this.directionsService = new google.maps.DirectionsService();
+      this.directionsRenderer = new google.maps.DirectionsRenderer(rendererOptions);
 
       this.setState({
         google: google,
@@ -91,17 +102,17 @@ export default class RutaUsuario extends Component<
           markers: [...self.state.markers, latLng],
         });
 
-        self.handleMapClick(e, directionsService, directionsRenderer, latLng);
+        self.handleMapClick(e, latLng);
       });
     });
   }
 
-  handleMapClick(e: any, directionsService: any, directionsRenderer: any, latLng: any) {
-    directionsRenderer.setMap(this.state.map);
-    this.calculateAndDisplayRoute(directionsService, directionsRenderer, latLng);
+  handleMapClick(e: any, latLng: any) {
+    this.directionsRenderer.setMap(this.state.map);
+    this.calculateAndDisplayRoute(latLng);
   }
 
-  calculateAndDisplayRoute(directionsService: any, directionsRenderer: any, latLng: any) {
+  calculateAndDisplayRoute(latLng: any) {
     const waypts = [];
 
     const { markers } = this.state;
@@ -118,7 +129,7 @@ export default class RutaUsuario extends Component<
     const destiny: google.maps.LatLngLiteral = latLng;
     const inUcab = localStorage.getItem("inUcab");
 
-    directionsService
+    this.directionsService
       .route({
         origin: ucab,
         destination: destiny,
@@ -143,22 +154,50 @@ export default class RutaUsuario extends Component<
           finalMarker: mark,
         });
 
-        directionsRenderer.setDirections(response);
+        this.directionsRenderer.setDirections(response);
       })
       .catch((e: any) => console.log(e));
   }
 
   retroceder(e: any, directionsService: any, directionsRenderer: any, latLng: any) {
     if (this.state.markers.length === 1) {
-      directionsRenderer.setDirections({ routes: [] });
-
+      this.directionsService
+        .route ({
+          origin: ucab,
+          destination: ucab,
+          travelMode: google.maps.TravelMode.DRIVING,
+        })
+        .then((response: any) => {
+          console.log(response);
+          this.directionsRenderer.setDirections(response);
+          this.setState({ path: JSON.stringify("") });
+        })
+      this.state.markers.pop();
       this.state.finalMarker.setMap(null);
     }
 
     if (this.state.markers.length > 1) {
+      this.directionsService
+      .route({
+        origin: ucab,
+        destination: this.state.markers[this.state.markers.length - 2],
+        travelMode: google.maps.TravelMode.DRIVING,
+      })
+      .then((response: any) => {
+        console.log(response);
+        this.directionsRenderer.setDirections(response);
+        this.setState({ path: JSON.stringify(response.routes[0].overview_path) });
+      })
+      this.state.finalMarker.setMap(null);
+      const newMarker = new google.maps.Marker({
+        position: this.state.markers[this.state.markers.length - 2],
+        map: this.state.map,
+      });
+      this.setState({
+        finalMarker: newMarker,
+      });
       this.state.markers.pop();
-      directionsRenderer.setMap(this.state.map);
-      this.calculateAndDisplayRoute(directionsService, directionsRenderer, latLng);
+      console.log(this.state.markers);
     }
   }
 
@@ -197,17 +236,28 @@ export default class RutaUsuario extends Component<
               }}
               sx={{ height: "400px", width: "100%", mb: 3, mt: 3 }}
             ></Box>
-            {/* <Button> Retroceder</Button> */}
+            <Button
+              variant="contained"
+              onClick={(e) =>  this.retroceder(e, this.state.google.maps.DirectionsService, this.state.google.maps.DirectionsRenderer, this.state.markers[this.state.markers.length - 1])}
+            > Retroceder</Button>
             <Button
               type="submit"
               variant="contained"
               onClick={() => {
-                var email = localStorage.getItem("email");
-                var data = JSON.stringify({
-                  email: email,
-                  path: this.state.path,
-                  name: this.state.name,
-                });
+                var data = "";
+                if (this.state.name === "") {
+                  alert("Por favor, ingrese un nombre para la ruta.");
+                }else if (this.state.markers.length === 0) {
+                  alert("Por favor, ingrese al menos una parada.");
+                }else{
+                  var email = localStorage.getItem("email");
+                  data = JSON.stringify({
+                    email: email,
+                    path: this.state.path,
+                    name: this.state.name,
+                    inUcab: true,
+                  });
+                }
 
                 const token = localStorage.getItem("token");
 

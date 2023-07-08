@@ -1,6 +1,6 @@
 import { Component } from "react";
 import { Loader } from "@googlemaps/js-api-loader";
-import { Box, Container, Stack, Button, TextField } from "@mui/material";
+import { Box, Container, Stack, Button, TextField, Typography} from "@mui/material";
 import SubPaginasHeader from "../components/SubPaginasHeader";
 import { LoadingButton } from "@mui/lab";
 import { Field, Form, Formik, FormikHelpers } from "formik";
@@ -74,6 +74,7 @@ export default class RutaUsuario2 extends Component<
         lng: lng,
       },
       zoom: 17,
+      clickableIcons: false,
     };
     loader.load().then((google) => {
       const map = new google.maps.Map(self.googleMapDiv, defaultMapOptions);
@@ -192,7 +193,7 @@ export default class RutaUsuario2 extends Component<
   render() {
     return (
       <Box>
-        <SubPaginasHeader pageName="Registro de Ruta 2" />
+        <SubPaginasHeader pageName="Registro de Ruta" />
         <Box
           sx={{
             display: "flex",
@@ -210,6 +211,9 @@ export default class RutaUsuario2 extends Component<
               position: "relative",
             }}
           >
+            <Typography variant="h6" gutterBottom>
+              Marca la ruta hacia la UCAB ( <img src="https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png" width={10}/>) 
+            </Typography>
             <TextField
               id="nombreRuta"
               label="Nombre de la ruta"
@@ -229,6 +233,9 @@ export default class RutaUsuario2 extends Component<
               type="submit"
               variant="contained"
               onClick={() => {
+                if (this.state.name === "") {
+                  alert("Debes colocar un nombre a la ruta");
+                }
                 const ucab = { lat: 8.296814168450002, lng: -62.71148732766616 };
                 const { markers } = this.state;	
                 const lastMarker = markers[markers.length - 1];

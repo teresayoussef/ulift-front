@@ -72,7 +72,6 @@ const PerfilUsuario = (): JSX.Element => {
     });
 
     const inUcab = localStorage.getItem("inUCAB");
-    console.log(inUcab);
 
     if(inUcab === "true"){
       for (let i = 0; i < response.data.uRoutes.length; i++) {
@@ -94,17 +93,20 @@ const PerfilUsuario = (): JSX.Element => {
     }
   }
 
-  console.log({rutas});
     usuario.name = response.data.user.name;
     usuario.lastname = response.data.user.lastName;
     usuario.email = response.data.user.email;
     usuario.emergencyContact = response.data.user.emergencyContact;
-    usuario.emergencyName = "Anthony Testing"; //Hayque agregarlo a la base de datos y al response
-    usuario.trips = response.data.user.liftCount;
-    usuario.rating = response.data.user.driverRating;
+    usuario.emergencyName = response.data.user.emergencyContactName; //Hayque agregarlo a la base de datos
+    if (response.data.user.status === "D"){
+      usuario.trips = response.data.user.liftCountAsDriver;
+      usuario.rating = response.data.user.driverRating;
+    }else{
+      usuario.trips = response.data.user.liftCountAsPassenger
+      usuario.rating = response.data.user.passengerRating;
+    }
     usuario.gender = response.data.user.gender;
     usuario.photo = response.data.user.photoURL;
-    console.log(usuario.photo);
     usuario.vehicles = response.data.vehicles;
     usuario.destinations = response.data.destinations;
     usuario.routes = rutas;
