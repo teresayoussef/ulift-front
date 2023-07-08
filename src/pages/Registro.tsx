@@ -119,7 +119,7 @@ const Registro = (): JSX.Element => {
     axios(config)
       .then(function (response) {
         console.log(JSON.stringify(response.data));
-        enqueueSnackbar("¡Ahora puedes iniciar sesión!", { variant: "success" });
+        enqueueSnackbar("¡Ahora, confirma tu correo electronico para iniciar sesion exitosamente!", { variant: "success" });
         navigate(`/login`);
       })
       .catch(function (error) {
