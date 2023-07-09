@@ -45,8 +45,10 @@ const usuario: User = {
   role: "",
   gender: "",
   photo: "",
-  trips: 0,
-  rating: 0,
+  tripsAsDriver: 0,
+  tripsAsPassenger: 0,
+  DriverRating: 0,
+  PassengerRating: 0,
   emergencyContact: "",
   emergencyName: "",
   vehicles: [],
@@ -98,13 +100,10 @@ const PerfilUsuario = (): JSX.Element => {
     usuario.email = response.data.user.email;
     usuario.emergencyContact = response.data.user.emergencyContact;
     usuario.emergencyName = response.data.user.emergencyContactName; //Hayque agregarlo a la base de datos
-    if (response.data.user.status === "D"){
-      usuario.trips = response.data.user.liftCountAsDriver;
-      usuario.rating = response.data.user.driverRating;
-    }else{
-      usuario.trips = response.data.user.liftCountAsPassenger
-      usuario.rating = response.data.user.passengerRating;
-    }
+      usuario.tripsAsDriver = response.data.user.liftCountAsDriver;
+      usuario.DriverRating = response.data.user.driverRating;
+      usuario.tripsAsPassenger = response.data.user.liftCountAsPassenger
+      usuario.PassengerRating = response.data.user.passengerRating;
     usuario.gender = response.data.user.gender;
     usuario.photo = response.data.user.photoURL;
     usuario.vehicles = response.data.vehicles;
@@ -142,8 +141,10 @@ const PerfilUsuario = (): JSX.Element => {
               role={usuario.role}
               gender={usuario.gender}
               photo={usuario.photo}
-              trips= {usuario.trips}
-              rating={usuario.rating}
+              tripsAsDriver= {usuario.tripsAsDriver}
+              tripsAsPassenger={usuario.tripsAsPassenger}
+              DriverRating={usuario.DriverRating}
+              PassengerRating={usuario.PassengerRating}
               emergencyContact={usuario.emergencyContact}
               emergencyName={usuario.emergencyName}
               vehicles={usuario.vehicles}

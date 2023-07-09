@@ -17,23 +17,43 @@ const Profile = (user: User): JSX.Element => {
       >
         {user.name} {user.lastname}
       </Typography>
-      <Stack direction="row" divider={<Divider orientation="vertical" flexItem />} spacing={6}>
+      <Stack direction="row"  alignContent={"center"} divider={<Divider orientation="vertical" flexItem />} spacing={6}>
         <Box>
-          <Typography textAlign="center">Rating</Typography>
+          <Typography textAlign="center">N° de Viajes como Conductor</Typography>
+          <Typography textAlign="center" fontWeight={600}>
+            {user.tripsAsDriver}
+          </Typography>
+        </Box>
+        <Box>
+          <Typography textAlign="center">Rating Conductor</Typography>
           <Stack direction="row" display="flex" justifyContent="center" alignItems="center">
             <Typography textAlign="center" fontWeight={600}>
-              {user.rating}
+              {user.DriverRating.toFixed(1)}
             </Typography>
             <StarIcon fontSize="small" color="secondary" />
           </Stack>
         </Box>
+        
+      </Stack>
+
+      <br></br>
+      <Stack direction="row" alignContent={"center"} divider={<Divider orientation="vertical" flexItem />} spacing={6}>
         <Box>
-          <Typography textAlign="center">Nro total de viajes</Typography>
+          <Typography textAlign="center">N° de Viajes como Pasajero </Typography>
           <Typography textAlign="center" fontWeight={600}>
-            {user.trips}
+            {user.tripsAsPassenger}
           </Typography>
         </Box>
-      </Stack>
+        <Box>
+          <Typography textAlign="center">Rating Pasajero</Typography>
+          <Stack direction="row" display="flex" justifyContent="center" alignItems="center">
+            <Typography textAlign="center" fontWeight={600}>
+              {user.PassengerRating.toFixed(1)}
+            </Typography>
+            <StarIcon fontSize="small" color="secondary" />
+          </Stack>
+        </Box>
+        </Stack>
     </Box>
   );
 };

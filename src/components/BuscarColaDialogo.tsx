@@ -144,7 +144,7 @@ const BuscarColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
         variant: "success",
       });
 
-      console.log(response.data);
+      console.log("response.data");
 
       setConductores(response.data.lifts);
       console.log({conductores})

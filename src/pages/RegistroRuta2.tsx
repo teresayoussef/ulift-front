@@ -47,6 +47,9 @@ export default class RutaUsuario2 extends Component<
   }
 > {
   googleMapDiv!: HTMLElement | any;
+  directionsService!: any;
+  directionsRenderer!: any;
+  currentLocation!: any;
 
   constructor(props: any) {
     super(props);
@@ -96,8 +99,8 @@ export default class RutaUsuario2 extends Component<
         }
       });
 
-      const directionsService = new google.maps.DirectionsService();
-      const directionsRenderer = new google.maps.DirectionsRenderer(rendererOptions);
+      this.directionsService = new google.maps.DirectionsService();
+      this.directionsRenderer = new google.maps.DirectionsRenderer(rendererOptions);
 
       this.setState({
         google: google,
@@ -114,17 +117,17 @@ export default class RutaUsuario2 extends Component<
           markers: [...self.state.markers, latLng],
         });
 
-        self.handleMapClick(e, directionsService, directionsRenderer, latLng);
+        self.handleMapClick(e, latLng);
       });
     });
   }
 
-  handleMapClick(e: any, directionsService: any, directionsRenderer: any, latLng: any) {
-    directionsRenderer.setMap(this.state.map);
-    this.calculateAndDisplayRoute(directionsService, directionsRenderer, latLng);
+  handleMapClick(e: any, latLng: any) {
+    this.directionsRenderer.setMap(this.state.map);
+    this.calculateAndDisplayRoute(latLng);
   }
 
-  calculateAndDisplayRoute(directionsService: any, directionsRenderer: any, latLng: any) {
+  calculateAndDisplayRoute(latLng: any) {
     const waypts = [];
 
     const { markers } = this.state;
@@ -145,7 +148,9 @@ export default class RutaUsuario2 extends Component<
       lng: parseFloat(localStorage.getItem("coordenadas")!.split(",")[1]),
     }    
 
-    directionsService
+    this.currentLocation = currentLocation;
+
+    this.directionsService
       .route({
         origin: currentLocation,
         destination: destiny,
@@ -170,7 +175,7 @@ export default class RutaUsuario2 extends Component<
           finalMarker: mark,
         });
 
-        directionsRenderer.setDirections(response);
+        this.directionsRenderer.setDirections(response);
 
       })
       .catch((e: any) => console.log(e));
@@ -178,17 +183,43 @@ export default class RutaUsuario2 extends Component<
 
   retroceder(e: any, directionsService: any, directionsRenderer: any, latLng: any) {
     if (this.state.markers.length === 1) {
-      directionsRenderer.setDirections({ routes: [] });
-
-      this.state.finalMarker.setMap(null);
-    }
-
-    if (this.state.markers.length > 1) {
-      this.state.markers.pop();
-      directionsRenderer.setMap(this.state.map);
-      this.calculateAndDisplayRoute(directionsService, directionsRenderer, latLng);
-    }
+      this.directionsService
+        .route({
+          origin: this.currentLocation,
+          destination: this.currentLocation,
+          travelMode: google.maps.TravelMode.DRIVING,
+        })
+        .then((response: any) => {
+          this.directionsRenderer.setDirections(response);
+          this.setState({ path: JSON.stringify("") });
+        })
+        this.state.markers.pop();
+        this.state.finalMarker.setMap(null);
+      }
+      
+      if (this.state.markers.length > 1) {
+        console.log(this.currentLocation);
+        this.directionsService
+        .route({
+          origin: this.currentLocation,
+          destination: this.state.markers[this.state.markers.length - 2],
+          travelMode: google.maps.TravelMode.DRIVING,
+        })
+        .then((response: any) => {
+          this.directionsRenderer.setDirections(response);
+          this.setState({ path: JSON.stringify(response.routes[0].overview_path) });
+        })
+        this.state.finalMarker.setMap(null);
+        const newMarker = new google.maps.Marker({
+          position: this.state.markers[this.state.markers.length - 2],
+          map: this.state.map,
+        });
+        this.setState({
+          finalMarker: newMarker,
+        });
+        this.state.markers.pop();
   }
+}
 
   render() {
     return (
@@ -228,54 +259,63 @@ export default class RutaUsuario2 extends Component<
               }}
               sx={{ height: "400px", width: "100%", mb: 3, mt: 3 }}
             ></Box>
-            {/* <Button> Retroceder</Button> */}
+            <Button
+              variant="contained"
+              onClick={(e) =>  this.retroceder(e, this.state.google.maps.DirectionsService, this.state.google.maps.DirectionsRenderer, this.state.markers[this.state.markers.length - 1])}
+              fullWidth
+            > Retroceder</Button>
+            <Box>
+              <p> </p>
+            </Box>
             <Button
               type="submit"
               variant="contained"
               onClick={() => {
                 if (this.state.name === "") {
                   alert("Debes colocar un nombre a la ruta");
-                }
-                const ucab = { lat: 8.296814168450002, lng: -62.71148732766616 };
-                const { markers } = this.state;	
-                const lastMarker = markers[markers.length - 1];
-                const distanceFromUcab = google.maps.geometry.spherical.computeDistanceBetween(
-                  new google.maps.LatLng(lastMarker.lat, lastMarker.lng),
-                  new google.maps.LatLng(ucab.lat, ucab.lng)
-                );
-                const maxDistance = 150;
-                if (distanceFromUcab > maxDistance) {
-                  alert ("La última parada debe estar a menos de 150 metros de la entrada de la UCAB");
-                  return;
-                }
-
-                var email = localStorage.getItem("email");
-                var data = JSON.stringify({
-                  email: email,
-                  path: this.state.path,
-                  name: this.state.name,
-                });
-
-                const token = localStorage.getItem("token");
-
-                var config = {
-                  method: "post",
-                  url: "https://ulift.azurewebsites.net/api/URoute",
-                  headers: {
-                    Authorization: `Bearer ${token}`,
-                    "Content-Type": "application/json",
-                  },
-                  data: data,
-                };
-
-                axios(config)
-                  .then(function (response) {
-                    console.log(JSON.stringify(response.data));
-                    alert("Ruta registrada con éxito, puedes registrar otra o ir a tu perfil.");
-                  })
-                  .catch(function (error) {
-                    console.log(error);
+                }else if (this.state.markers.length === 0) {
+                  alert("Debes colocar al menos una parada");
+                }else{
+                  const ucab = { lat: 8.296814168450002, lng: -62.71148732766616 };
+                  const { markers } = this.state;	
+                  const lastMarker = markers[markers.length - 1];
+                  const distanceFromUcab = google.maps.geometry.spherical.computeDistanceBetween(
+                    new google.maps.LatLng(lastMarker.lat, lastMarker.lng),
+                    new google.maps.LatLng(ucab.lat, ucab.lng)
+                  );
+                  const maxDistance = 150;
+                  if (distanceFromUcab > maxDistance) {
+                    alert ("La última parada debe estar a menos de 150 metros de la entrada de la UCAB");
+                    return;
+                  }
+                  var email = localStorage.getItem("email");
+                  var data = JSON.stringify({
+                    email: email,
+                    path: this.state.path,
+                    name: this.state.name,
                   });
+  
+                  const token = localStorage.getItem("token");
+  
+                  var config = {
+                    method: "post",
+                    url: "https://ulift.azurewebsites.net/api/URoute",
+                    headers: {
+                      Authorization: `Bearer ${token}`,
+                      "Content-Type": "application/json",
+                    },
+                    data: data,
+                  };
+  
+                  axios(config)
+                    .then(function (response) {
+                      console.log(JSON.stringify(response.data));
+                      alert("Ruta registrada con éxito, puedes registrar otra o ir a tu perfil.");
+                    })
+                    .catch(function (error) {
+                      console.log(error);
+                    });
+                }
               }}
               fullWidth
             >

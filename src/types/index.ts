@@ -6,8 +6,10 @@ export interface User {
   role: string;
   gender: string;
   photo: string;
-  trips: number;
-  rating: number;
+  tripsAsDriver: number;
+  tripsAsPassenger: number;
+  DriverRating: number;
+  PassengerRating: number;
   emergencyContact: string;
   emergencyName: string;
   vehicles: Vehicle[];

@@ -55,8 +55,10 @@ const WrapperPerfilExterno = (): JSX.Element => {
     role: "Estudiante",
     id: "8910",
     photo: "https://i.imgur.com/0cQ3X7A.png",
-    trips: 10,
-    rating: 2.5,
+    tripsAsDriver: 10,
+    tripsAsPassenger: 10,
+    DriverRating: 2.5,
+    PassengerRating: 3.5,
     emergencyContact: "123456789",
     emergencyName: "Luisa",
     vehicles: [],
@@ -73,8 +75,10 @@ const WrapperPerfilExterno = (): JSX.Element => {
       role={user.role}
       gender={user.gender}
       photo={user.photo}
-      trips={user.trips}
-      rating={user.rating}
+      tripsAsDriver={user.tripsAsDriver}
+      tripsAsPassenger={user.tripsAsPassenger}
+      DriverRating={user.DriverRating}
+      PassengerRating={user.PassengerRating}
       emergencyContact={user.emergencyContact}
       emergencyName={user.emergencyName}
       vehicles={user.vehicles}

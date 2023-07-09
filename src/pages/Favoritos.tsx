@@ -23,7 +23,8 @@ export interface Root2 {
   passengerRating: number
   driverRating: number
   confirmedUser: boolean
-  liftCount: number
+  liftCountAsDriver: number
+  liftCountAsPassenger: number
   status: string
 }
 
@@ -115,8 +116,10 @@ const Favoritos = (): JSX.Element => {
                   role={favorito.role}
                   gender={favorito.gender}
                   photo={favorito.photoURL}
-                  trips={favorito.liftCount}
-                  rating={favorito.passengerRating}
+                  tripsAsDriver={favorito.liftCountAsDriver}
+                  tripsAsPassenger={favorito.liftCountAsPassenger}
+                  DriverRating={favorito.driverRating}
+                  PassengerRating={favorito.passengerRating}
                   emergencyContact={favorito.emergencyContact}
                   emergencyName={favorito.emergencyContact}
                   vehicles={[]}

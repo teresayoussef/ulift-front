@@ -24,10 +24,12 @@ interface DialogProps {
   closeDialog: () => void;
   name: string;
   lastname: string;
-  trips: number;
+  tripsAsDriver: number;
+  tripsAsPassenger: number;
   role: string;
   photo: string;
-  rating: number;
+  driverRating: number;
+  passengerRating: number;
 }
 
 const InfoFavoritoDialogo = (props: DialogProps) => {
@@ -49,7 +51,7 @@ const InfoFavoritoDialogo = (props: DialogProps) => {
         {/* Aquí se tiene que cambiar para colocar la imagen */}
 
         <Avatar sx={{ width: 50, height: 50 }} src={props.photo} />
-
+        <br></br>
         <Typography
           sx={{
             fontWeight: 600,
@@ -59,8 +61,11 @@ const InfoFavoritoDialogo = (props: DialogProps) => {
         >
           {props.name}
         </Typography>
-        <Typography>Rating: {props.rating}</Typography>
-        <Typography>Numero total de viajes: {props.trips}</Typography>
+        <Typography>N° de viajes como Conductor: {props.tripsAsDriver}</Typography>
+        <Typography>Rating de Conductor: {props.driverRating.toFixed(1)}</Typography>
+        <br></br>
+        <Typography>N° de viajes como Pasajero: {props.tripsAsPassenger}</Typography>
+        <Typography>Rating de Pasajero: {props.passengerRating.toFixed(1)}</Typography>
       </DialogContent>
     </Dialog>
   );
