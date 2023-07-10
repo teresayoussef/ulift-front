@@ -55,24 +55,63 @@ const ListaEspera = (): JSX.Element => {
           }}
         >
           <Container maxWidth="md" sx={{ p: 3, alignItems: "center" }}>
-            <Typography
-              color="primary"
-              textAlign="left"
-              fontSize={{ xs: 27, md: 30 }}
-              fontWeight={600}
-              mb={{ xs: 2, sm: 3 }}
-              mt={-5}
-            >
-              Lista de espera
-            </Typography>
             {/* {requests.length === 0 && (
               <Typography fontSize={{ xs: 14, md: 17 }} mb={{ xs: 2, sm: 3 }}>
                 No hay nadie en la lista de espera
               </Typography>
             )} */}
 
-            {tipoUsuario === "conductor" && <ListaEsperaParaConductores />}
-            {tipoUsuario === "pasajero" && <ListaEsperaParaPasajeros />}
+            {tipoUsuario === "conductor" && (
+              <>
+                {" "}
+                <Typography
+                  color="primary"
+                  textAlign="left"
+                  fontSize={{ xs: 27, md: 30 }}
+                  fontWeight={600}
+                  mb={{ xs: 2, sm: 3 }}
+                  mt={-5}
+                >
+                  Lista de espera
+                </Typography>
+                <Typography
+                  color="primary"
+                  textAlign="left"
+                  fontSize={{ xs: 12, md: 20 }}
+                  fontWeight={600}
+                  mb={{ xs: 2, sm: 3 }}
+                  mt={-3.3}
+                >
+                  Seleccione los pasajeros a los que le gustaría darle la cola
+                </Typography>
+                <ListaEsperaParaConductores />
+              </>
+            )}
+            {tipoUsuario === "pasajero" && (
+              <>
+                <Typography
+                  color="primary"
+                  textAlign="left"
+                  fontSize={{ xs: 27, md: 30 }}
+                  fontWeight={600}
+                  mb={{ xs: 2, sm: 3 }}
+                  mt={-5}
+                >
+                  Lista de espera
+                </Typography>
+                <Typography
+                  color="primary"
+                  textAlign="left"
+                  fontSize={{ xs: 12, md: 20 }}
+                  fontWeight={600}
+                  mb={{ xs: 2, sm: 3 }}
+                  mt={-3.3}
+                >
+                  Seleccione el conductor con el que gustaría tomar una cola
+                </Typography>
+                <ListaEsperaParaPasajeros />
+              </>
+            )}
           </Container>
           <Button
             onClick={() => {
