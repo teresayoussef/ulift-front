@@ -9,6 +9,10 @@ import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import userEvent from '@testing-library/user-event';
 import ChatGlobo from '../components/ChatGlobo';
+import {HubConnection, HubConnectionBuilder} from '@microsoft/signalr';
+import axios from 'axios';
+import { connect } from 'http2';
+import { set } from 'date-fns';
 
 const Chat = (): JSX.Element => {
 
@@ -21,6 +25,48 @@ const Chat = (): JSX.Element => {
      const stackRef = useRef(null); 
      const [canScrollLeft, setCanScrollLeft] = useState(false); 
      const [canScrollRight, setCanScrollRight] = useState(true);
+     const [connection, setConnection] = useState<HubConnection | null>(null);
+     const [messages, setMessages] = useState<{ content: string; senderEmail: string }[]>([]);
+     const [receivedMessages, setReceivedMessages] = useState(false);
+
+     useEffect(() => {
+            const connection = new HubConnectionBuilder()
+            .withUrl('https://ulift.azurewebsites.net/chatHub')
+            .withAutomaticReconnect()
+            .build();
+
+          if (connection){
+            setConnection(connection)
+          }
+      }, []);
+
+    if (connection) {
+        connection.start()
+            .then(result => {
+                console.log('Connected!');
+
+            }
+        )
+        .catch(e => console.log('Connection failed: ', e));
+    }
+
+    if (connection && !receivedMessages) {
+        const senderEmail = localStorage.getItem("receiverEmail");
+        const receiverEmail = localStorage.getItem("senderEmail");
+        const receiveMessage = {
+            url: `https://ulift.azurewebsites.net/api/Message/${senderEmail}/${receiverEmail}`,
+            method: 'get',
+        }
+        axios(receiveMessage)
+        .then((response) => {
+            console.log(response);
+            setMessages(response.data);
+        }
+        )
+        setReceivedMessages(true);
+    }
+
+
      useEffect(() => {
         if (stackRef.current) {
           const handleScroll = () => {
@@ -63,6 +109,37 @@ const Chat = (): JSX.Element => {
          }
        }
      };
+
+    const handleSendMessage = (message: string) => {
+        if (connection){
+            console.log(message);
+            const senderEmail = localStorage.getItem("senderEmail");
+            const receiverEmail = localStorage.getItem("receiverEmail");
+            const liftID = localStorage.getItem("liftID");
+            connection.invoke('SendMessage', localStorage.getItem("senderEmail"), localStorage.getItem("receiverEmail"), message)
+            .then(() => console.log('Message sent!'))
+            .catch((e) => console.log('Error: ', e));
+
+            const sendMessage = {
+                url: `https://ulift.azurewebsites.net/api/Message/${liftID}/${senderEmail}/${receiverEmail}/${message}`,
+                method: 'post',
+            }
+
+            axios(sendMessage)
+            .then((response) => {
+                console.log(response);
+            }
+            )
+            .catch((error) => {
+                console.log(error);
+            }
+            );     
+            setMessages((prevMessages) => [
+                ...prevMessages,
+                { content: message, senderEmail: senderEmail ?? '' },
+              ]); 
+        }
+    }
 
     const mensajesPasajero = [
         "Hola.",
@@ -132,20 +209,9 @@ const Chat = (): JSX.Element => {
                 {/* @ts-ignore */}
                 <div className='cont-messages'>
                 <Box display={"flex"} flexDirection="column">
-                    <ChatGlobo content={"Me fuí."} sender={"yo"} />
-                    <ChatGlobo content={"Hola"} sender={"otro"} />
-                    <ChatGlobo content={"Estoy en el estacionamiento"} sender={"yo"} />
-                    <ChatGlobo content={"Hola"} sender={"otro"} />
-                    <ChatGlobo content={"Estoy en los patos"} sender={"otro"} />
-                    <ChatGlobo content={"Hola"} sender={"otro"} />
-                    <ChatGlobo content={"Estoy en el estacionamiento"} sender={"yo"} />
-                    <ChatGlobo content={"Hola"} sender={"otro"} />
-                    <ChatGlobo content={"Estoy en los patos"} sender={"otro"} />
-                    <ChatGlobo content={"Hola"} sender={"otro"} />
-                    <ChatGlobo content={"Estoy en el estacionamiento"} sender={"yo"} />
-                    <ChatGlobo content={"Hola"} sender={"otro"} />
-                    <ChatGlobo content={"Estoy en los patos"} sender={"otro"} />
-                    <ChatGlobo content={"Cesar es estupido"} sender={"otro"} />
+                        {messages.map((message, index) => (
+                        <ChatGlobo key={index} content={message.content} senderEmail={message.senderEmail === localStorage.getItem("senderEmail") ? "yo" : "otro"} />
+                        ))}
                 </Box>
                 </div>
                 <div style={{position: 'absolute', bottom: 0, width: '100%', backgroundColor: '#fff'}}>
@@ -192,7 +258,12 @@ const Chat = (): JSX.Element => {
                                     } */}
                                     {
                                         mensajesPasajero.map((mensaje) => (
-                                            <Chip label={mensaje} variant="outlined" onClick={() => console.log({mensaje})} />
+                                            <Chip 
+                                                key = {mensaje}
+                                                label = {mensaje}
+                                                variant = "outlined"
+                                                onClick = {() => handleSendMessage(mensaje)}
+                                            />
                                         ))
                                     }
                                 </>

@@ -118,6 +118,12 @@ export const NavBar = (props: Props) => {
   };
 
   const handleClickChat = () => {
+    localStorage.setItem("senderEmail", localStorage.getItem("email")!);
+    if(localStorage.getItem("email") !== "cmrojas.20@est.ucab.edu.ve"){
+      localStorage.setItem("receiverEmail", "cmrojas.20@est.ucab.edu.ve");
+    }else{
+      localStorage.setItem("receiverEmail", "arbarrios.19@est.ucab.edu.ve");
+    }
     navigate(`/chat`);
   };
 
