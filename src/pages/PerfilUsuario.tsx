@@ -45,8 +45,10 @@ const usuario: User = {
   role: "",
   gender: "",
   photo: "",
-  trips: 0,
-  rating: 0,
+  tripsAsDriver: 0,
+  tripsAsPassenger: 0,
+  DriverRating: 0,
+  PassengerRating: 0,
   emergencyContact: "",
   emergencyName: "",
   vehicles: [],
@@ -72,7 +74,6 @@ const PerfilUsuario = (): JSX.Element => {
     });
 
     const inUcab = localStorage.getItem("inUCAB");
-    console.log(inUcab);
 
     if(inUcab === "true"){
       for (let i = 0; i < response.data.uRoutes.length; i++) {
@@ -94,17 +95,17 @@ const PerfilUsuario = (): JSX.Element => {
     }
   }
 
-  console.log({rutas});
     usuario.name = response.data.user.name;
     usuario.lastname = response.data.user.lastName;
     usuario.email = response.data.user.email;
     usuario.emergencyContact = response.data.user.emergencyContact;
-    usuario.emergencyName = "Anthony Testing"; //Hayque agregarlo a la base de datos y al response
-    usuario.trips = response.data.user.liftCount;
-    usuario.rating = response.data.user.driverRating;
+    usuario.emergencyName = response.data.user.emergencyContactName; //Hayque agregarlo a la base de datos
+      usuario.tripsAsDriver = response.data.user.liftCountAsDriver;
+      usuario.DriverRating = response.data.user.driverRating;
+      usuario.tripsAsPassenger = response.data.user.liftCountAsPassenger
+      usuario.PassengerRating = response.data.user.passengerRating;
     usuario.gender = response.data.user.gender;
     usuario.photo = response.data.user.photoURL;
-    console.log(usuario.photo);
     usuario.vehicles = response.data.vehicles;
     usuario.destinations = response.data.destinations;
     usuario.routes = rutas;
@@ -140,8 +141,10 @@ const PerfilUsuario = (): JSX.Element => {
               role={usuario.role}
               gender={usuario.gender}
               photo={usuario.photo}
-              trips= {usuario.trips}
-              rating={usuario.rating}
+              tripsAsDriver= {usuario.tripsAsDriver}
+              tripsAsPassenger={usuario.tripsAsPassenger}
+              DriverRating={usuario.DriverRating}
+              PassengerRating={usuario.PassengerRating}
               emergencyContact={usuario.emergencyContact}
               emergencyName={usuario.emergencyName}
               vehicles={usuario.vehicles}

@@ -151,15 +151,20 @@ const Inicio = (): JSX.Element => {
 
     var lat1 = localStorage.getItem("coordenadas")!.split(",")[0];
     var lon1 = localStorage.getItem("coordenadas")!.split(",")[1];
+
+    //Coordenadas Orinokia
     // var lat1 =  8.292362164394163;
     // var lon1 = -62.742359070043264;
+
+    //Coordenadas CDE
+    // var lat1 = 8.296688605749425;
+    // var lon1 = -62.71208489602171
 
     //Coordenadas del Centro de la UCAB
     var lat2 =8.296814168450002;
     var lon2 = -62.71148732766616;
     var distance = getDistance(Number(lat1), Number(lon1), lat2, lon2);
-
-    var inUcab = localStorage.getItem("inUCAB");
+    console.log(distance);
 
     var radius = 290;
     if (distance <= radius) {
@@ -167,6 +172,8 @@ const Inicio = (): JSX.Element => {
     } else {
       localStorage.setItem("inUCAB", "false");
     }
+
+    var inUcab = localStorage.getItem("inUCAB");
 
     var queryVehiculos = {
       method: "get",
@@ -214,7 +221,7 @@ const Inicio = (): JSX.Element => {
     axios(queryColas)
       .then(function (response) {
         colas = response.data;
-        // console.log(colas[0].waitingTime);
+        console.log('colas');
         console.log({colas});
         setFlagColas(true);
       })

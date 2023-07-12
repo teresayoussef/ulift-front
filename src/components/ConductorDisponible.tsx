@@ -64,9 +64,9 @@ const ConductorDisponible = (props: UserProps): JSX.Element => {
             p: 0,
           }}
         >
-          {/* <Box alignItems="center" mr={2}>
-            <Avatar sx={{ width: 50, height: 50, marginBottom: 1 }} src={foto} />
-          </Box> */}
+          <Box alignItems="center" mr={2}>
+            <Avatar sx={{ width: 50, height: 50, marginBottom: 1 }} src={props.photo} />
+          </Box>
 
           <Box sx={{ display: "flex", flexDirection: "column", width: "360px" }}>
             <Box

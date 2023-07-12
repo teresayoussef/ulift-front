@@ -73,10 +73,12 @@ const UsuarioTarjeta = (user?: User): JSX.Element => {
         closeDialog={closeInfoUserDialog}
         name={user?.name || ""}
         lastname={user?.lastname || ""}
-        trips={user?.trips || 0}
+        tripsAsDriver={user?.tripsAsDriver || 0}
+        tripsAsPassenger={user?.tripsAsPassenger || 0}
         role={user?.role || ""}
         photo={user?.photo || ""}
-        rating={user?.rating || 0}
+        driverRating={user?.DriverRating || 0}
+        passengerRating={user?.PassengerRating || 0}
       />
     </Grid>
   );

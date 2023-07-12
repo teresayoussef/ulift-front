@@ -139,9 +139,12 @@ const BuscarColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
 
     try{
       const response = await axios(config);
+      console.log(response.data);
       enqueueSnackbar("¡Solicitud de cola creada con exito! Espera que un conductor te acepte.", {
         variant: "success",
       });
+
+      console.log("response.data");
 
       setConductores(response.data.lifts);
       console.log({conductores})

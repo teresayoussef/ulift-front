@@ -97,7 +97,7 @@ const Registro = (): JSX.Element => {
     }
 
     data.append("emergencyContact", user.emergencyContact);
-    data.append("emergencyName", user.emergencyName);
+    data.append("emergencyContactName", user.emergencyName);
     data.append("lat", latitude.toString()!);
     data.append("lng", longitude.toString()!);
 
