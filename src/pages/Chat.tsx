@@ -66,6 +66,16 @@ const Chat = (): JSX.Element => {
         setReceivedMessages(true);
     }
 
+    useEffect(() => {
+        if (connection){
+            connection.on("ReceiveMessage", (senderEmail: string, message: string) => {
+                setMessages((prevMessages) => [
+                    ...prevMessages,
+                    { content: message, senderEmail: senderEmail ?? "" },
+                ]);
+            });
+        }
+    }, [connection]);
 
      useEffect(() => {
         if (stackRef.current) {
