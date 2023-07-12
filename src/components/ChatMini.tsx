@@ -7,6 +7,7 @@ interface UserProps {
   photo: string;
   lastMsg: string;
   userId: string;
+  type?: string;
 }
 
 const ChatMini = (props: UserProps): JSX.Element => {
@@ -39,11 +40,11 @@ const ChatMini = (props: UserProps): JSX.Element => {
               p: 0,
             }}
           >
-            <Box alignItems="center" mr={2}>
+            <Box alignItems="center" mr={2} ml={2} >
               {/* Aquí se tiene que cambiar para colocar la imagen */}
               <Avatar
                 sx={{ width: 50, height: 50 }}
-                src={"https://ulift-backend.up.railway.app/" + props.photo}
+                src={props.photo}
               />
             </Box>
 
@@ -58,6 +59,7 @@ const ChatMini = (props: UserProps): JSX.Element => {
                 <Typography
                   sx={{
                     fontWeight: 600,
+                    // textAlign: `${props.type==="izq"? "left": "right"}`
                   }}
                 >
                   {props.name}
@@ -77,6 +79,7 @@ const ChatMini = (props: UserProps): JSX.Element => {
                 <Typography
                   sx={{
                     color: grey,
+                    // textAlign: `${props.type==="izq"? "left": "right"}`
                   }}
                 >
                   {props.lastMsg}

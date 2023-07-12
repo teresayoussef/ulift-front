@@ -8,7 +8,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import userEvent from '@testing-library/user-event';
-
+import ChatMini from '../components/ChatMini';
+import ChatGlobo from '../components/ChatGlobo';
 
 const Chat = (): JSX.Element => {
 
@@ -131,12 +132,26 @@ const Chat = (): JSX.Element => {
                 </AppBar>
                 {/* @ts-ignore */}
                 <div className='cont-messages'>
-                    
+                <Box display={"flex"} flexDirection="column">
+                    <ChatGlobo content={"Me fuí."} sender={"yo"} />
+                    <ChatGlobo content={"Hola"} sender={"otro"} />
+                    <ChatGlobo content={"Estoy en el estacionamiento"} sender={"yo"} />
+                    <ChatGlobo content={"Hola"} sender={"otro"} />
+                    <ChatGlobo content={"Estoy en los patos"} sender={"otro"} />
+                    <ChatGlobo content={"Hola"} sender={"otro"} />
+                    <ChatGlobo content={"Estoy en el estacionamiento"} sender={"yo"} />
+                    <ChatGlobo content={"Hola"} sender={"otro"} />
+                    <ChatGlobo content={"Estoy en los patos"} sender={"otro"} />
+                    <ChatGlobo content={"Hola"} sender={"otro"} />
+                    <ChatGlobo content={"Estoy en el estacionamiento"} sender={"yo"} />
+                    <ChatGlobo content={"Hola"} sender={"otro"} />
+                    <ChatGlobo content={"Estoy en los patos"} sender={"otro"} />
+                </Box>
                 </div>
                 <div style={{position: 'absolute', bottom: 0, width: '100%', backgroundColor: '#fff'}}>
                     <AppBar 
                         position='fixed'
-                        sx={{ zIndex: (theme) => theme.zIndex.drawer, backgroundColor: '#fff', borderTop: '1px solid #e0e0e0', position: 'relative' }} 
+                        sx={{ zIndex: (theme) => theme.zIndex.drawer, backgroundColor: '#fff', borderTop: '1px solid #e0e0e0', position:"relative" }} 
                         elevation={0}
                     >
                         <Toolbar sx={{color: '#010101'}}>
@@ -177,7 +192,7 @@ const Chat = (): JSX.Element => {
                                     } */}
                                     {
                                         mensajesPasajero.map((mensaje) => (
-                                            <Chip label={mensaje} variant="outlined" clickable />
+                                            <Chip label={mensaje} variant="outlined" onClick={() => console.log({mensaje})} />
                                         ))
                                     }
                                 </>
