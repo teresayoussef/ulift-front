@@ -26,14 +26,17 @@ const initialValues: Values = {
   asientos: 1,
 };
 const schema = yup.object().shape({
-  placa: yup.string().required("Campo requerido").length(7, "La placa debe tener 6 caracteres"),
+  placa: yup.string().
+    required("Campo requerido")
+    .min(6, "La placa debe tener 6 o 7 caracteres")
+    .max(7, "La placa debe tener 6 o 7 caracteres"),
   color: yup.string().required("Campo requerido"),
   modelo: yup.string().required("Campo requerido"),
   asientos: yup
     .number()
     .required("Campo requerido")
     .moreThan(0, "El número de asientos debe ser mayor a 0")
-    .lessThan(8, "El número de asientos debe ser menor a 6"),
+    .lessThan(6, "El número de asientos debe ser menor a 6"),
 });
 
 const RegistroVehiculo = (): JSX.Element => {
