@@ -8,7 +8,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import userEvent from '@testing-library/user-event';
-import ChatMini from '../components/ChatMini';
 import ChatGlobo from '../components/ChatGlobo';
 
 const Chat = (): JSX.Element => {
@@ -146,6 +145,7 @@ const Chat = (): JSX.Element => {
                     <ChatGlobo content={"Estoy en el estacionamiento"} sender={"yo"} />
                     <ChatGlobo content={"Hola"} sender={"otro"} />
                     <ChatGlobo content={"Estoy en los patos"} sender={"otro"} />
+                    <ChatGlobo content={"Cesar es estupido"} sender={"otro"} />
                 </Box>
                 </div>
                 <div style={{position: 'absolute', bottom: 0, width: '100%', backgroundColor: '#fff'}}>
