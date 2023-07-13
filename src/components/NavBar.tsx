@@ -157,6 +157,14 @@ export const NavBar = (props: Props) => {
 
   const handleClickCloseSesion = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("email");
+    localStorage.removeItem("inUCAB");
+    localStorage.removeItem("liftID");
+    localStorage.removeItem("senderEmail");
+    localStorage.removeItem("receiverEmail");
+    localStorage.removeItem("coordenadas");
+    localStorage.removeItem("driverData")
+    localStorage.removeItem("elegidos")
     navigate(`/login`);
   };
 

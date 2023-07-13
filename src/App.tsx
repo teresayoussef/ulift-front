@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Outlet, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Outlet, Route, Routes, useNavigate } from "react-router-dom";
 import ColaProceso from "./pages/ColaProceso";
 import Favoritos from "./pages/Favoritos";
 import Faq from "./pages/Faq";
@@ -23,6 +23,7 @@ import Rating  from "./pages/Rating";
 import RegistroRuta2 from "./pages/RegistroRuta2";
 import SalaDeEspera from "./pages/SalaEspera";
 import { ChatList } from "./pages/ChatList";
+import { useEffect } from "react";
 
 //const socket = io("http://localhost:3001");
 
@@ -85,6 +86,15 @@ const App = (): JSX.Element => {
   //   localStorage.setItem("requests", JSON.stringify(requests));
   // });
 
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if(!token){
+      navigate("/login");
+    }
+  }, []);
+
   return (
     <>
       <Routes>
@@ -92,7 +102,7 @@ const App = (): JSX.Element => {
           <Route element={<Outlet />}></Route>
           <Route path="login" element={<InicioSesion />} />
           <Route path="signup" element={<Registro />} />
-        </Route>
+        </Route>        
         <Route path="/" element={<Inicio />} />
         <Route path="perfil" element={<PerfilUsuario />} />
         <Route path="historial" element={<HistorialColas />} />
