@@ -143,63 +143,63 @@ const ListaEsperaParaConductores = (): JSX.Element => {
       });
       console.log(data);
       //WaitingList/Requests/{liftId}
-      //AcceptRequest
-      var config = {
-        method: "post",
-        url: "https://ulift-backend.up.railway.app/api/lift/accept",
-        //https://ulift.azurewebsites.net/api/Lift/AcceptRequest
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-          "Content-Type": "application/json",
-        },
-        data: data,
-      };
+      // //AcceptRequest
+      // var config = {
+      //   method: "post",
+      //   url: "https://ulift-backend.up.railway.app/api/lift/accept",
+      //   //https://ulift.azurewebsites.net/api/Lift/AcceptRequest
+      //   headers: {
+      //     Authorization: `Bearer ${localStorage.getItem("token")}`,
+      //     "Content-Type": "application/json",
+      //   },
+      //   data: data,
+      // };
 
-      //StartLift
-      var startLift = {
-        method: "post",
-        url: "https://ulift-backend.up.railway.app/api/lift/start",
-        //https://ulift.azurewebsites.net/api/Lift/StartLift
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      };
+      // //StartLift
+      // var startLift = {
+      //   method: "post",
+      //   url: "https://ulift-backend.up.railway.app/api/lift/start",
+      //   //https://ulift.azurewebsites.net/api/Lift/StartLift
+      //   headers: {
+      //     Authorization: `Bearer ${localStorage.getItem("token")}`,
+      //   },
+      // };
 
-      axios(config).then(function (response) {
-        console.log("Ejecutando accept");
-        console.log(JSON.stringify(response.data.message));
-      });
+      // axios(config).then(function (response) {
+      //   console.log("Ejecutando accept");
+      //   console.log(JSON.stringify(response.data.message));
+      // });
 
-      axios(startLift).then(function (response) {
-        console.log("Ejecutando start");
-        console.log(JSON.stringify(response.data));
-      });
+      // axios(startLift).then(function (response) {
+      //   console.log("Ejecutando start");
+      //   console.log(JSON.stringify(response.data));
+      // });
     }
 
     var dataLift = JSON.stringify({
       liftID: localStorage.getItem("liftID"),
     });
 
-    var createRatings = {
-      method: "post",
-      url: "https://ulift-backend.up.railway.app/api/lift/createR",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-      data: dataLift,
-    };
+    // var createRatings = {
+    //   method: "post",
+    //   url: "https://ulift-backend.up.railway.app/api/lift/createR",
+    //   headers: {
+    //     Authorization: `Bearer ${localStorage.getItem("token")}`,
+    //     "Content-Type": "application/json",
+    //   },
+    //   data: dataLift,
+    // };
 
-    axios(createRatings).then(function (response) {
-      console.log("Ejecutando create ratings");
-      console.log(JSON.stringify(response.data));
-      enqueueSnackbar("El viaje ya va a comenzar ", { variant: "info" });
-      setTimeout(() => {
-        localStorage.setItem("elegidos", JSON.stringify(elegidos));
-        flag = true;
-        navigate("/colaEnProceso/conductor");
-      }, 8000);
-    });
+    // axios(createRatings).then(function (response) {
+    //   console.log("Ejecutando create ratings");
+    //   console.log(JSON.stringify(response.data));
+    //   enqueueSnackbar("El viaje ya va a comenzar ", { variant: "info" });
+    //   setTimeout(() => {
+    //     localStorage.setItem("elegidos", JSON.stringify(elegidos));
+    //     flag = true;
+    //     navigate("/colaEnProceso/conductor");
+    //   }, 8000);
+    // });
   }
 
   const startTrip = async () =>{

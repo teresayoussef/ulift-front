@@ -34,36 +34,36 @@ const RatingPassanger = ({ isOpen, closeDialog, p, tipo }: DialogProps): JSX.Ele
       rate: value,
     });
 
-    var config = {
-      method: "post",
-      url: "https://ulift-backend.up.railway.app/api/lift/rating",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-      data: data,
-    };
+    // var config = {
+    //   method: "post",
+    //   url: "https://ulift-backend.up.railway.app/api/lift/rating",
+    //   headers: {
+    //     Authorization: `Bearer ${localStorage.getItem("token")}`,
+    //     "Content-Type": "application/json",
+    //   },
+    //   data: data,
+    // };
 
-    axios(config)
-      .then(function (response) {
-        console.log(JSON.stringify(response.data));
-        enqueueSnackbar("¡Proceso finalizado! En unos segundos estará de vuelta al inicio.", {
-          variant: "success",
-        });
-        setTimeout(() => {
-          closeDialog();
+    // axios(config)
+    //   .then(function (response) {
+    //     console.log(JSON.stringify(response.data));
+    //     enqueueSnackbar("¡Proceso finalizado! En unos segundos estará de vuelta al inicio.", {
+    //       variant: "success",
+    //     });
+    //     setTimeout(() => {
+    //       closeDialog();
 
-          localStorage.removeItem("requests");
-          localStorage.removeItem("elegidos");
-          localStorage.removeItem("liftID");
+    //       localStorage.removeItem("requests");
+    //       localStorage.removeItem("elegidos");
+    //       localStorage.removeItem("liftID");
 
-          navigate("/");
-        }, 8000);
-      })
-      .catch(function (error) {
-        console.log(error);
-        enqueueSnackbar("¡Error al procesar el rating!", { variant: "error" });
-      });
+    //       navigate("/");
+    //     }, 8000);
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //     enqueueSnackbar("¡Error al procesar el rating!", { variant: "error" });
+    //   });
   };
 
   return (

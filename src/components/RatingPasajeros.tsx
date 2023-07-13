@@ -66,25 +66,25 @@ const RatingPasajeros = ({ isOpen, closeDialog, p }: DialogProps): JSX.Element =
 
         console.log(data);
 
-        var config = {
-          method: "post",
-          url: "https://ulift-backend.up.railway.app/api/lift/rating",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Content-Type": "application/json",
-          },
-          data: data,
-        };
+      //   var config = {
+      //     method: "post",
+      //     url: "https://ulift-backend.up.railway.app/api/lift/rating",
+      //     headers: {
+      //       Authorization: `Bearer ${localStorage.getItem("token")}`,
+      //       "Content-Type": "application/json",
+      //     },
+      //     data: data,
+      //   };
 
-        axios(config)
-          .then(function (response) {
-            console.log(JSON.stringify(response.data));
-            j++;
-          })
-          .catch(function (error) {
-            console.log(error);
-            enqueueSnackbar("¡Error al procesar el rating!", { variant: "error" });
-          });
+      //   axios(config)
+      //     .then(function (response) {
+      //       console.log(JSON.stringify(response.data));
+      //       j++;
+      //     })
+      //     .catch(function (error) {
+      //       console.log(error);
+      //       enqueueSnackbar("¡Error al procesar el rating!", { variant: "error" });
+      //     });
       }, 5000);
     }
 

@@ -56,50 +56,50 @@ export const NavBar = (props: Props) => {
 
   const token = localStorage.getItem("token");
 
-  var numEmer = {
-    method: "get",
-    url: "https://ulift-backend.up.railway.app/api/user/profile",
-    headers: { Authorization: `Bearer ${token}` },
-  };
+  // var numEmer = {
+  //   method: "get",
+  //   url: "https://ulift-backend.up.railway.app/api/user/profile",
+  //   headers: { Authorization: `Bearer ${token}` },
+  // };
 
-  var config = {
-    method: "get",
-    url: "https://ulift-backend.up.railway.app/api/user/status",
-    headers: { Authorization: `Bearer ${token}` },
-  };
+  // var config = {
+  //   method: "get",
+  //   url: "https://ulift-backend.up.railway.app/api/user/status",
+  //   headers: { Authorization: `Bearer ${token}` },
+  // };
 
-  var requestAConductores = {
-    method: "get",
-    url: "https://ulift-backend.up.railway.app/api/lift/requests",
-    headers: { Authorization: `Bearer ${token}` },
-  };
+  // var requestAConductores = {
+  //   method: "get",
+  //   url: "https://ulift-backend.up.railway.app/api/lift/requests",
+  //   headers: { Authorization: `Bearer ${token}` },
+  // };
 
-  var getMode = {
-    method: "get",
-    url: "https://ulift-backend.up.railway.app/api/user/mode",
-    headers: { Authorization: `Bearer ${token}` },
-  };
+  // var getMode = {
+  //   method: "get",
+  //   url: "https://ulift-backend.up.railway.app/api/user/mode",
+  //   headers: { Authorization: `Bearer ${token}` },
+  // };
 
-  axios(getMode)
-    .then(function (response) {
-      localStorage.setItem("mode", JSON.stringify(response.data.mode));
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+  // axios(getMode)
+  //   .then(function (response) {
+  //     localStorage.setItem("mode", JSON.stringify(response.data.mode));
+  //   })
+  //   .catch(function (error) {
+  //     console.log(error);
+  //   });
 
-  axios(config).then(function (response) {
-    tipoUsuario = response.data.status;
-  });
+  // axios(config).then(function (response) {
+  //   tipoUsuario = response.data.status;
+  // });
 
-  axios(numEmer).then(function (response) {
-    numeroEmergencia = response.data.user.emergencyContact;
-  });
+  // axios(numEmer).then(function (response) {
+  //   numeroEmergencia = response.data.user.emergencyContact;
+  // });
 
-  axios(requestAConductores).then(function (response) {
-    var requests: ColasDisponibles[] = response.data.requests;
-    localStorage.setItem("requests", JSON.stringify(requests));
-  });
+  // axios(requestAConductores).then(function (response) {
+  //   var requests: ColasDisponibles[] = response.data.requests;
+  //   localStorage.setItem("requests", JSON.stringify(requests));
+  // });
 
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
