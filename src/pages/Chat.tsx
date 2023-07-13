@@ -71,13 +71,13 @@ const Chat = (): JSX.Element => {
         if (connection) {
           // Suscribirse al evento "ReceiveMessage" del servidor
           connection.on("ReceiveMessage", (senderEmail, message) => {
-            console.log("Received message:", senderEmail, message);
-    
-            // Actualizar el estado de los mensajes con el nuevo mensaje recibido
-            setMessages((prevMessages) => [
-              ...prevMessages,
-              { content: message, senderEmail },
-            ]);
+                if (senderEmail === localStorage.getItem("receiverEmail")){
+                    console.log('Message received from ' + senderEmail + ' with message: ' + message);
+                    setMessages((prevMessages) => [
+                        ...prevMessages,
+                        { content: message, senderEmail },
+                      ]);
+                }         
           });
         }
       }, [connection]);
