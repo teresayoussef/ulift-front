@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import { grey } from "@mui/material/colors";
 import { ChatRounded as LocIcon } from "@mui/icons-material";
+import axios from "axios";
 
 interface ColasDisponibles {
     color: string;
@@ -33,6 +34,10 @@ interface ColasDisponibles {
   export interface Root2 {
     waitingList: WaitingList
     user: UserData
+    photoURL: string
+    name: string
+    lastName: string
+    email: string
   }
   
   export interface WaitingList {
@@ -68,12 +73,21 @@ export function ChatList (): JSX.Element {
     const [passengersData, setPassengersData] = React.useState<Root>([]);
 
   const fetchUser = async () => {
-    // var requestsString = JSON.parse(localStorage.getItem("requests")!);
-    // requests = requestsString;
-    // console.log("arreglo de requests" + requests);
+    const liftID = localStorage.getItem("liftID");
+    const requestsPasajeros = `https://ulift.azurewebsites.net/api/Lift/usersInLift/${liftID}`;
+    const request ={
+      url : requestsPasajeros,
+      method: 'GET',
+    }
 
-    var elegidosString: Root = JSON.parse(localStorage.getItem("elegidos")!);
-    setPassengersData(elegidosString);
+    axios(request)
+    .then((response) => {
+      console.log(response.data);
+      setPassengersData(response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
   };
 
   React.useEffect(() => {
@@ -124,13 +138,15 @@ export function ChatList (): JSX.Element {
 }
 
 export const PasajeroListaEspera = ({ usuario, solicitudes, elegidos, setElegidos  }: solicitud): JSX.Element => {
-    const foto = usuario.user.photoURL;
+    console.log(usuario)
+    const foto = usuario.photoURL;
     const navigate = useNavigate();
     // console.log(
     //   "arreglo de requests " + requests.flatMap((usuario) => usuario.nameU + " " + usuario.id)
     // );
     const handleClick = (email: string) => () => {
-        console.log(email)
+        localStorage.setItem("receiverEmail", email);
+        navigate("/chat") ;
     };
     const goChat = (id: number) => () => {
       navigate("/chatPrivado/" + id);
@@ -180,7 +196,7 @@ export const PasajeroListaEspera = ({ usuario, solicitudes, elegidos, setElegido
                 fontStyle: "bold",
               }}
             >
-              {usuario.user.name} {usuario.user.lastName}
+              {usuario.name} {usuario.lastName}
             </Typography>
           </Box>
           <Box
@@ -192,7 +208,7 @@ export const PasajeroListaEspera = ({ usuario, solicitudes, elegidos, setElegido
             {/* <IconButton sx={{ marginRight: 1 }} onClick={goChat(usuario.id)}>
               <ChatRounded color="primary" />
             </IconButton> */}
-            <IconButton sx={{ marginRight: 1 }} onClick={handleClick(usuario.user.email)}>
+            <IconButton sx={{ marginRight: 1 }} onClick={handleClick(usuario.email)}>
               <LocIcon />
             </IconButton>
           </Box>
