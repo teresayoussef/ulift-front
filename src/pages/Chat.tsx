@@ -31,7 +31,6 @@ const Chat = (): JSX.Element => {
      const [receivedMessages, setReceivedMessages] = useState(false);
 
      const scrollToBottom = () => {
-        console.log("scrolling")
         if (stackRefMessages.current){
             stackRefMessages.current.scrollTo({
                 top: stackRefMessages.current.scrollHeight,
@@ -52,7 +51,6 @@ const Chat = (): JSX.Element => {
           }
       }, []);
 
-
     if (connection) {
         connection.start()
             .then(result => {
@@ -63,7 +61,6 @@ const Chat = (): JSX.Element => {
         .catch(e => console.log('Connection failed: ', e));
     }
 
-    
     if (connection && !receivedMessages) {
         const senderEmail = localStorage.getItem("receiverEmail");
         const receiverEmail = localStorage.getItem("senderEmail");
@@ -81,9 +78,9 @@ const Chat = (): JSX.Element => {
             console.log(error);
         }
         );
+        scrollToBottom();
         setReceivedMessages(true);
     }
-
 
     useEffect(() => {
         if (connection) {
@@ -104,7 +101,6 @@ const Chat = (): JSX.Element => {
 
 
      useEffect(() => {
-        scrollToBottom();
         if (stackRef.current) {
           const handleScroll = () => {
             if (stackRef.current) {
@@ -121,7 +117,7 @@ const Chat = (): JSX.Element => {
           // @ts-ignore
           return () => stackRef.current?.removeEventListener('scroll', handleScroll);
         }
-      }, [stackRef, scrollToBottom]);
+      }, [stackRef]);
 
      const handleScrollLeft = () => {
        if (stackRef.current) {
