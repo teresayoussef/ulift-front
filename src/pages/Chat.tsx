@@ -35,14 +35,6 @@ const Chat = (): JSX.Element => {
             .withAutomaticReconnect()
             .build();
 
-            connection.on("ReceiveMessage", (senderEmail: string, message: string) => {
-                console.log(senderEmail);
-                setMessages((prevMessages) => [
-                    ...prevMessages,
-                    { content: message, senderEmail: senderEmail ?? "" },
-                ]);
-            });
-
           if (connection){
             setConnection(connection)
           }
@@ -72,6 +64,20 @@ const Chat = (): JSX.Element => {
         )
         setReceivedMessages(true);
     }
+
+    if(connection && receivedMessages){
+        connection.on('ReceiveMessage', (senderEmail, message) => {
+            console.log(senderEmail);
+            console.log(message);
+            setMessages((prevMessages) => [
+                ...prevMessages,
+                { content: message,
+                    senderEmail: senderEmail ?? '' },
+                ]);
+            }
+        );
+    }
+
 
      useEffect(() => {
         if (stackRef.current) {
