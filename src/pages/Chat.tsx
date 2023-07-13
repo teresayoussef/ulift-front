@@ -134,7 +134,7 @@ const Chat = (): JSX.Element => {
             const receiverEmail = localStorage.getItem("receiverEmail");
             const liftID = localStorage.getItem("liftID");
             connection.invoke('SendMessage', localStorage.getItem("senderEmail"), localStorage.getItem("receiverEmail"), message)
-            .then(() => console.log('Message sent!'))
+            .then(() => console.log('Message sent to ' + localStorage.getItem("receiverEmail") + ' from ' + localStorage.getItem("senderEmail") + ' with message: ' + message ))
             .catch((e) => console.log('Error: ', e));
 
             const sendMessage = {
