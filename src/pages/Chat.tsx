@@ -29,6 +29,21 @@ const Chat = (): JSX.Element => {
      const [connection, setConnection] = useState<HubConnection | null>(null);
      const [messages, setMessages] = useState<{ content: string; senderEmail: string }[]>([]);
      const [receivedMessages, setReceivedMessages] = useState(false);
+     const receiver = localStorage.getItem("receiverEmail");
+     const sender = localStorage.getItem("email");
+     const [receiverData, setReceiverData] = useState<any | null>(null);
+     const [senderData, setSenderData] = useState<any | null>(null);
+
+
+    const user ={
+        url : `https://ulift.azurewebsites.net/api/User/${receiver}`,
+        method: 'get',
+    }
+
+    const user2 ={
+        url : `https://ulift.azurewebsites.net/api/User/${sender}`,
+        method: 'get',
+    }
 
      const scrollToBottom = () => {
         if (stackRefMessages.current){
@@ -41,6 +56,26 @@ const Chat = (): JSX.Element => {
     }
 
      useEffect(() => {
+        axios(user)
+        .then((response) => {
+            console.log(response.data);
+            setReceiverData(response.data);
+        }
+        ).catch((error) => {
+            console.log(error);
+        }
+        );
+
+        axios(user2)
+        .then((response) => {
+            console.log(response.data);
+            setSenderData(response.data);
+            console.log(senderData);
+        }
+        ).catch((error) => {
+            console.log(error);
+        }
+        );
             const connection = new HubConnectionBuilder()
             .withUrl('https://ulift.azurewebsites.net/chatHub')
             .withAutomaticReconnect()
@@ -233,10 +268,10 @@ const Chat = (): JSX.Element => {
                                 <ArrowBackIcon/> 
                             </IconButton>
                             {/* src={user.img}  colocar la imagen en avatar*/} 
-                            <Avatar imgProps={{ referrerPolicy: "no-referrer" }} sx={{cursor: 'pointer'}} />
+                            <Avatar src = {receiverData?.user.photoURL} imgProps={{ referrerPolicy: "no-referrer" }} />
                             <Typography noWrap sx={{maxWidth: '300pt', textOverflow: 'ellipsis'}}>
                                 {/* colocar variable con la foto obtenida del endpoint */}
-                                Teresa Youssef
+                                {receiverData?.user.name}
                             </Typography>
                         </Stack>
                     </Toolbar>
@@ -286,14 +321,17 @@ const Chat = (): JSX.Element => {
                                 }}
                             >
                                 <>
-                                    {/* { user.status === "pasajero" ? {
-
-                                    } : {
-
-                                    } */}
-                                    {
-                                        mensajesPasajero.map((mensaje) => (
-                                            <Chip 
+                                    {senderData?.user.status === "D" ? 
+                                        mensajesConductor.map((mensaje) => (
+                                            <Chip
+                                                key = {mensaje}
+                                                label = {mensaje}
+                                                variant = "outlined"
+                                                onClick = {() => handleSendMessage(mensaje)}
+                                            />
+                                        ))
+                                    :  mensajesPasajero.map((mensaje) => (
+                                            <Chip
                                                 key = {mensaje}
                                                 label = {mensaje}
                                                 variant = "outlined"
