@@ -83,11 +83,8 @@ const Chat = (): JSX.Element => {
         );
         setReceivedMessages(true);
     }
-    
-    useEffect(() => {
-        scrollToBottom();
-    }, [scrollToBottom]);
-    
+
+
     useEffect(() => {
         if (connection) {
           // Suscribirse al evento "ReceiveMessage" del servidor
@@ -107,6 +104,7 @@ const Chat = (): JSX.Element => {
 
 
      useEffect(() => {
+        scrollToBottom();
         if (stackRef.current) {
           const handleScroll = () => {
             if (stackRef.current) {
@@ -123,7 +121,7 @@ const Chat = (): JSX.Element => {
           // @ts-ignore
           return () => stackRef.current?.removeEventListener('scroll', handleScroll);
         }
-      }, [stackRef]);
+      }, [stackRef, scrollToBottom]);
 
      const handleScrollLeft = () => {
        if (stackRef.current) {
