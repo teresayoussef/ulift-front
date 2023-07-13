@@ -22,19 +22,66 @@ const Chat = (): JSX.Element => {
         navigate(-1);
      };
 
-     const stackRef = useRef(null); 
+     const stackRef = useRef<HTMLDivElement | null>(null); 
+     const stackRefMessages = useRef<HTMLDivElement | null>(null);
      const [canScrollLeft, setCanScrollLeft] = useState(false); 
      const [canScrollRight, setCanScrollRight] = useState(true);
      const [connection, setConnection] = useState<HubConnection | null>(null);
      const [messages, setMessages] = useState<{ content: string; senderEmail: string }[]>([]);
      const [receivedMessages, setReceivedMessages] = useState(false);
+     const receiver = localStorage.getItem("receiverEmail");
+     const sender = localStorage.getItem("email");
+     const [receiverData, setReceiverData] = useState<any | null>(null);
+     const [senderData, setSenderData] = useState<any | null>(null);
+
+
+    const user ={
+        url : `https://ulift.azurewebsites.net/api/User/${receiver}`,
+        method: 'get',
+    }
+
+    const user2 ={
+        url : `https://ulift.azurewebsites.net/api/User/${sender}`,
+        method: 'get',
+    }
+
+     const scrollToBottom = () => {
+        if (stackRefMessages.current){
+            console.log(stackRefMessages.current.scrollHeight)
+            stackRefMessages.current.scrollTo({
+                top: stackRefMessages.current.scrollHeight,
+                behavior: 'smooth',
+            });
+        };
+    }
 
      useEffect(() => {
+        axios(user)
+        .then((response) => {
+            console.log(response.data);
+            setReceiverData(response.data);
+        }
+        ).catch((error) => {
+            console.log(error);
+        }
+        );
+
+        axios(user2)
+        .then((response) => {
+            console.log(response.data);
+            setSenderData(response.data);
+            console.log(senderData);
+        }
+        ).catch((error) => {
+            console.log(error);
+        }
+        );
             const connection = new HubConnectionBuilder()
             .withUrl('https://ulift.azurewebsites.net/chatHub')
             .withAutomaticReconnect()
             .build();
 
+        
           if (connection){
             setConnection(connection)
           }
@@ -44,7 +91,7 @@ const Chat = (): JSX.Element => {
         connection.start()
             .then(result => {
                 console.log('Connected!');
-
+                console.log(connection)
             }
         )
         .catch(e => console.log('Connection failed: ', e));
@@ -63,8 +110,30 @@ const Chat = (): JSX.Element => {
             setMessages(response.data);
         }
         )
+        .catch((error) => {
+            console.log(error);
+        }
+        );
+        scrollToBottom();
         setReceivedMessages(true);
     }
+
+    useEffect(() => {
+        if (connection) {
+          // Suscribirse al evento "ReceiveMessage" del servidor
+          connection.on("ReceiveMessage", (senderEmail, message) => {
+                if (senderEmail === localStorage.getItem("receiverEmail")){
+                    console.log('Message received from ' + senderEmail + ' with message: ' + message);
+                    setMessages((prevMessages) => [
+                        ...prevMessages,
+                        { content: message, senderEmail },
+                      ]);
+                    }         
+                scrollToBottom();
+          });
+        }
+      }, [connection]);
+
 
 
      useEffect(() => {
@@ -117,7 +186,7 @@ const Chat = (): JSX.Element => {
             const receiverEmail = localStorage.getItem("receiverEmail");
             const liftID = localStorage.getItem("liftID");
             connection.invoke('SendMessage', localStorage.getItem("senderEmail"), localStorage.getItem("receiverEmail"), message)
-            .then(() => console.log('Message sent!'))
+            .then(() => console.log('Message sent to ' + localStorage.getItem("receiverEmail") + ' from ' + localStorage.getItem("senderEmail") + ' with message: ' + message ))
             .catch((e) => console.log('Error: ', e));
 
             const sendMessage = {
@@ -138,6 +207,7 @@ const Chat = (): JSX.Element => {
                 ...prevMessages,
                 { content: message, senderEmail: senderEmail ?? '' },
               ]); 
+            scrollToBottom();
         }
     }
 
@@ -198,16 +268,16 @@ const Chat = (): JSX.Element => {
                                 <ArrowBackIcon/> 
                             </IconButton>
                             {/* src={user.img}  colocar la imagen en avatar*/} 
-                            <Avatar imgProps={{ referrerPolicy: "no-referrer" }} sx={{cursor: 'pointer'}} />
+                            <Avatar src = {receiverData?.user.photoURL} imgProps={{ referrerPolicy: "no-referrer" }} />
                             <Typography noWrap sx={{maxWidth: '300pt', textOverflow: 'ellipsis'}}>
                                 {/* colocar variable con la foto obtenida del endpoint */}
-                                Teresa Youssef
+                                {receiverData?.user.name}
                             </Typography>
                         </Stack>
                     </Toolbar>
                 </AppBar>
                 {/* @ts-ignore */}
-                <div className='cont-messages'>
+                <div className='cont-messages'  ref={stackRefMessages}>
                 <Box display={"flex"} flexDirection="column">
                         {messages.map((message, index) => (
                         <ChatGlobo key={index} content={message.content} senderEmail={message.senderEmail === localStorage.getItem("senderEmail") ? "yo" : "otro"} />
@@ -251,14 +321,17 @@ const Chat = (): JSX.Element => {
                                 }}
                             >
                                 <>
-                                    {/* { user.status === "pasajero" ? {
-
-                                    } : {
-
-                                    } */}
-                                    {
-                                        mensajesPasajero.map((mensaje) => (
-                                            <Chip 
+                                    {senderData?.user.status === "D" ? 
+                                        mensajesConductor.map((mensaje) => (
+                                            <Chip
+                                                key = {mensaje}
+                                                label = {mensaje}
+                                                variant = "outlined"
+                                                onClick = {() => handleSendMessage(mensaje)}
+                                            />
+                                        ))
+                                    :  mensajesPasajero.map((mensaje) => (
+                                            <Chip
                                                 key = {mensaje}
                                                 label = {mensaje}
                                                 variant = "outlined"
