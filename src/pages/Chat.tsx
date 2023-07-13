@@ -66,7 +66,7 @@ const Chat = (): JSX.Element => {
     }
 
     if(connection && receivedMessages){
-        connection.on('ReceiveMessage', (senderEmail, message) => {
+        connection.on('ReceiveMessage', (senderEmail, receiverEmail, message) => {
             console.log(senderEmail);
             console.log(message);
             setMessages((prevMessages) => [
