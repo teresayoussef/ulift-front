@@ -32,6 +32,7 @@ const Chat = (): JSX.Element => {
 
      const scrollToBottom = () => {
         if (stackRefMessages.current){
+            console.log(stackRefMessages.current.scrollHeight)
             stackRefMessages.current.scrollTo({
                 top: stackRefMessages.current.scrollHeight,
                 behavior: 'smooth',
@@ -93,10 +94,10 @@ const Chat = (): JSX.Element => {
                         { content: message, senderEmail },
                       ]);
                     }         
-                    scrollToBottom();
-                });
+                scrollToBottom();
+          });
         }
-      }, [connection, scrollToBottom]);
+      }, [connection]);
 
 
 
