@@ -22,12 +22,23 @@ const Chat = (): JSX.Element => {
         navigate(-1);
      };
 
-     const stackRef = useRef(null); 
+     const stackRef = useRef<HTMLDivElement | null>(null); 
+     const stackRefMessages = useRef<HTMLDivElement | null>(null);
      const [canScrollLeft, setCanScrollLeft] = useState(false); 
      const [canScrollRight, setCanScrollRight] = useState(true);
      const [connection, setConnection] = useState<HubConnection | null>(null);
      const [messages, setMessages] = useState<{ content: string; senderEmail: string }[]>([]);
      const [receivedMessages, setReceivedMessages] = useState(false);
+
+     const scrollToBottom = () => {
+        console.log("scrolling")
+        if (stackRefMessages.current){
+            stackRefMessages.current.scrollTo({
+                top: stackRefMessages.current.scrollHeight,
+                behavior: 'smooth',
+            });
+        };
+    }
 
      useEffect(() => {
             const connection = new HubConnectionBuilder()
@@ -41,6 +52,7 @@ const Chat = (): JSX.Element => {
           }
       }, []);
 
+
     if (connection) {
         connection.start()
             .then(result => {
@@ -51,6 +63,7 @@ const Chat = (): JSX.Element => {
         .catch(e => console.log('Connection failed: ', e));
     }
 
+    
     if (connection && !receivedMessages) {
         const senderEmail = localStorage.getItem("receiverEmail");
         const receiverEmail = localStorage.getItem("senderEmail");
@@ -64,9 +77,17 @@ const Chat = (): JSX.Element => {
             setMessages(response.data);
         }
         )
+        .catch((error) => {
+            console.log(error);
+        }
+        );
         setReceivedMessages(true);
     }
-
+    
+    useEffect(() => {
+        scrollToBottom();
+    }, [scrollToBottom]);
+    
     useEffect(() => {
         if (connection) {
           // Suscribirse al evento "ReceiveMessage" del servidor
@@ -77,10 +98,11 @@ const Chat = (): JSX.Element => {
                         ...prevMessages,
                         { content: message, senderEmail },
                       ]);
-                }         
-          });
+                    }         
+                    scrollToBottom();
+                });
         }
-      }, [connection]);
+      }, [connection, scrollToBottom]);
 
 
 
@@ -155,6 +177,7 @@ const Chat = (): JSX.Element => {
                 ...prevMessages,
                 { content: message, senderEmail: senderEmail ?? '' },
               ]); 
+            scrollToBottom();
         }
     }
 
@@ -224,7 +247,7 @@ const Chat = (): JSX.Element => {
                     </Toolbar>
                 </AppBar>
                 {/* @ts-ignore */}
-                <div className='cont-messages'>
+                <div className='cont-messages'  ref={stackRefMessages}>
                 <Box display={"flex"} flexDirection="column">
                         {messages.map((message, index) => (
                         <ChatGlobo key={index} content={message.content} senderEmail={message.senderEmail === localStorage.getItem("senderEmail") ? "yo" : "otro"} />
