@@ -35,6 +35,14 @@ const Chat = (): JSX.Element => {
             .withAutomaticReconnect()
             .build();
 
+            connection.on("ReceiveMessage", (senderEmail: string, message: string) => {
+                console.log(senderEmail);
+                setMessages((prevMessages) => [
+                    ...prevMessages,
+                    { content: message, senderEmail: senderEmail ?? "" },
+                ]);
+            });
+
           if (connection){
             setConnection(connection)
           }
@@ -44,13 +52,6 @@ const Chat = (): JSX.Element => {
         connection.start()
             .then(result => {
                 console.log('Connected!');
-                connection.on("ReceiveMessage", (senderEmail: string, message: string) => {
-                    setMessages((prevMessages) => [
-                        ...prevMessages,
-                        { content: message, senderEmail: senderEmail ?? "" },
-                    ]);
-                });
-
             }
         )
         .catch(e => console.log('Connection failed: ', e));
