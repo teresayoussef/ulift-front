@@ -14,23 +14,23 @@ const CheckParaPasajeros = (): JSX.Element => {
 
   //Solicitar a la API el destino en el que fue dejado el pasajero
 
-  var config = {
-    method: "get",
-    url: "https://ulift-backend.up.railway.app/api/lift/driver",
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-      "Content-Type": "application/json",
-    },
-  };
+  // var config = {
+  //   method: "get",
+  //   url: "https://ulift-backend.up.railway.app/api/lift/driver",
+  //   headers: {
+  //     Authorization: `Bearer ${localStorage.getItem("token")}`,
+  //     "Content-Type": "application/json",
+  //   },
+  // };
 
-  axios(config)
-    .then(function (response) {
-      console.log(JSON.stringify(response.data));
-      conductor = response.data.driver;
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+  // axios(config)
+  //   .then(function (response) {
+  //     console.log(JSON.stringify(response.data));
+  //     conductor = response.data.driver;
+  //   })
+  //   .catch(function (error) {
+  //     console.log(error);
+  //   });
 
   const [open, setOpen] = React.useState(false);
 
