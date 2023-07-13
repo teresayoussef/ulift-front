@@ -25,7 +25,7 @@ import {
   Chat as ChatIcon,
 } from "@mui/icons-material";
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import logo from "../assets/logo512.png";
 import axios from "axios";
@@ -49,6 +49,8 @@ interface ColasDisponibles {
 export const NavBar = (props: Props) => {
   var numeroEmergencia = "";
   var tipoUsuario: string;
+  const params = useParams();
+  tipoUsuario = params.tipo!;
 
   //  const url = "http://localhost:3000/api/user/profile";
 
@@ -124,14 +126,14 @@ export const NavBar = (props: Props) => {
     }else{
       localStorage.setItem("receiverEmail", "arbarrios.19@est.ucab.edu.ve");
     }
-    navigate(`/chat`);
+    navigate(`/chat/${tipoUsuario}`);
   };
 
   const handleClickHistory = () => {
     navigate(`/historial`);
   };
   const handleClickColasenProceso = () => {
-    if (tipoUsuario === "D") {
+    if (tipoUsuario === "conductor") {
       navigate(`/colaEnProceso/conductor`);
     } else {
       navigate(`/colaEnProceso/pasajero`);
