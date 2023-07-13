@@ -35,6 +35,7 @@ const Chat = (): JSX.Element => {
             .withAutomaticReconnect()
             .build();
 
+        
           if (connection){
             setConnection(connection)
           }
@@ -44,6 +45,7 @@ const Chat = (): JSX.Element => {
         connection.start()
             .then(result => {
                 console.log('Connected!');
+                console.log(connection)
             }
         )
         .catch(e => console.log('Connection failed: ', e));
@@ -65,18 +67,21 @@ const Chat = (): JSX.Element => {
         setReceivedMessages(true);
     }
 
-    if(connection && receivedMessages){
-        connection.on('ReceiveMessage', (senderEmail, receiverEmail, message) => {
-            console.log(senderEmail);
-            console.log(message);
+    useEffect(() => {
+        if (connection) {
+          // Suscribirse al evento "ReceiveMessage" del servidor
+          connection.on("ReceiveMessage", (senderEmail, message) => {
+            console.log("Received message:", senderEmail, message);
+    
+            // Actualizar el estado de los mensajes con el nuevo mensaje recibido
             setMessages((prevMessages) => [
-                ...prevMessages,
-                { content: message,
-                    senderEmail: senderEmail ?? '' },
-                ]);
-            }
-        );
-    }
+              ...prevMessages,
+              { content: message, senderEmail },
+            ]);
+          });
+        }
+      }, [connection]);
+
 
 
      useEffect(() => {
