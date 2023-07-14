@@ -9,7 +9,7 @@ import {
   List,
   Typography,
 } from "@mui/material";
-import { ChatRounded, DriveEtaRounded as LocIcon } from "@mui/icons-material";
+import { ChatRounded, CheckBox, DriveEtaRounded as LocIcon } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { grey } from "@mui/material/colors";
 import { User } from "../types";
@@ -39,38 +39,37 @@ interface ColasDisponibles {
   newRate: number | null;
 }
 
-
 interface SolicitudUsuarios {
   usuario: ColasDisponibles;
   solicitudes: ColasDisponibles[];
 }
 
-export type Root = Root2[]
+export type Root = Root2[];
 
 export interface Root2 {
-  waitingList: WaitingList
-  user: UserData
+  waitingList: WaitingList;
+  user: UserData;
 }
 
 export interface WaitingList {
-  liftId: string
-  passengerEmail: string
+  liftId: string;
+  passengerEmail: string;
 }
 
 export interface UserData {
-  email: string
-  password: string
-  name: string
-  lastName: string
-  photoURL: string
-  gender: string
-  role: string
-  emergencyContact: string
-  passengerRating: number
-  driverRating: number
-  confirmedUser: boolean
-  liftCount: number
-  status: string
+  email: string;
+  password: string;
+  name: string;
+  lastName: string;
+  photoURL: string;
+  gender: string;
+  role: string;
+  emergencyContact: string;
+  passengerRating: number;
+  driverRating: number;
+  confirmedUser: boolean;
+  liftCount: number;
+  status: string;
 }
 
 export interface solicitud {
@@ -92,11 +91,11 @@ const ListaEsperaParaConductores = (): JSX.Element => {
   fetchUser();
   const navigate = useNavigate();
 
-  const [requestsData,setRequestsData] = useState<Root>([] as Root);
+  const [requestsData, setRequestsData] = useState<Root>([] as Root);
   const [selecteds, setSelecteds] = useState<Root>([] as Root);
 
   const getRequests = async () => {
-    console.log("hola")
+    console.log("hola");
 
     //api/Lift/Requests/{liftId}
     const liftId = localStorage.getItem("liftID");
@@ -107,31 +106,28 @@ const ListaEsperaParaConductores = (): JSX.Element => {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
-      }
-    }
+      },
+    };
 
     axios(config)
       .then(function (response) {
-        console.log('-------------------')
+        console.log("-------------------");
         console.log(JSON.stringify(response.data));
 
-        const data: Root = response.data; 
+        const data: Root = response.data;
 
         setRequestsData([...data] as Root);
 
         // requests = response.data;
-      }
-      )
+      })
       .catch(function (error) {
         console.log(error);
-      }
-      );
-
-  }
+      });
+  };
 
   useEffect(() => {
     getRequests();
-  },[]);
+  }, []);
 
   function empezarViaje() {
     //aqui se debe pasar la lista de elegidos a la cola en proceso
@@ -202,9 +198,8 @@ const ListaEsperaParaConductores = (): JSX.Element => {
     // });
   }
 
-  const startTrip = async () =>{
-
-    const token = localStorage.getItem("token")
+  const startTrip = async () => {
+    const token = localStorage.getItem("token");
     const liftId = localStorage.getItem("liftID");
 
     if (selecteds.length > 0) {
@@ -287,15 +282,25 @@ const ListaEsperaParaConductores = (): JSX.Element => {
             // <PasajeroListaEspera usuario={user} solicitudes={requests} key={index} />
           ))} */}
           {requestsData.map((request, index) => (
-            <PasajeroListaEspera usuario={request} solicitudes={requestsData} elegidos={selecteds} setElegidos={setSelecteds} key={index} />
+            <PasajeroListaEspera
+              usuario={request}
+              solicitudes={requestsData}
+              elegidos={selecteds}
+              setElegidos={setSelecteds}
+              key={index}
+            />
           ))}
         </List>
       )}
 
       {!flag && requestsData.length > 0 && (
-        <Button variant="contained" onClick={startTrip} style={{
-          marginTop: "20px",
-        }}>
+        <Button
+          variant="contained"
+          onClick={startTrip}
+          style={{
+            marginTop: "20px",
+          }}
+        >
           Empezar viaje
         </Button>
       )}
@@ -305,7 +310,12 @@ const ListaEsperaParaConductores = (): JSX.Element => {
 
 export default ListaEsperaParaConductores;
 
-export const PasajeroListaEspera = ({ usuario, solicitudes, elegidos, setElegidos  }: solicitud): JSX.Element => {
+export const PasajeroListaEspera = ({
+  usuario,
+  solicitudes,
+  elegidos,
+  setElegidos,
+}: solicitud): JSX.Element => {
   const foto = usuario.user.photoURL;
   const [isActive, setIsActive] = useState(false);
   const navigate = useNavigate();
@@ -391,9 +401,9 @@ export const PasajeroListaEspera = ({ usuario, solicitudes, elegidos, setElegido
           {/* <IconButton sx={{ marginRight: 1 }} onClick={goChat(usuario.id)}>
             <ChatRounded color="primary" />
           </IconButton> */}
-          <IconButton sx={{ marginRight: 1 }} onClick={handleClick(usuario.user.email)}>
-            <LocIcon />
-          </IconButton>
+          <Button sx={{ marginRight: 1 }} onClick={handleClick(usuario.user.email)}>
+            Seleccionar
+          </Button>
         </Box>
       </CardContent>
     </Card>
