@@ -53,35 +53,26 @@ const OfrecerColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
       rutas.pop();
     }
 
-    
     for (let i = 0; i < response.data.vehicles.length; i++) {
-      vehiculos.push(
-        response.data.vehicles[i].plate + " - " + response.data.vehicles[i].model
-      );
+      vehiculos.push(response.data.vehicles[i].plate + " - " + response.data.vehicles[i].model);
     }
 
-    console.log("ji")
-    console.log(response.data.uRoutes)
-    
-    if (inUcab === "true"){
-      console.log("entro")
+    console.log("ji");
+    console.log(response.data.uRoutes);
+
+    if (inUcab === "true") {
+      console.log("entro");
       for (let i = 0; i < response.data.uRoutes.length; i++) {
-        
-        if (response.data.uRoutes[i].inUcab === true){
-          rutas.push(
-            response.data.uRoutes[i].name
-          );
+        if (response.data.uRoutes[i].inUcab === true) {
+          rutas.push(response.data.uRoutes[i].name);
         }
       }
-    }
-    else{
+    } else {
       for (let i = 0; i < response.data.uRoutes.length; i++) {
-        if (response.data.uRoutes[i].inUcab === false){
-          console.log(response.data.uRoutes[i].name)
-          console.log(response.data.uRoutes[i].inUcab)
-          rutas.push(
-            response.data.uRoutes[i].name
-          );
+        if (response.data.uRoutes[i].inUcab === false) {
+          console.log(response.data.uRoutes[i].name);
+          console.log(response.data.uRoutes[i].inUcab);
+          rutas.push(response.data.uRoutes[i].name);
         }
       }
     }
@@ -136,7 +127,6 @@ const OfrecerColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
           "Content-Type": "application/json",
         },
         data: data,
-
       };
 
       // var requestAConductores = {
@@ -151,16 +141,17 @@ const OfrecerColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
           console.log(JSON.stringify(response.data));
           enqueueSnackbar("Cola creada, espera que alguien te envie una solicitud", {
             variant: "success",
-          });          
+          });
           localStorage.setItem("liftID", response.data.liftId);
+          localStorage.setItem("puestos", puestos.toString());
           //wait 3 seconds
-          console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!')
-          console.log(response.data)
-          console.log(response.data.liftId)
-          console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+          console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!");
+          console.log(response.data);
+          console.log(response.data.liftId);
+          console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
-          setTimeout(() => {            
-             navigate("/listaEspera/conductor");
+          setTimeout(() => {
+            navigate("/listaEspera/conductor");
           }, 3000);
           // axios(requestAConductores).then((res) => {
           //   requests = res.data.requests;

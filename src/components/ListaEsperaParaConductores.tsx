@@ -15,6 +15,7 @@ import { grey } from "@mui/material/colors";
 import { User } from "../types";
 import axios from "axios";
 import { useSnackbar } from "notistack";
+import ConfirmarDialogo from "./ConfirmarDialog";
 
 interface ColasDisponibles {
   color: string;
@@ -93,6 +94,15 @@ const ListaEsperaParaConductores = (): JSX.Element => {
 
   const [requestsData, setRequestsData] = useState<Root>([] as Root);
   const [selecteds, setSelecteds] = useState<Root>([] as Root);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [puestos, setPuestos] = useState<number | null>(() => {
+    const puestos = localStorage.getItem("puestos");
+
+    if (puestos) {
+      return parseInt(puestos);
+    }
+    return null;
+  });
 
   const getRequests = async () => {
     console.log("hola");
@@ -215,6 +225,8 @@ const ListaEsperaParaConductores = (): JSX.Element => {
         axios(config)
           .then(function (response) {
             console.log(response.data);
+            localStorage.removeItem("puestos");
+            closeDialog();
             enqueueSnackbar("Se ha aceptado la solicitud", { variant: "success" });
           })
           .catch(function (error) {
@@ -252,6 +264,14 @@ const ListaEsperaParaConductores = (): JSX.Element => {
     }
   };
 
+  const openDialog = () => {
+    setIsDialogOpen(true);
+  };
+
+  const closeDialog = () => {
+    setIsDialogOpen(false);
+  };
+
   return (
     <Box display={"flex"} flexDirection="column" alignItems="center" justifyContent="center">
       {/* Cuando haya seleccionado al menos uno o el límite indicado y si es conductor , debe habilitarse esta opción */}
@@ -261,32 +281,46 @@ const ListaEsperaParaConductores = (): JSX.Element => {
         </Typography>
       )}
       {!flag && (
-        <List dense sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
-          {/* {requests.map((user, index) => (
+        <>
+          <Typography fontSize={{ xs: 14, md: 17 }} mb={{ xs: 2, sm: 3 }}>
+            Maximo de pasajeros: {puestos}
+          </Typography>
+          <List dense sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
+            {/* {requests.map((user, index) => (
             // <PasajeroListaEspera usuario={user} solicitudes={requests} key={index} />
           ))} */}
-          {requestsData.map((request, index) => (
-            <PasajeroListaEspera
-              usuario={request}
-              solicitudes={requestsData}
-              elegidos={selecteds}
-              setElegidos={setSelecteds}
-              key={index}
-            />
-          ))}
-        </List>
+
+            {requestsData.map((request, index) => (
+              <PasajeroListaEspera
+                usuario={request}
+                solicitudes={requestsData}
+                elegidos={selecteds}
+                setElegidos={setSelecteds}
+                key={index}
+              />
+            ))}
+          </List>
+        </>
       )}
 
       {!flag && requestsData.length > 0 && (
-        <Button
-          variant="contained"
-          onClick={startTrip}
-          style={{
-            marginTop: "20px",
-          }}
-        >
-          Empezar viaje
-        </Button>
+        <>
+          <Button
+            variant="contained"
+            onClick={openDialog}
+            style={{
+              marginTop: "20px",
+            }}
+          >
+            Empezar viaje
+          </Button>
+          <ConfirmarDialogo
+            selected={selecteds.length}
+            startTrip={startTrip}
+            isOpen={isDialogOpen}
+            closeDialog={closeDialog}
+          />
+        </>
       )}
     </Box>
   );
