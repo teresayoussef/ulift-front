@@ -274,8 +274,8 @@ export const PasajeroListaEspera = ({ usuario, solicitudes, elegidos, setElegido
           >
           {/* Mostrar botón del conductor para los pasajeros */}
           {!isDriver && flag && (
-            <IconButton sx={{ marginRight: 1 }} onClick={handleClick(usuario.email)}>
-              <LocIcon sx={{color: "#40b4e5"}} />
+            <IconButton sx={{ marginRight: 1, backgroundColor: "#042f3e" }} onClick={handleClick(usuario.email)}>
+              <LocIcon sx={{color: "white"}} />
             </IconButton>
           )}
 

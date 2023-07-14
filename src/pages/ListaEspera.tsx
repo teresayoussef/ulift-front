@@ -74,16 +74,7 @@ const ListaEspera = (): JSX.Element => {
                 >
                   Lista de espera
                 </Typography>
-                <Typography
-                  color="primary"
-                  textAlign="left"
-                  fontSize={{ xs: 12, md: 20 }}
-                  fontWeight={600}
-                  mb={{ xs: 2, sm: 3 }}
-                  mt={-3.3}
-                >
-                  Seleccione los pasajeros a los que le gustaría darle la cola
-                </Typography>
+               
                 <ListaEsperaParaConductores />
               </>
             )}

@@ -56,16 +56,7 @@ const ListaEsperaParaPasajeros = (): JSX.Element => {
   return (
     
     <Box display={"flex"} flexDirection="column">
-      <Typography
-        sx={{
-          fontWeight: 800,
-          fontSize: 15,
-          mt: 2,
-          mb: 2,
-        }}
-      >
-        Selecciona al conductor que deseas solicitar la cola:
-      </Typography>
+      
       {/* {JSON.stringify(liftsList)} */}
       {liftsList.map((cola, index) => (
         <Conductor
