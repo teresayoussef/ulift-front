@@ -29,6 +29,8 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import logo from "../assets/logo512.png";
 import axios from "axios";
+import { useEffect } from "react";
+import { set } from "date-fns";
 
 const drawerWidth = 240;
 
@@ -36,70 +38,47 @@ interface Props {
   window?: () => Window;
 }
 
-interface ColasDisponibles {
-  id: string;
+interface User {
   email: string;
-  nameU: string;
+  name: string;
   lastname: string;
   liftID: string;
   photo: string;
   role: string;
+  status :string;
 }
 
 export const NavBar = (props: Props) => {
   var numeroEmergencia = "";
-  var tipoUsuario: string;
   const params = useParams();
-  tipoUsuario = params.tipo!;
+  const email = localStorage.getItem("email");
+  const [userData, setUserData] = React.useState<User>();
+  const [tipoUsuario, setTipoUsuario] = React.useState<string>();
 
-  //  const url = "http://localhost:3000/api/user/profile";
+  const url = `https://ulift.azurewebsites.net/api/user/${email}`
+  
+  useEffect(() => {
+    var user = {
+      method: "get",
+      url: url,
+    }
+  
+    axios(user)
+      .then(function (response) {
+        setUserData(response.data.user);
+        setTipoUsuario(userData?.status);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }, [userData?.status]);
+  
+  
 
+    
+  
   const token = localStorage.getItem("token");
 
-  // var numEmer = {
-  //   method: "get",
-  //   url: "https://ulift-backend.up.railway.app/api/user/profile",
-  //   headers: { Authorization: `Bearer ${token}` },
-  // };
-
-  // var config = {
-  //   method: "get",
-  //   url: "https://ulift-backend.up.railway.app/api/user/status",
-  //   headers: { Authorization: `Bearer ${token}` },
-  // };
-
-  // var requestAConductores = {
-  //   method: "get",
-  //   url: "https://ulift-backend.up.railway.app/api/lift/requests",
-  //   headers: { Authorization: `Bearer ${token}` },
-  // };
-
-  // var getMode = {
-  //   method: "get",
-  //   url: "https://ulift-backend.up.railway.app/api/user/mode",
-  //   headers: { Authorization: `Bearer ${token}` },
-  // };
-
-  // axios(getMode)
-  //   .then(function (response) {
-  //     localStorage.setItem("mode", JSON.stringify(response.data.mode));
-  //   })
-  //   .catch(function (error) {
-  //     console.log(error);
-  //   });
-
-  // axios(config).then(function (response) {
-  //   tipoUsuario = response.data.status;
-  // });
-
-  // axios(numEmer).then(function (response) {
-  //   numeroEmergencia = response.data.user.emergencyContact;
-  // });
-
-  // axios(requestAConductores).then(function (response) {
-  //   var requests: ColasDisponibles[] = response.data.requests;
-  //   localStorage.setItem("requests", JSON.stringify(requests));
-  // });
 
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -120,20 +99,18 @@ export const NavBar = (props: Props) => {
   };
 
   const handleClickChat = () => {
-    localStorage.setItem("senderEmail", localStorage.getItem("email")!);
-    if(localStorage.getItem("email") !== "cmrojas.20@est.ucab.edu.ve"){
-      localStorage.setItem("receiverEmail", "cmrojas.20@est.ucab.edu.ve");
-    }else{
-      localStorage.setItem("receiverEmail", "arbarrios.19@est.ucab.edu.ve");
+    if (tipoUsuario === "D") {
+      navigate(`/chat/conductor`);
+    } else {
+      navigate(`/chat/pasajero`);
     }
-    navigate(`/chat/${tipoUsuario}`);
-  };
+  }
 
   const handleClickHistory = () => {
     navigate(`/historial`);
   };
   const handleClickColasenProceso = () => {
-    if (tipoUsuario === "conductor") {
+    if (tipoUsuario === "D") {
       navigate(`/colaEnProceso/conductor`);
     } else {
       navigate(`/colaEnProceso/pasajero`);

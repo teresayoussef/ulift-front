@@ -121,12 +121,12 @@ const Chat = (): JSX.Element => {
     useEffect(() => {
         if (connection) {
           // Suscribirse al evento "ReceiveMessage" del servidor
-          connection.on("ReceiveMessage", (senderEmail, message) => {
-                if (senderEmail === localStorage.getItem("receiverEmail")){
+          connection.on("ReceiveMessage", (senderEmail, receiverEmail, message) => {
+                if (senderEmail === localStorage.getItem("receiverEmail") && receiverEmail === localStorage.getItem("senderEmail")){
                     console.log('Message received from ' + senderEmail + ' with message: ' + message);
                     setMessages((prevMessages) => [
                         ...prevMessages,
-                        { content: message, senderEmail },
+                        { content: message, senderEmail: senderEmail ?? '' },
                       ]);
                     }         
                 scrollToBottom();

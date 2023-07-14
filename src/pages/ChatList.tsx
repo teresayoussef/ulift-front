@@ -66,33 +66,78 @@ interface ColasDisponibles {
     solicitudes?: Root2[];
     elegidos?: Root;
     setElegidos?: React.Dispatch<React.SetStateAction<Root>>;
+    currentDomain?: string;
+    flag?: boolean;
   }
 
 export function ChatList (): JSX.Element {
 
     const [passengersData, setPassengersData] = React.useState<Root>([]);
+    const [driverData, setDriverData] = React.useState<Root2 | null>(null);
+    const [liftActive, setLiftActive] = React.useState<boolean>(true);
+    var liftID = "";
 
+    React.useEffect(() => {
+      liftID = localStorage.getItem("liftID")!;
+      if (liftID !== ""){
+        
+        const checkLift = {
+          url : `https://ulift.azurewebsites.net/api/Lift/chatAvailable/${liftID}`,
+          method: 'GET',
+        }
+    
+        axios(checkLift)
+        .then((response) => {
+          console.log(response.data);
+          if (response.data === false){
+            console.log(response.data)
+            localStorage.setItem("liftID", "");
+            setLiftActive(false);
+          }else{
+            setLiftActive(true);
+          }
+        }).catch((error) => {
+          console.log(error);
+        });
+      }
+      fetchUser();
+    } , []);
+    
   const fetchUser = async () => {
-    const liftID = localStorage.getItem("liftID");
-    const requestsPasajeros = `https://ulift.azurewebsites.net/api/Lift/usersInLift/${liftID}`;
-    const request ={
-      url : requestsPasajeros,
-      method: 'GET',
+    liftID = localStorage.getItem("liftID")!;
+    if (liftActive){
+      console.log({liftActive});
+      const requestsPasajeros = `https://ulift.azurewebsites.net/api/Lift/usersInLift/${liftID}`;
+      const request ={
+        url : requestsPasajeros,
+        method: 'GET',
+      }
+  
+      axios(request)
+      .then((response) => {
+        console.log(response.data);
+        setPassengersData(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  
+      const requestDriver = {
+        url: `https://ulift.azurewebsites.net/api/Lift/driverInLift/${liftID}`,
+        method: 'GET',
+      }
+  
+      axios(requestDriver)
+      .then((response) => {
+        console.log(response.data);
+        setDriverData(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     }
+  }
 
-    axios(request)
-    .then((response) => {
-      console.log(response.data);
-      setPassengersData(response.data);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-  };
-
-  React.useEffect(() => {
-    fetchUser();
-  } , []);
 
 
   return (
@@ -123,12 +168,27 @@ export function ChatList (): JSX.Element {
             </Typography>
             )}
           <List dense sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
+            {driverData && (
+              <React.Fragment key = "driver">
+                <Typography variant = "h6">Conductor</Typography>
+                <PasajeroListaEspera usuario={driverData} solicitudes={passengersData} flag = {true} />
+              </React.Fragment>
+            )}
+          
           {/* {requests.map((user, index) => (
             // <PasajeroListaEspera usuario={user} solicitudes={requests} key={index} />
           ))} */}
-            {passengersData.map((request, index) => (
-                <PasajeroListaEspera usuario={request} solicitudes={passengersData} key={index} />
-            ))}
+          <p></p>
+          <Typography variant = "h6">Pasajero(s)</Typography>
+            {passengersData.map((request, index) => {
+              if (request.email === localStorage.getItem("email")){
+                console.log(request.email)
+                return null;
+              }
+              else{
+                return <PasajeroListaEspera usuario={request} solicitudes={passengersData} key={index} flag={false}/>
+              }
+            })}
           </List>
         </Container>
     </Box>
@@ -137,20 +197,27 @@ export function ChatList (): JSX.Element {
   )
 }
 
-export const PasajeroListaEspera = ({ usuario, solicitudes, elegidos, setElegidos  }: solicitud): JSX.Element => {
-    console.log(usuario)
+export const PasajeroListaEspera = ({ usuario, solicitudes, elegidos, setElegidos, currentDomain, flag }: solicitud): JSX.Element => {
+    currentDomain = currentDomain || window.location.pathname;
     const foto = usuario.photoURL;
     const navigate = useNavigate();
+
+
+
     // console.log(
     //   "arreglo de requests " + requests.flatMap((usuario) => usuario.nameU + " " + usuario.id)
     // );
     const handleClick = (email: string) => () => {
         localStorage.setItem("receiverEmail", email);
+        localStorage.setItem("senderEmail", localStorage.getItem("email")!);
         navigate("/chat") ;
     };
     const goChat = (id: number) => () => {
       navigate("/chatPrivado/" + id);
     };
+
+    const isDriver = currentDomain === "/chat/conductor";
+    const isCurrentUser = usuario.email === localStorage.getItem("email");
   
     return (
       <Card
@@ -205,12 +272,22 @@ export const PasajeroListaEspera = ({ usuario, solicitudes, elegidos, setElegido
               flexDirection: "row",
             }}
           >
-            {/* <IconButton sx={{ marginRight: 1 }} onClick={goChat(usuario.id)}>
-              <ChatRounded color="primary" />
-            </IconButton> */}
+          {/* Mostrar botón del conductor para los pasajeros */}
+          {!isDriver && flag && (
             <IconButton sx={{ marginRight: 1 }} onClick={handleClick(usuario.email)}>
-              <LocIcon />
+              <LocIcon sx={{color: "#40b4e5"}} />
             </IconButton>
+          )}
+
+          {/* Mostrar botones adicionales para el conductor, excepto el botón del propio conductor */}
+          {isDriver && !isCurrentUser &&  (
+            <>
+              {/* Agregar aquí los botones adicionales para el conductor */}
+              <IconButton sx={{ marginRight: 1 }} onClick={handleClick(usuario.email)}>
+                <LocIcon sx={{color: "#40b4e5"}}/>
+              </IconButton>
+            </>
+          )}
           </Box>
         </CardContent>
       </Card>

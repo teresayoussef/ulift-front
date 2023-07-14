@@ -207,62 +207,69 @@ const ListaEsperaParaConductores = (): JSX.Element => {
     const token = localStorage.getItem("token")
     const liftId = localStorage.getItem("liftID");
 
-    if(selecteds.length > 0){
-      
-      selecteds.forEach((user) => {
-
+    if (selecteds.length > 0) {
+      const processRequest = async (index:number) => {
+        if (index >= selecteds.length) {
+          // All requests processed
+          console.log("All requests processed");
+          enqueueSnackbar("Se han aceptado las solicitudes", { variant: "success" });
+    
+          setTimeout(() => {
+            const config = {
+              method: "post",
+              url: `https://ulift.azurewebsites.net/api/Lift/StartLift/${liftId}`,
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+              },
+            };
+            axios(config)
+              .then(function (response) {
+                console.log(response.data);
+                enqueueSnackbar("El viaje ya va a comenzar ", { variant: "info" });
+                setTimeout(() => {
+                  localStorage.setItem("elegidos", JSON.stringify(selecteds));
+                  flag = true;
+                  navigate("/colaEnProceso/conductor");
+                }, 6000);
+              })
+              .catch(function (error) {
+                console.log(error);
+                enqueueSnackbar("Ha ocurrido un error", { variant: "error" });
+              });
+          }, 3000);
+    
+          return;
+        }
+    
+        const user = selecteds[index];
+    
         const config = {
           method: "post",
           url: `https://ulift.azurewebsites.net/api/Lift/AcceptRequest/${user.waitingList.liftId}/${user.waitingList.passengerEmail}`,
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
-          }
+          },
+        };
+    
+        try {
+          const response = await axios(config);
+          console.log(`Request ${index + 1} success:`, response.data);
+        } catch (error) {
+          console.log(`Request ${index + 1} error:`, error);
+          enqueueSnackbar("Ha ocurrido un error", { variant: "error" });
         }
-        axios(config)
-          .then(function (response) {
-            console.log(response.data);
-            enqueueSnackbar("Se ha aceptado la solicitud", { variant: "success" });
-          }
-          )
-          .catch(function (error) {
-            console.log(error);
-            enqueueSnackbar("Ha ocurrido un error", { variant: "error" });
-          }
-          );
-      })
-
-      setTimeout(() => {
-        const config = {
-          method: "post",
-          url: `https://ulift.azurewebsites.net/api/Lift/StartLift/${liftId}`,
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          }
-        }
-        axios(config)
-          .then(function (response) {
-            console.log(response.data);
-            enqueueSnackbar("El viaje ya va a comenzar ", { variant: "info" });
-            setTimeout(() => {
-              localStorage.setItem("elegidos", JSON.stringify(selecteds));
-              flag = true;
-              navigate("/colaEnProceso/conductor");
-            }, 6000);
-          }
-          )
-          .catch(function (error) {
-            console.log(error);
-            enqueueSnackbar("Ha ocurrido un error", { variant: "error" });
-          }
-          );
-
-      }, 3000);
-
-    }else{
+    
+        // Process next request
+        processRequest(index + 1);
+      };
+    
+      processRequest(0);
+    } else {
       enqueueSnackbar("No ha seleccionado ningún pasajero", { variant: "error" });
     }
+    
 
   }
 
