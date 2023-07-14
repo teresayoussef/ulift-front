@@ -21,7 +21,7 @@ const Header = (props: Props) => {
     >
       <Toolbar sx={{ justifyContent: "space-between" }}>
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Tooltip title="Atrás" sx={{ display: { md: "none" } }} arrow>
+          <Tooltip title="Atrás" arrow>
             <IconButton size="large" color="primary" edge="start" onClick={() => navigate(-1)}>
               <ArrowBackRoundedIcon />
             </IconButton>

@@ -1,5 +1,5 @@
-import * as React from "react"; 
-import { Avatar, Box, IconButton, Typography } from "@mui/material";
+import * as React from "react";
+import { Avatar, Box, Button, IconButton, Typography } from "@mui/material";
 import { ChatRounded, HailRounded as PedirColaIcon } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import Card from "@mui/material/Card";
@@ -33,14 +33,14 @@ interface ColasDisponibles {
 }
 
 export interface lifts {
-  lift: Lift
-  driver: Driver
-  route: Route
-  vehicle: Vehicle
+  lift: Lift;
+  driver: Driver;
+  route: Route;
+  vehicle: Vehicle;
 }
 
 const ListaEsperaParaPasajeros = (): JSX.Element => {
-  const {liftsList} = React.useContext(LiftContext);
+  const { liftsList } = React.useContext(LiftContext);
   var pasajeros: ColasDisponibles[] = [];
 
   const fetchUser = async () => {
@@ -49,9 +49,9 @@ const ListaEsperaParaPasajeros = (): JSX.Element => {
   };
 
   fetchUser();
-  React.useEffect(()=>{
-    console.log({liftsList})
-  }, [])
+  React.useEffect(() => {
+    console.log({ liftsList });
+  }, []);
 
   return (
     
@@ -102,18 +102,18 @@ export default ListaEsperaParaPasajeros;
 export const Conductor = (usuario: ColasDisponibles): JSX.Element => {
   const foto = usuario.photo;
 
-  console.log({usuario})
+  console.log({ usuario });
 
   const navigate = useNavigate();
 
   const handleClick = (id: string) => () => {
-    console.log({id});
+    console.log({ id });
 
     const Email = localStorage.getItem("email");
     console.log(usuario.liftID);
     const data = JSON.stringify({
       liftId: usuario.liftID,
-      passengerEmail: Email,  
+      passengerEmail: Email,
     });
 
     const token = localStorage.getItem("token");

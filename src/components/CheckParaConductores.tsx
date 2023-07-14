@@ -116,7 +116,7 @@ const CheckParaConductores = (): JSX.Element => {
   
           if (!result) {
             enqueueSnackbar("No todos tus pasajeros llegaron a su destino. Asegurate si deseas finalizar la cola", {
-              variant: "success",
+              variant: "info",
             });
           }
           else{
