@@ -54,7 +54,18 @@ const ListaEsperaParaPasajeros = (): JSX.Element => {
   }, [])
 
   return (
+    
     <Box display={"flex"} flexDirection="column">
+      <Typography
+        sx={{
+          fontWeight: 800,
+          fontSize: 15,
+          mt: 2,
+          mb: 2,
+        }}
+      >
+        Selecciona al conductor que deseas solicitar la cola:
+      </Typography>
       {/* {JSON.stringify(liftsList)} */}
       {liftsList.map((cola, index) => (
         <Conductor
@@ -191,9 +202,9 @@ export const Conductor = (usuario: ColasDisponibles): JSX.Element => {
           {/* <IconButton sx={{ marginRight: 1 }} onClick={goChat(usuario.driverID.toString())}>
             <ChatRounded color="primary" />
           </IconButton> */}
-          <IconButton sx={{ marginRight: 1 }} onClick={handleClick(usuario.liftID)}>
-            <PedirColaIcon />
-          </IconButton>
+          <IconButton sx={{ marginRight: 1, backgroundColor: "#042f3e" }} onClick={handleClick(usuario.liftID)}>
+            <PedirColaIcon sx = {{color: "white"}}/>
+          </IconButton >
         </Box>
       </CardContent>
     </Card>

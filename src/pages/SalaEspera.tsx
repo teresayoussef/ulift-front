@@ -30,8 +30,8 @@ const SalaDeEspera = (): JSX.Element => {
         navigate("/colaEnProceso/pasajero");
       }
       else {
-        enqueueSnackbar("El conductor no ha aceptado tu solicitud", {
-          variant: "error",
+        enqueueSnackbar("El conductor aún no ha aceptado tu solicitud", {
+          variant: "info",
         });
       }
     }

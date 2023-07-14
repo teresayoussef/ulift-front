@@ -5,6 +5,11 @@ import {
   Button,
   Card,
   CardContent,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   IconButton,
   List,
   Typography,
@@ -94,6 +99,7 @@ const ListaEsperaParaConductores = (): JSX.Element => {
 
   const [requestsData,setRequestsData] = useState<Root>([] as Root);
   const [selecteds, setSelecteds] = useState<Root>([] as Root);
+  const [open, setOpen] = useState(false);
 
   const getRequests = async () => {
     console.log("hola")
@@ -142,64 +148,11 @@ const ListaEsperaParaConductores = (): JSX.Element => {
         dNumber: 1,
       });
       console.log(data);
-      //WaitingList/Requests/{liftId}
-      // //AcceptRequest
-      // var config = {
-      //   method: "post",
-      //   url: "https://ulift-backend.up.railway.app/api/lift/accept",
-      //   //https://ulift.azurewebsites.net/api/Lift/AcceptRequest
-      //   headers: {
-      //     Authorization: `Bearer ${localStorage.getItem("token")}`,
-      //     "Content-Type": "application/json",
-      //   },
-      //   data: data,
-      // };
-
-      // //StartLift
-      // var startLift = {
-      //   method: "post",
-      //   url: "https://ulift-backend.up.railway.app/api/lift/start",
-      //   //https://ulift.azurewebsites.net/api/Lift/StartLift
-      //   headers: {
-      //     Authorization: `Bearer ${localStorage.getItem("token")}`,
-      //   },
-      // };
-
-      // axios(config).then(function (response) {
-      //   console.log("Ejecutando accept");
-      //   console.log(JSON.stringify(response.data.message));
-      // });
-
-      // axios(startLift).then(function (response) {
-      //   console.log("Ejecutando start");
-      //   console.log(JSON.stringify(response.data));
-      // });
     }
 
     var dataLift = JSON.stringify({
       liftID: localStorage.getItem("liftID"),
     });
-
-    // var createRatings = {
-    //   method: "post",
-    //   url: "https://ulift-backend.up.railway.app/api/lift/createR",
-    //   headers: {
-    //     Authorization: `Bearer ${localStorage.getItem("token")}`,
-    //     "Content-Type": "application/json",
-    //   },
-    //   data: dataLift,
-    // };
-
-    // axios(createRatings).then(function (response) {
-    //   console.log("Ejecutando create ratings");
-    //   console.log(JSON.stringify(response.data));
-    //   enqueueSnackbar("El viaje ya va a comenzar ", { variant: "info" });
-    //   setTimeout(() => {
-    //     localStorage.setItem("elegidos", JSON.stringify(elegidos));
-    //     flag = true;
-    //     navigate("/colaEnProceso/conductor");
-    //   }, 8000);
-    // });
   }
 
   const startTrip = async () =>{
@@ -208,6 +161,7 @@ const ListaEsperaParaConductores = (): JSX.Element => {
     const liftId = localStorage.getItem("liftID");
 
     if (selecteds.length > 0) {
+
       const processRequest = async (index:number) => {
         if (index >= selecteds.length) {
           // All requests processed
@@ -269,12 +223,51 @@ const ListaEsperaParaConductores = (): JSX.Element => {
     } else {
       enqueueSnackbar("No ha seleccionado ningún pasajero", { variant: "error" });
     }
-    
-
   }
+
+  const handleOpenDialog = () => {
+    if (selecteds.length !== requestsData.length) {
+      setOpen(true);
+    } else {
+      startTrip();
+    }
+  };
+  
+
+  const handleCloseDialog = () => {
+    setOpen(false);
+  };
+  
 
   return (
     <Box display={"flex"} flexDirection="column" alignItems="center" justifyContent="center">
+      <Typography
+        sx={{
+          fontWeight: 800,
+          fontSize: 15,
+          mt: 2,
+          mb: 2,
+        }}
+      >
+        Selecciona los pasajeros a los que deseas darle la cola
+      </Typography>
+      <Dialog open={open} onClose={handleCloseDialog}>
+        <DialogTitle>Confirmación</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            ¿Está seguro de que desea continuar sin marcar todas las opciones?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">
+            Cancelar
+          </Button>
+          <Button onClick={startTrip} color="primary" autoFocus>
+            Aceptar
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       {/* Cuando haya seleccionado al menos uno o el límite indicado y si es conductor , debe habilitarse esta opción */}
       {flag && (
         <Typography fontSize={{ xs: 14, md: 17 }} mb={{ xs: 2, sm: 3 }}>
@@ -293,7 +286,7 @@ const ListaEsperaParaConductores = (): JSX.Element => {
       )}
 
       {!flag && requestsData.length > 0 && (
-        <Button variant="contained" onClick={startTrip} style={{
+        <Button variant="contained" onClick={handleOpenDialog} style={{
           marginTop: "20px",
         }}>
           Empezar viaje
@@ -391,8 +384,8 @@ export const PasajeroListaEspera = ({ usuario, solicitudes, elegidos, setElegido
           {/* <IconButton sx={{ marginRight: 1 }} onClick={goChat(usuario.id)}>
             <ChatRounded color="primary" />
           </IconButton> */}
-          <IconButton sx={{ marginRight: 1 }} onClick={handleClick(usuario.user.email)}>
-            <LocIcon />
+          <IconButton sx={{ marginRight: 1, backgroundColor: "#042f3e"}} onClick={handleClick(usuario.user.email)}>
+            <LocIcon sx={{color: "white"}}/>
           </IconButton>
         </Box>
       </CardContent>
