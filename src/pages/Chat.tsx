@@ -36,12 +36,12 @@ const Chat = (): JSX.Element => {
 
 
     const user ={
-        url : `https://ulift.azurewebsites.net/api/User/${receiver}`,
+        url : `https://u-lift.azurewebsites.net/api/User/${receiver}`,
         method: 'get',
     }
 
     const user2 ={
-        url : `https://ulift.azurewebsites.net/api/User/${sender}`,
+        url : `https://u-lift.azurewebsites.net/api/User/${sender}`,
         method: 'get',
     }
 
@@ -77,7 +77,7 @@ const Chat = (): JSX.Element => {
         }
         );
             const connection = new HubConnectionBuilder()
-            .withUrl('https://ulift.azurewebsites.net/chatHub')
+            .withUrl('https://u-lift.azurewebsites.net/chatHub')
             .withAutomaticReconnect()
             .build();
 
@@ -101,7 +101,7 @@ const Chat = (): JSX.Element => {
         const senderEmail = localStorage.getItem("receiverEmail");
         const receiverEmail = localStorage.getItem("senderEmail");
         const receiveMessage = {
-            url: `https://ulift.azurewebsites.net/api/Message/${senderEmail}/${receiverEmail}`,
+            url: `https://u-lift.azurewebsites.net/api/Message/${senderEmail}/${receiverEmail}`,
             method: 'get',
         }
         axios(receiveMessage)
@@ -190,7 +190,7 @@ const Chat = (): JSX.Element => {
             .catch((e) => console.log('Error: ', e));
 
             const sendMessage = {
-                url: `https://ulift.azurewebsites.net/api/Message/${liftID}/${senderEmail}/${receiverEmail}/${message}`,
+                url: `https://u-lift.azurewebsites.net/api/Message/${liftID}/${senderEmail}/${receiverEmail}/${message}`,
                 method: 'post',
             }
 

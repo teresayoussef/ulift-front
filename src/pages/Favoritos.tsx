@@ -48,7 +48,7 @@ const Favoritos = (): JSX.Element => {
 
     var config = {
       method: "get",
-      url: `https://ulift.azurewebsites.net/api/Favorite/${email}`,
+      url: `https://u-lift.azurewebsites.net/api/Favorite/${email}`,
       headers: { Authorization: `Bearer ${token}` }
     };
 

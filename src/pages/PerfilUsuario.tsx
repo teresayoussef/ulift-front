@@ -63,7 +63,7 @@ const PerfilUsuario = (): JSX.Element => {
 
   const { enqueueSnackbar } = useSnackbar();
   const email = localStorage.getItem("email");
-  const url = `https://ulift.azurewebsites.net/api/User/${email}`;
+  const url = `https://u-lift.azurewebsites.net/api/User/${email}`;
   
   //const url = "http://localhost:3000/api/user/profile";
   const fetchUser = async () => {

@@ -111,7 +111,7 @@ export const Conductor = (usuario: ColasDisponibles): JSX.Element => {
 
     const config = {
       method: "post",
-      url: "https://ulift.azurewebsites.net/api/WaitingList/Request",
+      url: "https://u-lift.azurewebsites.net/api/WaitingList/Request",
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",

@@ -263,7 +263,7 @@ export default class RutaUsuario extends Component<
 
                 var config = {
                   method: "post",
-                  url: "https://ulift.azurewebsites.net/api/URoute",
+                  url: "https://u-lift.azurewebsites.net/api/URoute",
                   headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "application/json",

@@ -55,7 +55,7 @@ export const NavBar = (props: Props) => {
   const [userData, setUserData] = React.useState<User>();
   const [tipoUsuario, setTipoUsuario] = React.useState<string>();
 
-  const url = `https://ulift.azurewebsites.net/api/user/${email}`
+  const url = `https://u-lift.azurewebsites.net/api/user/${email}`
   
   useEffect(() => {
     var user = {

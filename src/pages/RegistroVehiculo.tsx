@@ -49,7 +49,7 @@ const RegistroVehiculo = (): JSX.Element => {
       return;
     } else {
       setSubmitting(true);
-      const url = "https://ulift.azurewebsites.net/api/Vehicle";
+      const url = "https://u-lift.azurewebsites.net/api/Vehicle";
       const token = localStorage.getItem("token");
       const email = localStorage.getItem("email");
       var data = JSON.stringify({

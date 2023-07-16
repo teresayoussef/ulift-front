@@ -78,7 +78,7 @@ const BuscarColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
   const [conductores, setConductores] = React.useState<lifts[]>([]);
 
   const email = localStorage.getItem("email");
-  const url = `https://ulift.azurewebsites.net/api/User/${email}`;
+  const url = `https://u-lift.azurewebsites.net/api/User/${email}`;
   //const url = "http://localhost:3000/api/user/profile";
   const fetchUser = async () => {
     const token = localStorage.getItem("token");
@@ -191,7 +191,7 @@ const BuscarColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
       }
 
       const url =
-      "https://ulift.azurewebsites.net/api/Lift/" +           
+      "https://u-lift.azurewebsites.net/api/Lift/" +           
       lat +
       "/" +
       lng +

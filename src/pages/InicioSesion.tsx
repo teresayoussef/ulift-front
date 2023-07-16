@@ -40,7 +40,7 @@ const InicioSesion = (): JSX.Element => {
 
     //const url = "https://ulift-backend-production.up.railway.app/api/";
 
-    const url = "https://ulift.azurewebsites.net/api/Auth/";
+    const url = "https://u-lift.azurewebsites.net/api/Auth/";
     // const url = "http://localhost:3000/api/";
     return api_instance
       .post(url + "Login", user)

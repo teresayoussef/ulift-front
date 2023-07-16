@@ -108,7 +108,7 @@ const ListaEsperaParaConductores = (): JSX.Element => {
 
     const config = {
       method: "get",
-      url: `https://ulift.azurewebsites.net/api/WaitingList/Requests/${liftId}`,
+      url: `https://u-lift.azurewebsites.net/api/WaitingList/Requests/${liftId}`,
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
@@ -166,7 +166,7 @@ const ListaEsperaParaConductores = (): JSX.Element => {
           setTimeout(() => {
             const config = {
               method: "post",
-              url: `https://ulift.azurewebsites.net/api/Lift/StartLift/${liftId}`,
+              url: `https://u-lift.azurewebsites.net/api/Lift/StartLift/${liftId}`,
               headers: {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",
@@ -195,7 +195,7 @@ const ListaEsperaParaConductores = (): JSX.Element => {
     
         const config = {
           method: "post",
-          url: `https://ulift.azurewebsites.net/api/Lift/AcceptRequest/${user.waitingList.liftId}/${user.waitingList.passengerEmail}`,
+          url: `https://u-lift.azurewebsites.net/api/Lift/AcceptRequest/${user.waitingList.liftId}/${user.waitingList.passengerEmail}`,
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",

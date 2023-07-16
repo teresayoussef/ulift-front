@@ -176,7 +176,7 @@ const Rating = (): JSX.Element => {
 
         var config = {
           method: "put",
-          url: `https://ulift.azurewebsites.net/api/Lift/complete`,
+          url: `https://u-lift.azurewebsites.net/api/Lift/complete`,
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
             "Content-Type": "application/json",
@@ -214,7 +214,7 @@ const Rating = (): JSX.Element => {
 
         const config = { 
           method: "post",
-          url: `https://ulift.azurewebsites.net/api/Lift/createRatingPassenger/?liftId=${ratingData.liftId}&passengerEmail=${ratingData.passengerEmail}&rating=${ratingData.rating}`,
+          url: `https://u-lift.azurewebsites.net/api/Lift/createRatingPassenger/?liftId=${ratingData.liftId}&passengerEmail=${ratingData.passengerEmail}&rating=${ratingData.rating}`,
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
           },

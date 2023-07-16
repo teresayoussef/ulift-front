@@ -16,7 +16,7 @@ const SalaDeEspera = (): JSX.Element => {
 
   var config = {
     method: "get",
-    url: `https://ulift.azurewebsites.net/api/Lift/checkAcceptCola?email=${localStorage.getItem(
+    url: `https://u-lift.azurewebsites.net/api/Lift/checkAcceptCola?email=${localStorage.getItem(
       "email"
     )}&liftId=${localStorage.getItem("liftID")}`,
   };

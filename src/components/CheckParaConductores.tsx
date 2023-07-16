@@ -105,7 +105,7 @@ const CheckParaConductores = (): JSX.Element => {
     const finViaje = () => {
       const config = {
         method: "get",
-        url: `https://ulift.azurewebsites.net/api/Lift/checkPassengerArriving?liftId=${liftID}`,
+        url: `https://u-lift.azurewebsites.net/api/Lift/checkPassengerArriving?liftId=${liftID}`,
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
         }
@@ -136,7 +136,7 @@ const CheckParaConductores = (): JSX.Element => {
 
     // var config = {
     //   method: "put",
-    //   url: `https://ulift.azurewebsites.net/api/Lift/complete/${localStorage.getItem("liftID")}`,
+    //   url: `https://u-lift.azurewebsites.net/api/Lift/complete/${localStorage.getItem("liftID")}`,
     //   headers: {
     //     Authorization: "Bearer " + localStorage.getItem("token"),
     //   },

@@ -53,7 +53,7 @@ const CheckParaPasajeros = (): JSX.Element => {
 
     var config = {
       method: "post",
-      url: `https://ulift.azurewebsites.net/api/Lift/PasajeroCheck/${Email}`,
+      url: `https://u-lift.azurewebsites.net/api/Lift/PasajeroCheck/${Email}`,
       headers: {
         Authorization: "Bearer " + localStorage.getItem("token"),
       }

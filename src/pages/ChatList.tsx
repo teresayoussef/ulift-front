@@ -82,7 +82,7 @@ export function ChatList (): JSX.Element {
       if (liftID !== ""){
         
         const checkLift = {
-          url : `https://ulift.azurewebsites.net/api/Lift/chatAvailable/${liftID}`,
+          url : `https://u-lift.azurewebsites.net/api/Lift/chatAvailable/${liftID}`,
           method: 'GET',
         }
     
@@ -107,7 +107,7 @@ export function ChatList (): JSX.Element {
     liftID = localStorage.getItem("liftID")!;
     if (liftActive){
       console.log({liftActive});
-      const requestsPasajeros = `https://ulift.azurewebsites.net/api/Lift/usersInLift/${liftID}`;
+      const requestsPasajeros = `https://u-lift.azurewebsites.net/api/Lift/usersInLift/${liftID}`;
       const request ={
         url : requestsPasajeros,
         method: 'GET',
@@ -123,7 +123,7 @@ export function ChatList (): JSX.Element {
       });
   
       const requestDriver = {
-        url: `https://ulift.azurewebsites.net/api/Lift/driverInLift/${liftID}`,
+        url: `https://u-lift.azurewebsites.net/api/Lift/driverInLift/${liftID}`,
         method: 'GET',
       }
   

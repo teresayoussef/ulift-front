@@ -70,7 +70,7 @@ const RegistroDestino = (): JSX.Element => {
     const token = localStorage.getItem("token");
     const config = {
       method: "post",
-      url: "https://ulift.azurewebsites.net/api/Destination",
+      url: "https://u-lift.azurewebsites.net/api/Destination",
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",

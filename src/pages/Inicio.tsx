@@ -149,12 +149,12 @@ const Inicio = (): JSX.Element => {
       return deg * (Math.PI / 180);
     }
 
-    var lat1 = localStorage.getItem("coordenadas")!.split(",")[0];
-    var lon1 = localStorage.getItem("coordenadas")!.split(",")[1];
+    // var lat1 = localStorage.getItem("coordenadas")!.split(",")[0];
+    // var lon1 = localStorage.getItem("coordenadas")!.split(",")[1];
 
     //Coordenadas Orinokia
-    // var lat1 =  8.292362164394163;
-    // var lon1 = -62.742359070043264;
+    var lat1 =  8.292362164394163;
+    var lon1 = -62.742359070043264;
 
     //Coordenadas CDE
     // var lat1 = 8.296688605749425;
@@ -177,20 +177,20 @@ const Inicio = (): JSX.Element => {
 
     var queryVehiculos = {
       method: "get",
-      url: `https://ulift.azurewebsites.net/api/Vehicle/${email}`,
+      url: `https://u-lift.azurewebsites.net/api/Vehicle/${email}`,
       headers: { Authorization: `Bearer ${token}` },
     };
   
     var queryRutas = {
       method: "get",
-      url: `https://ulift.azurewebsites.net/api/URoute/${email}/${inUcab}`,
+      url: `https://u-lift.azurewebsites.net/api/URoute/${email}/${inUcab}`,
       headers: { Authorization: `Bearer ${token}` },
     };
   
     var queryColas = {
       method: "get",
       //url: "https://ulift-backend.up.railway.app/api/lift/match/0/0/0/0",
-      url: `https://ulift.azurewebsites.net/api/Lift/Available/?inUcab=${inUcab}`,
+      url: `https://u-lift.azurewebsites.net/api/Lift/Available/?inUcab=${inUcab}`,
       headers: {
         Authorization: `Bearer ${token}`,
       },

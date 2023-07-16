@@ -109,7 +109,7 @@ const Registro = (): JSX.Element => {
 
     const config = {
       method: "post",
-      url: "https://ulift.azurewebsites.net/api/Auth/SignUp",
+      url: "https://u-lift.azurewebsites.net/api/Auth/SignUp",
       headers: {
         "Content-Type": "multipart/form-data",
       },

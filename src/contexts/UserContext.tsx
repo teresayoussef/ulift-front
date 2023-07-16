@@ -18,7 +18,7 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
   const getUser = async () => {
     const userData = localStorage.getItem("user");
 
-    const url = "https://ulift.azurewebsites.net/api/Auth/Login";
+    const url = "https://u-lift.azurewebsites.net/api/Auth/Login";
     
     try {
       const response = await fetch(url, {

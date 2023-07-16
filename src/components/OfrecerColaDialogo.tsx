@@ -33,7 +33,7 @@ var vehiculos: string[] = [];
 
 const email = localStorage.getItem("email");
 const OfrecerColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
-  const url = `https://ulift.azurewebsites.net/api/User/${email}`;
+  const url = `https://u-lift.azurewebsites.net/api/User/${email}`;
   // const url = "http://localhost:3000/api/user/profile";
   const inUcab = localStorage.getItem("inUCAB");
   const fetchUser = async () => {
@@ -120,7 +120,7 @@ const OfrecerColaDialogo = ({ isOpen, closeDialog }: DialogProps) => {
 
       const config = {
         method: "post",
-        url: "https://ulift.azurewebsites.net/api/Lift/Create",
+        url: "https://u-lift.azurewebsites.net/api/Lift/Create",
         //url: "https://localhost:7007/api/Lift/Create",
         headers: {
           Authorization: `Bearer ${token}`,

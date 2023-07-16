@@ -31,7 +31,7 @@ const PasajeroFavoritoDialogo = ({ isOpen, closeDialog }: DialogProps) => {
   const handleAddFavorito = async () => {
     setAdding(true);
     const token = localStorage.getItem("token");
-    const url = "https://ulift.azurewebsites.net/api/Favorite";
+    const url = "https://u-lift.azurewebsites.net/api/Favorite";
     const email = localStorage.getItem("email");
     //   const url = "http://localhost:3000/api/lift";
     var data = JSON.stringify({
