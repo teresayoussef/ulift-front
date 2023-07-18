@@ -69,10 +69,10 @@ export default class RutaUsuario2 extends Component<
 
   componentDidMount() {
     let self = this;
-    // var lat = parseFloat(localStorage.getItem("coordenadas")!.split(",")[0]);
-    // const lng = parseFloat(localStorage.getItem("coordenadas")!.split(",")[1]);
-    var lat =  8.292362164394163;
-    var lng = -62.742359070043264;
+    var lat = parseFloat(localStorage.getItem("coordenadas")!.split(",")[0]);
+    const lng = parseFloat(localStorage.getItem("coordenadas")!.split(",")[1]);
+    // var lat =  8.292362164394163;
+    // var lng = -62.742359070043264;
     const defaultMapOptions = {
       center: {
         lat: lat,

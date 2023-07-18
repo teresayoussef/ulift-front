@@ -149,12 +149,12 @@ const Inicio = (): JSX.Element => {
       return deg * (Math.PI / 180);
     }
 
-    // var lat1 = localStorage.getItem("coordenadas")!.split(",")[0];
-    // var lon1 = localStorage.getItem("coordenadas")!.split(",")[1];
+    var lat1 = localStorage.getItem("coordenadas")!.split(",")[0];
+    var lon1 = localStorage.getItem("coordenadas")!.split(",")[1];
 
     //Coordenadas Orinokia
-    var lat1 =  8.292362164394163;
-    var lon1 = -62.742359070043264;
+    // var lat1 =  8.292362164394163;
+    // var lon1 = -62.742359070043264;
 
     //Coordenadas CDE
     // var lat1 = 8.296688605749425;
